@@ -1,0 +1,19 @@
+/* EmotionDetec.css */
+
+.EmotionDetec {
+    position: relative;
+    text-align: center;
+    background-color: #f9f9f9; /* Optional: add a background color */
+    padding: 20px; /* Optional: add padding */
+    border-radius: 10px; /* Optional: add rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    top:120px;
+}
+
+.video-container {
+    position: relative;
+    top: 120px; /* Adjust the value as needed to move it further down */
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}

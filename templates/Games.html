@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Task Master</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/Games.css') }}">
+
+{% endblock %}
+
+{% block body %}
+    <div class="background-one">
+  <div class="link-container">
+    <a class="link-one" href="{{ url_for('MemoryGame') }}">Memory Game</a>
+  </div>
+</div>
+<div class="background-two link-container">
+  <a class="link-two" href="{{ url_for('Tetris') }}">Tetris</a>
+</div>
+<div class="background-three link-container">
+  <a class="link-three" href="{{ url_for('Cube') }}">Chess Game</a>
+</div>
+
+
+
+    <script src="static/PageOff/assets/js/MemoryGame.js"></script>
+
+{% endblock %}

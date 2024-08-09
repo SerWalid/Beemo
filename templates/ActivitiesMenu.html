@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Task Master</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/Activities.css') }}">
+
+{% endblock %}
+
+{% block body %}
+ <div class="wrapper-images">
+	<div class="images-line">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s1.png') }}" class="line large" alt="Image 1">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s2.jpg') }}" class="line" alt="Image 2">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s3.jpg') }}" class="line" alt="Image 3">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s4.jpg') }}" class="line large" alt="Image 4">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s5.png') }}" class="line" alt="Image 5">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s6.jpg') }}" class="line" alt="Image 6">
+    </div>
+	<div class="images-line">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s111.jpg') }}" class="line large" alt="Image 1">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s22.jpg') }}" class="line" alt="Image 2">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s33.jpg') }}" class="line" alt="Image 3">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s44.jpg') }}" class="line large" alt="Image 4">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s55.jpeg') }}" class="line" alt="Image 5">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s66.jpg') }}" class="line" alt="Image 6">
+    </div>
+	<div class="images-line">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s1111.jpeg') }}" class="line large" alt="Image 1">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s222.jpg') }}" class="line" alt="Image 2">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s333.jpg') }}" class="line" alt="Image 3">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s444.jpg') }}" class="line large" alt="Image 4">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s555.jpg') }}" class="line" alt="Image 5">
+    <img src="{{ url_for('static', filename='PageOff/assets/images/s666.png') }}" class="line" alt="Image 6">
+    </div>
+</div>
+<div class="containerAct">
+	<div class="logo">
+		<img src="{{ url_for('static', filename='PageOff/assets/images/logomenukid.png') }}" alt="Natural Pet Bakery">
+	</div>
+	<nav class="menu">
+		<a href="{{ url_for('StoryTelling') }}">StoryTelling</a>
+		<a href="{{ url_for('Music') }}">Music </a>
+		<a href="{{ url_for('GameSelectTest') }}">Puzzles and Games</a>
+		<a href="{{ url_for('painting') }}">Arts and Crafts</a>
+	</nav>
+</div>
+{% endblock %}

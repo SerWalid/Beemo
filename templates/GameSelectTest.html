@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Task Master</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/GameSelectTest.css') }}">
+
+{% endblock %}
+
+{% block body %}
+    <br><br><br><br><br><br><br>
+    <div class="containerAAAAAAAAAA">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+            <h4>Amazing <em>Services &amp; Features</em> for you</h4>
+             <img src="{{ url_for('static', filename='PageOff/assets/images/heading-line-dec.png') }}" alt="" >
+            <p> Beemo detects emotions with a camera, initiates conversations based on these emotions, interacts uniquely with each child's needs, and provides detailed progress reports on their development.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="CardsBody">
+    <a href="{{ url_for('MemoryGame') }}" alt="Mythrill">
+  <div class="card">
+    <div class="wrapper">
+      <img src="{{ url_for('static', filename='PageOff/assets/images/memoryGameB.jpg') }}" class="cover-image" />
+    </div>
+    <img src="{{ url_for('static', filename='PageOff/assets/images/memgamekid.jpg') }}" class="character" />
+  </div>
+</a>
+
+<a href="{{ url_for('Tetris') }}" alt="Mythrill" >
+  <div class="card">
+    <div class="wrapper">
+      <img src="{{ url_for('static', filename='PageOff/assets/images/tetrisbaack.jpg') }}" class="cover-image" />
+    </div>
+    <img src="{{ url_for('static', filename='PageOff/assets/images/tetrisfront.png') }}" class="character" />
+  </div>
+</a>
+
+    <a href="{{ url_for('Cube') }}" alt="Mythrill" >
+  <div class="card">
+    <div class="wrapper">
+      <img src="{{ url_for('static', filename='PageOff/assets/images/chessBack.jpg') }}" class="cover-image" />
+    </div>
+    <img src="{{ url_for('static', filename='PageOff/assets/images/chessbg.jpg') }}" class="character" />
+  </div>
+</a>
+
+
+
+
+
+     </div>
+{% endblock %}

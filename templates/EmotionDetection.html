@@ -1,0 +1,18 @@
+<!-- index.html -->
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Emotion Detection</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/EmotionDetec.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/facemesh"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/emotion"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="EmotionDetec">
+        <h1>Emotion Detection</h1>
+    </div>
+{% endblock %}
