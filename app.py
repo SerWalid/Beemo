@@ -129,10 +129,17 @@ def Games():
 @app.route('/painting')
 def painting():
     return render_template('painting.html')
+
+@app.route('/Number')
+def Number():
+    return render_template('Number.html')
+
 @app.route('/MemoryGame')
 def MemoryGame():
     return render_template('MemoryGame.html')
-
+@app.route('/emotion')
+def emotion():
+    return render_template('emotion.html')
 @app.route('/chatbotinterface')
 def chatbotinterface():
     return render_template('chatbotinterface.html')
