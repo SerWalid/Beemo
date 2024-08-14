@@ -237,6 +237,37 @@ def chatbottest_page():
 def Music():
     return render_template('Music.html')
 
+@app.route('/PlayStation')
+def PlayStation():
+    return render_template('PlayStation.html')
+
+@app.route('/BoxCube')
+def BoxCube():
+    return render_template('BoxCube.html')
+
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/beemo')
+def beemo():
+    return render_template('beemo.html')
+
+@app.route('/christmas')
+def christmas():
+    return render_template('christmas.html')
+
+
+@app.route('/Campfire')
+def Campfire():
+    return render_template('Campfire.html')
+
+
+@app.route('/RelaxMenu')
+def RelaxMenu():
+    return render_template('RelaxMenu.html')
+
 @app.route('/get_response', methods=['POST'])
 def get_response():
     data = request.json

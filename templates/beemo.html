@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+            <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/beemo.css') }}">
+            <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<div class="controls">
+  <a id="reset" href="#">Reset Rotation</a>
+</div>
+<div class="message">
+  <em>Click &amp; drag left or right to rotate</em>
+</div>
+<div class="stage" id="stage">
+  <div class="positioning animated">
+
+    <div class="bmo">
+      <figure class="back">
+        <div class="slit"></div>
+        <div class="slit"></div>
+        <div class="slit"></div>
+        <div class="slit"></div>
+        <div class="slit"></div>
+        <div class="backpanel">
+          <span class="screw"></span>
+          <span class="screw"></span>
+          <span class="screw"></span>
+          <span class="screw"></span>
+        </div>
+        <div class="tapeslot"></div>
+      </figure>
+      <figure class="front">
+        <div class="face">
+          <span class="eye lefteye"></span>
+          <span class="eye righteye"></span>
+          <span class="smile"></span>
+          <div class="message1">
+            <h1>Back<br>in<br>5 Minutes</h1>
+          </div>
+          <div class="message2">
+            <img src="https://www.joshuawinn.com/wp-content/uploads/2015/07/dancing_bug.gif" alt="Dancing Bug" />
+          </div>
+          <div class="message3">
+            <img src="https://www.joshuawinn.com/wp-content/uploads/2015/07/bmo_skateboard.gif" alt="Dancing Bug" />
+          </div>
+        </div>
+        <div class="frontbuttons-flat">
+          <span class="slot"></span>
+          <span class="port leftport"></span>
+          <span class="port rightport"></span>
+          <span class="port tinyport"></span>
+        </div>
+        <div class="frontbuttons">
+          <div class="thedpad">
+           <div class="dpad">
+            <div class="square-top"></div><div class="square-top"></div>
+            <div class="square-top"></div><div class="square-top"></div>
+            <div class="square-top"></div>
+           </div>
+           <div class="dpad">
+            <div class="square-edge"></div><div class="square-edge"></div>
+            <div class="square-edge"></div><div class="square-edge"></div>
+
+            <div class="square-edge"></div><div class="square-edge"></div>
+            <div class="square-edge"></div><div class="square-edge"></div>
+
+            <div class="square-edge"></div><div class="square-edge"></div>
+            <div class="square-edge"></div><div class="square-edge"></div>
+           </div>
+          </div>
+          <div class="circlebig">
+            <div class="edges">
+              <div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div>
+            </div>
+          </div>
+          <div class="circlesmall">
+            <div class="edges">
+              <div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div>
+            </div>
+          </div>
+          <div class="triangle">
+            <div class="topleft"></div>
+            <div class="topright"></div>
+          </div>
+        </div>
+      </figure>
+      <figure class="left">
+        <div class="speaker">
+          <span></span><span></span><br/>
+          <span></span><span></span><span></span><br/>
+          <span></span><span></span>
+        </div>
+        <h1 class="label">BMO</h1>
+        <div class="arm"></div>
+      </figure>
+      <figure class="right">
+        <div class="speaker">
+          <span></span><span></span><br/>
+          <span></span><span></span><span></span><br/>
+          <span></span><span></span>
+        </div>
+        <h1 class="label">BMO</h1>
+         <div class="arm"></div>
+      </figure>
+      <figure class="top"></figure>
+      <figure class="bottom">
+        <div class="leg"></div>
+        <div class="leg left"></div>
+      </figure>
+      <!-- Rounded edges. For more explanation, see:
+             https://codepen.io/forthewinn/pen/OPpJpE -->
+      <div class="topleftcorner">
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+      </div>
+      <div class="toprightcorner">
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+      </div>
+      <div class="bottomleftcorner">
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+      </div>
+      <div class="bottomrightcorner">
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+        <div class="corner"></div><div class="corner"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+      <script src="static/PageOff/assets/js/beemo.js"></script>
+
+</body>
+</html>

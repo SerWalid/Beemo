@@ -234,3 +234,16 @@ document.getElementById('container').appendChild( stats.domElement );
 document.addEventListener('clmtrackrIteration', function(event) {
 	stats.update();
 }, false);
+
+
+
+
+
+
+
+
+
+
+
+
+

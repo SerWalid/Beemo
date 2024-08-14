@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>List Item Hover Effects</title>
+                    <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/RelaxMenu.css') }}">
+    </head>
+    <body>
+            <ul>
+                <li><a href="{{ url_for('Campfire') }}" data-text="Home">Campfire</a></li>
+                <li><a href="{{ url_for('beemo') }}" data-text="About">Beemo</a></li>
+                <li><a href="{{ url_for('christmas') }}" data-text="Services">Christmas</a></li>
+                <li><a href="#" data-text="Work">Work</a></li>
+                <li><a href="#" data-text="Team">Team</a></li>
+                <li><a href="#" data-text="Contact">Contact</a></li>
+            </ul>
+    </body>
+</html>

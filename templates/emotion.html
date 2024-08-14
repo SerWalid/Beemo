@@ -18,6 +18,20 @@
 {% endblock %}
 
 {% block body %}
+
+    <br><br><br><br><br><br><br>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+            <h4>Test <em>Emotion Detection</em> </h4>
+             <img src="{{ url_for('static', filename='PageOff/assets/images/heading-line-dec.png') }}" alt="" >
+            <p> Beemo detects your emotions via camera, then redirects you to a chatbot page that tailors interactions based on your detected emotion after 10 seconds.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
 <div id="content">
 <div id="container">
 <video id="videoel" width="500" height="400" preload="auto" loop="" playsinline="" autoplay=""></video>
@@ -44,6 +58,22 @@
 
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+    setTimeout(function(){
+        window.location.href = "{{ url_for('chatbotinterface') }}";
+    }, 10000); // 10000 milliseconds = 10 seconds
+</script>
             <script src="static/js/emotionDetection.js"></script>
 
 {% endblock %}
