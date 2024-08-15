@@ -7,6 +7,10 @@ import os
 from groq import Groq
 import pyttsx3
 import tempfile
+import requests
+import openai
+
+
 
 app = Flask(__name__)
 
@@ -14,10 +18,12 @@ app = Flask(__name__)
 os.makedirs('static/audio', exist_ok=True)
 
 
+# ----------------------------------------------- API -----------------------------------------------
+api_key = 'X'
+client = Groq(api_key=api_key)
 
 
-
-# Database setup
+# ----------------------------------------------- Database setup -----------------------------------------------
 def create_connection():
     connection = None
     try:
@@ -61,12 +67,10 @@ def init_db():
 
 init_db()
 
-# Initialize the Groq client
-api_key = 'X'
-client = Groq(api_key=api_key)
 
 
 
+# ----------------------------------------------- LLM -----------------------------------------------
 def get_llm_story(character):
     prompt = f"Generate a short, engaging story about {character} that lasts around 30 seconds when read aloud."
     stream = client.chat.completions.create(
@@ -113,6 +117,10 @@ def get_llm_response(prompt):
     return response
 
 
+# Function to generate images using DALL-E
+
+
+# ----------------------------------------------- URLs -----------------------------------------------
 @app.route('/')
 def index():
     return render_template('index.html')

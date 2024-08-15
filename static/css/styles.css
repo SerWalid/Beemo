@@ -265,3 +265,52 @@ textarea::placeholder {
 
 
 
+.BeemoProduct a {
+  display: inline-block !important;
+  padding: 10px 20px !important;
+  color: #4b8ef1 !important;
+  border: 1px solid #4b8ef1;
+  text-transform: capitalize;
+  font-size: 15px;
+  display: inline-block;
+  background-color: #fff;
+  border-radius: 23px;
+  font-weight: 500 !important;
+  letter-spacing: 0.3px !important;
+  transition: all .5s;
+    position:relative;
+    left:800px;
+    top:-200px;
+    height:55px;
+    width:160px;
+}
+
+.BeemoProduct a:hover {
+  background-color: #4b8ef1;
+  color: #fff !important;
+}
+
+
+
+.listBeemo {
+  padding: 0;
+  margin: 0;
+    position: relative;
+    left:40%;
+}
+
+.list-item {
+  list-style: none;
+  text-align: center;
+  margin-bottom: 15px;
+}
+.list-item-img {
+  width: 200px;
+
+}
+
+.list-item-job {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: normal;
+}
