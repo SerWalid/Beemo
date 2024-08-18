@@ -3,12 +3,22 @@
 {% block head %}
 <title>Task Master</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/chatbotinterface.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/emotion.css') }}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://www.auduno.com/clmtrackr/examples/js/libs/utils.js"></script>
+<script src="https://www.auduno.com/clmtrackr/build/clmtrackr.js"></script>
+<script src="https://www.auduno.com/clmtrackr/models/model_pca_20_svm.js"></script>
+<script src="https://www.auduno.com/clmtrackr/examples/js/libs/Stats.js"></script>
+<script src="https://www.auduno.com/clmtrackr/examples/js/libs/d3.min.js"></script>
+<script src="https://www.auduno.com/clmtrackr/examples/js/emotion_classifier.js"></script>
+<script src="https://www.auduno.com/clmtrackr/examples/js/emotionmodel.js"></script>
+
 {% endblock %}
 
 {% block body %}
 
 <div id='containerchatbotinterface'>
-            <img src="https://lilgreenland.github.io/images/BMO.jpg" align="middle" style="width: 180px; height: 180px; position:relative; left:950px;top:120px;">
+            <img src="https://lilgreenland.github.io/images/BMO.jpg" align="middle" style="width: 150px; height: 150px; position:relative; left:600px;top:100px;">
 
     <div id='bodybox'>
         <div id='chatborder'>
@@ -27,6 +37,50 @@
         <br><br>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+    <div id="content">
+<div id="container">
+<video id="videoel" width="500" height="400" preload="auto" loop="" playsinline="" autoplay=""></video>
+<canvas id="overlay" width="500" height="400"></canvas>
+<div id="emotion_container">
+<div id="emotion_icons">
+					<img class="emotion_icon" id="icon1" src="https://dl.dropboxusercontent.com/s/j7ljqofc0dwj0zr/angry.png?dl=0">
+   	<img class="emotion_icon" id="icon2" src="https://dl.dropboxusercontent.com/s/qpnr8ygcb1mwcsz/disgust.png?dl=0">
+     	<img class="emotion_icon" id="icon3" src="https://dl.dropboxusercontent.com/s/exji8myrvkpapjd/scared.png?dl=0">
+					<img class="emotion_icon" id="icon4" src="https://dl.dropboxusercontent.com/s/eie40nw1carr8w7/sad.png?dl=0">
+					<img class="emotion_icon" id="icon5" src="https://dl.dropboxusercontent.com/s/c2j19szoxfzs3nc/surprise.png?dl=0">
+					<img class="emotion_icon" id="icon6" src="https://dl.dropboxusercontent.com/s/20mfy5jlzdb41ul/happy.png?dl=0">
+				</div>
+
+<div id="emotion_chart"></div>
+</div>
+
+
+
+		</div>
+            <div id="controls">
+				<div class="btn" onclick="startVideo()">SCAN</div>
+            </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+            <script src="static/js/emotionDetection.js"></script>
 
 <script src="{{ url_for('static', filename='PageOff/assets/js/chatbotinterface.js') }}"></script>
 {% endblock %}

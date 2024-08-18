@@ -4,6 +4,27 @@ var messages = [], // array that holds the record of each string in chat
     userName = 'Client', // name of the user
     talking = true; // when false the speech function doesn't work
 
+// This function triggers when the page is loaded
+window.onload = function() {
+    botInitiateConversation();
+};
+
+// Function to initiate conversation
+function botInitiateConversation() {
+    let botInitiatedMessage = "Welcome. I'm BMO, your mental health assistant. If you're feeling overwhelmed or need someone to talk to, I'm here to listen. How can I assist you today?";
+    messages.push(`<span class="bold">${botName}:</span> ${botInitiatedMessage}`);
+    // Outputs the message to the HTML
+    for (var i = 1; i < 8; i++) {
+        if (messages[messages.length - i]) {
+            let messageElement = document.getElementById("chatlog" + i);
+            messageElement.innerHTML = messages[messages.length - i];
+            messageElement.className = "chatlog bot-message";
+        }
+    }
+    // Optional: Says the message using the text to speech function
+    Speech(botInitiatedMessage);
+}
+
 // this runs each time enter is pressed or send button is clicked.
 function newEntry() {
     // if the message from the user isn't empty then run
