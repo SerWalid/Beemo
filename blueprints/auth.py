@@ -13,10 +13,10 @@ def create_connection():
     connection = None
     try:
         connection = mysql.connector.connect(
-            host='localhost',  # MySQL host
-            user='root',  # MySQL username
-            password='',  # MySQL password
-            database='Autism'  # MySQL database name
+            host='sql7.freesqldatabase.com',  # MySQL host
+            user='sql7727502',  # MySQL username
+            password='PwwVKdQe8w',  # MySQL password
+            database='sql7727502'  # MySQL database name
         )
         if connection.is_connected():
             print("Connected to MySQL database")
@@ -78,13 +78,13 @@ def login():
             cursor.close()
             connection.close()
 
-            if user and user['phone_number'] == password:
+            if user and check_password_hash(user['phone_number'], password):
                 # Login successful
                 return redirect(url_for('main.PageOff'))
             else:
                 return redirect(url_for('auth.login'))
 
-    return render_template('login.html')
+    return render_template('Login.html')
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():

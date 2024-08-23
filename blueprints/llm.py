@@ -8,7 +8,7 @@ from groq import Groq
 llm_bp = Blueprint('llm', __name__)
 
 # Groq API Setup
-api_key = 'X'
+api_key = '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'
 client = Groq(api_key=api_key)
 
 # Function to generate a story using Groq API
