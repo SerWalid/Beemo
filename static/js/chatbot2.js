@@ -17,7 +17,7 @@ document
       "max-w-2xl ms-auto flex justify-end gap-x-2 sm:gap-x-4";
     userBubble.innerHTML = `
         <div class="grow text-end space-y-3">
-            <div class="inline-block bg-blue-600 rounded-lg p-4 shadow-sm">
+            <div class="inline-block bg-blue-600 rounded-lg p-2 shadow-sm">
                 <p class="text-sm text-white">${userInput}</p>
             </div>
         </div>
@@ -40,7 +40,7 @@ document
                 class="object-contain w-full h-full"
               />
             </span>
-        <div class="bg-white border border-gray-200 rounded-lg p-4 space-y-3 dark:bg-neutral-900 dark:border-neutral-700">
+        <div class="bg-white border border-gray-200 rounded-lg p-4 space-y-3 white:bg-neutral-900 dark:border-neutral-700">
             <p class="text-sm text-gray-800 dark:text-white">Beemo is typing...</p>
         </div>
     `;
@@ -77,8 +77,8 @@ document
             </span>
             <div class="grow max-w-[90%] md:max-w-2xl w-full space-y-3">
 
-            <div class="bg-white border border-gray-200 rounded-lg p-4 space-y-3 dark:bg-neutral-900 dark:border-neutral-700">
-                <p class="text-sm text-gray-800 dark:text-white">${result.response}</p>
+            <div class="bg-white border border-gray-200 rounded-lg p-4 space-y-3 white:bg-neutral-900 white:border-neutral-700">
+                <p class="text-sm text-gray-800 dark:white">${result.response}</p>
             </div>
             <div>
                 <div class="sm:flex sm:justify-between">
