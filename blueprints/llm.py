@@ -3,13 +3,94 @@ import os
 import tempfile
 from gtts import gTTS
 from groq import Groq
-
+import mysql.connector
+from mysql.connector import Error
 # Initialize Blueprint
 llm_bp = Blueprint('llm', __name__)
 
 # Groq API Setup
-api_key = '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'
+api_key = 'X'
 client = Groq(api_key=api_key)
+
+
+
+Variable = False;
+# Global connection object
+connection = None
+
+def create_db_connection():
+    global connection
+    if connection is None or not connection.is_connected():
+        try:
+            connection = mysql.connector.connect(
+                host='sql7.freesqldatabase.com',
+                user='sql7727502',
+                password='PwwVKdQe8w',
+                database='sql7727502'
+            )
+            if connection.is_connected():
+                print("Connected to MySQL database")
+        except Error as e:
+            print(f"The error '{e}' occurred while creating the database connection")
+
+
+def get_db_connection():
+    global connection
+    if connection is None or not connection.is_connected():
+        create_db_connection()
+    return connection
+
+def create_new_chat_session():
+    connection = get_db_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            cursor.execute('''
+                INSERT INTO Chat_History (timestamp)
+                VALUES (NOW())
+            ''')
+            connection.commit()
+            chat_history_id = cursor.lastrowid
+            return chat_history_id
+        except Error as e:
+            print(f"The error '{e}' occurred during chat session creation")
+        finally:
+            cursor.close()
+    return None
+
+@llm_bp.route('/get_response', methods=['POST'])
+def get_response():
+        global Variable,id_last
+        data = request.json
+        prompt = data['prompt']
+        response = get_llm_response(prompt)
+
+        if not Variable:
+            id_last = create_new_chat_session()
+            if id_last is None:
+                return jsonify({'error': 'Failed to create new chat session'}), 500
+            Variable = True
+
+
+        connection = get_db_connection()
+        if connection:
+            try:
+                cursor = connection.cursor()
+                # Insert user input and chatbot response into Discussion
+                cursor.execute('''
+                    INSERT INTO Discussion (ID_ForeignKeyChat_History, user_input, chatbo_output)
+                    VALUES (%s, %s, %s)
+                ''', (id_last, prompt, response))
+                connection.commit()
+
+            except Error as e:
+                print(f"The error '{e}' occurred during data insertion")
+            finally:
+                cursor.close()
+
+        return jsonify({'response': response})
+
+
 
 # Function to generate a story using Groq API
 def get_llm_story(character):
@@ -56,14 +137,6 @@ def get_llm_response(prompt):
             response += delta_content
     return response
 
-# Route to handle LLM response
-@llm_bp.route('/get_response', methods=['POST'])
-def get_response():
-    data = request.json
-    prompt = data['prompt']
-    response = get_llm_response(prompt)
-    return jsonify({'response': response})
-
 # Utility function to generate audio file
 def generate_audio(text, filename):
     tts = gTTS(text=text, lang='en')
@@ -87,3 +160,6 @@ def character_story_audio(character):
         return response
 
     return send_file(temp_file_name)
+
+
+

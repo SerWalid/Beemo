@@ -93,3 +93,11 @@ def Campfire():
 @main_bp.route('/RelaxMenu')
 def RelaxMenu():
     return render_template('RelaxMenu.html')
+
+@main_bp.route('/sidebar')
+def sidebar():
+    return render_template('sidebar.html')
+
+@main_bp.route('/test')
+def Test():
+    return render_template('test.html')

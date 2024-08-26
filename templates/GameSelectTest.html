@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'sidebar.html' %}
 
 {% block head %}
 <title>Task Master</title>
@@ -7,18 +7,7 @@
 {% endblock %}
 
 {% block body %}
-    <br><br><br><br><br><br><br>
-    <div class="containerAAAAAAAAAA">
-      <div class="row">
-        <div class="col-lg-8 offset-lg-2">
-          <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
-            <h4>Amazing <em>Services &amp; Features</em> for you</h4>
-             <img src="{{ url_for('static', filename='PageOff/assets/images/heading-line-dec.png') }}" alt="" >
-            <p> Beemo detects emotions with a camera, initiates conversations based on these emotions, interacts uniquely with each child's needs, and provides detailed progress reports on their development.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <div class="CardsBody">
     <a href="{{ url_for('main.MemoryGame') }}" alt="Mythrill">
   <div class="card">
@@ -44,13 +33,7 @@
   </div>
 </a>
 
-    <a href="{{ url_for('main.Number') }}" alt="Mythrill" >
-  <div class="card">
-    <div class="wrapper">
-      <img src="{{ url_for('static', filename='PageOff/assets/images/numb.jpg') }}" class="cover-image" />
-    </div>
-  </div>
-</a>
+
 
 
 <a href="{{ url_for('main.BoxCube') }}" alt="Mythrill" >

@@ -1020,6 +1020,7 @@ Services Style
   border-radius: 10px;
   border-top-right-radius: 50px;
   transition: all .3s;
+  width: 300px;
 }
 
 .service-item .icon {
@@ -1061,12 +1062,20 @@ Services Style
 .second-service .icon {
   background-image: url(../images/chatbot.png);
 }
+.second-service {
+  position:absolute;
+  left:50px;
+}
 
 .second-service:hover .icon {
   background-image: url(../images/dialogue.png);
 }
 
 
+.third-service {
+  position:absolute;
+  left:400px;
+}
 .third-service .icon {
   background-image: url(../images/interaction.png);
 }

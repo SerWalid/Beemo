@@ -6,6 +6,7 @@
   position: relative;
   width: 1160px;
   top : 150px;
+  left : 80px;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -23,6 +24,7 @@
   overflow: hidden;
   margin-right: 15px;
   margin-top: 45px;
+
 }
 .containerStory:hover .box {
   transform: rotateY(25deg);

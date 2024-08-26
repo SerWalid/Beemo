@@ -12,12 +12,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position:relative;
+  top :20px;
+  left : 100px;
 }
 .card {
   width: var(--card-width);
   height: var(--card-height);
   position: relative;
-  top: -180px; /* Adjust this value as needed to move the card up */
   display: flex;
   justify-content: center;
   align-items: flex-end;

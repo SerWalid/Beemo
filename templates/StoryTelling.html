@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'sidebar.html' %}
 
 {% block head %}
 <title>Story Telling</title>
@@ -6,17 +6,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="containerW">
-      <div class="row">
-        <div class="col-lg-8 offset-lg-2">
-          <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
-            <h4>Amazing <em>Story Telling</em> for you</h4>
-             <img src="{{ url_for('static', filename='PageOff/assets/images/heading-line-dec.png') }}" alt="" >
-            <p> Beemo detects emotions with a camera, initiates conversations based on these emotions, interacts uniquely with each child's needs, and provides detailed progress reports on their development.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <div class="containerStory">
         <div class="box" onclick="playAudio('batman')">
             <div class="imgBx">
