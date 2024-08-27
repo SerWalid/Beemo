@@ -101,3 +101,24 @@ def sidebar():
 @main_bp.route('/test')
 def Test():
     return render_template('test.html')
+@main_bp.route('/home')
+def Home():
+    return render_template('homePage.html')
+@main_bp.route('/story-time')
+def Story():
+    return render_template('storyTime.html')
+
+
+@main_bp.route('/batman_story')
+def batman_story():
+    return render_template('batman_story.html')
+
+
+@main_bp.route('/spiderman-story')
+def spiderman_story():
+    return render_template('spiderman_story.html')
+
+
+@main_bp.route('/tom-and-jerry-story')
+def tom_and_jerry_story():
+    return render_template('tom_and_jerry_story.html')

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, send_file, after_this_request
+from flask import Blueprint, jsonify, request, send_file, after_this_request,url_for,current_app as app,render_template
 import os
 import tempfile
 from gtts import gTTS
@@ -9,7 +9,7 @@ from mysql.connector import Error
 llm_bp = Blueprint('llm', __name__)
 
 # Groq API Setup
-api_key = 'X'
+api_key = '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'
 client = Groq(api_key=api_key)
 
 
@@ -93,20 +93,22 @@ def get_response():
 
 
 # Function to generate a story using Groq API
+
 def get_llm_story(character):
-    prompt = f"Generate a short, engaging story about {character} that lasts around 30 seconds when read aloud."
+    prompt = f"Generate a short, engaging story about {character} that lasts around 1 minute when read aloud .captivating, and imaginative story about the character [insert character's name] that is both engaging and easy for young children (ages 4-7) to follow. The story should be whimsical, age-appropriate, and take approximately 30 seconds to read aloud. Focus on simple language, a positive message, and a playful tone that will entertain and inspire young minds. The story should have a clear beginning, middle, and end, with a little adventure or lesson suitable for kids. ONly give me the story without comments and response and don't say here is the story "
     stream = client.chat.completions.create(
         messages=[
-            {"role": "system", "content": "You are a professional children's storyteller. Craft a concise and engaging story about the character that should take around 30 seconds to read aloud."},
+            {"role": "system", "content": "You are a professional children's storyteller. Craft a concise and engaging story about the character that should take around 1 minute to read aloud."},
             {"role": "user", "content": prompt}
         ],
         model="llama3-70b-8192",
         temperature=0.5,
-        max_tokens=64,
+        max_tokens=500,
         top_p=1,
         stop=None,
         stream=True,
     )
+
 
     response = ""
     for chunk in stream:
@@ -137,29 +139,114 @@ def get_llm_response(prompt):
             response += delta_content
     return response
 
-# Utility function to generate audio file
+
 def generate_audio(text, filename):
     tts = gTTS(text=text, lang='en')
     tts.save(filename)
 
-# Route to generate and serve audio file for a story
-@llm_bp.route('/character_story_audio/<character>')
+# Format the story to wrap each word in span tags
+def format_story_with_spans(story):
+    words = story.split()
+    formatted_story = ""
+    for i, word in enumerate(words):
+        formatted_story += f"<span id='word{i}'>{word} </span>"
+    return formatted_story
+
+# Route to generate story and audio based on character
+@llm_bp.route('/character_story_audio/<character>', methods=['GET'])
 def character_story_audio(character):
-    story = get_llm_story(character)
+    try:
+        # Generate story using LLM (this function needs to be implemented)
+        story = get_llm_story(character)
 
-    with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as temp_file:
-        temp_file_name = temp_file.name
-        generate_audio(story, temp_file_name)
+        # Format the story with spans for word highlighting
+        formatted_story = format_story_with_spans(story)
 
-    @after_this_request
-    def cleanup(response):
-        try:
-            os.remove(temp_file_name)
-        except Exception as e:
-            print(f'Failed to delete {temp_file_name}. Reason: {e}')
-        return response
+        # Use a temporary file for the audio
+        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as temp_file:
+            temp_file_name = temp_file.name
+            generate_audio(story, temp_file_name)
 
-    return send_file(temp_file_name)
+        # Return both the formatted story and the audio URL
+        audio_url = url_for('llm.download_audio', filename=os.path.basename(temp_file_name), _external=True)
+        
+        return jsonify({'story': formatted_story, 'audio_url': audio_url}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Route to handle story generation from user input (POST)
+@llm_bp.route('/generate_story', methods=['POST'])
+def generate_story():
+    try:
+        data = request.get_json()
+        story_input = data.get('story_input')
+
+        # Validate the input
+        if not story_input:
+            return jsonify({'error': 'Invalid input'}), 400
+
+        # Generate the story using LLM based on user input (this function needs to be implemented)
+        story = get_llm_story(story_input)
+
+        # Format the story with spans for word highlighting
+        formatted_story = format_story_with_spans(story)
+
+        # Use a temporary file for the audio
+        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as temp_file:
+            temp_file_name = temp_file.name
+            generate_audio(story, temp_file_name)
+
+        # Return both the formatted story and the audio URL
+        audio_url = url_for('llm.download_audio', filename=os.path.basename(temp_file_name), _external=True)
+        
+        return jsonify({'story': formatted_story, 'audio_url': audio_url}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Serve the audio file
+@llm_bp.route('/download_audio/<filename>', methods=['GET'])
+def download_audio(filename):
+    # Construct the file path from the temporary directory
+    file_path = os.path.join(tempfile.gettempdir(), filename)
+
+    try:
+        # Ensure the file exists before sending it
+        if os.path.exists(file_path):
+
+            # Schedule the file to be deleted after the response is sent
+            @after_this_request
+            def remove_file(response):
+                try:
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                except Exception as e:
+                    # Log the error or handle it
+                    app.logger.error(f"Error deleting file: {e}")
+                return response
+
+            # Serve the file
+            return send_file(file_path, mimetype='audio/mpeg')
+        else:
+            return jsonify({'error': 'File not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+
+
+
+story_bp = Blueprint('story', __name__)
+
+# Route to serve the Batman story
+@llm_bp.route('/batman_story', methods=['GET'])
+def batman_story():
+    # Simple story text
+    story_text = "Once upon a time in Gotham, there was a hero named Batman."
+
+    # Render the story page and pass the simple story text
+    return render_template('batman_story.html', story=story_text)
+
+
 
 
 
