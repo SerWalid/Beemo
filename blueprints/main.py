@@ -101,3 +101,9 @@ def sidebar():
 @main_bp.route('/test')
 def Test():
     return render_template('test.html')
+@main_bp.route('/home')
+def Home():
+    return render_template('homePage.html')
+@main_bp.route('/story-time')
+def Story():
+    return render_template('storyTime.html')
