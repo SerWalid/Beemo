@@ -80,7 +80,7 @@ def login():
 
             if user and check_password_hash(user['phone_number'], password):
                 # Login successful
-                return redirect(url_for('main.PageOff'))
+                return redirect(url_for('main.LoadingHome'))
             else:
                 return redirect(url_for('auth.login'))
 
