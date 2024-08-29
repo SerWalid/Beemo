@@ -2,9 +2,20 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from mysql.connector import Error
+from dotenv import load_dotenv
+import os
 
 auth_bp = Blueprint('auth', __name__)
 
+
+# Load environment variables from .env file
+load_dotenv()
+# Access environment variables
+api_key = os.getenv('API_KEY')
+db_host = os.getenv('DB_HOST')
+db_user = os.getenv('DB_USER')
+db_password = os.getenv('DB_PASSWORD')
+db_name = os.getenv('DB_NAME')
 def create_connection():
     """
     Creates a connection to the MySQL database.
@@ -13,10 +24,10 @@ def create_connection():
     connection = None
     try:
         connection = mysql.connector.connect(
-            host='sql7.freesqldatabase.com',  # MySQL host
-            user='sql7727502',  # MySQL username
-            password='PwwVKdQe8w',  # MySQL password
-            database='sql7727502'  # MySQL database name
+            host=db_host,
+            user=db_user,
+            password=db_password,
+            database=db_name
         )
         if connection.is_connected():
             print("Connected to MySQL database")

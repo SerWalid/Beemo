@@ -6,28 +6,38 @@ from gtts import gTTS
 from groq import Groq
 import mysql.connector
 from mysql.connector import Error
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 
 # Initialize Blueprint
 llm_bp = Blueprint('llm', __name__)
 
 # Groq API Setup
-api_key = 'X'
+# Access environment variables
+api_key = os.getenv('API_KEY')
+db_host = os.getenv('DB_HOST')
+db_user = os.getenv('DB_USER')
+db_password = os.getenv('DB_PASSWORD')
+db_name = os.getenv('DB_NAME')
+
 client = Groq(api_key=api_key)
 
 Variable = False;
 # Global connection object
 connection = None
 
-
 def create_db_connection():
     global connection
     if connection is None or not connection.is_connected():
         try:
             connection = mysql.connector.connect(
-                host='sql7.freesqldatabase.com',
-                user='sql7727502',
-                password='PwwVKdQe8w',
-                database='sql7727502'
+                host=db_host,
+                user=db_user,
+                password=db_password,
+                database=db_name
             )
             if connection.is_connected():
                 print("Connected to MySQL database")

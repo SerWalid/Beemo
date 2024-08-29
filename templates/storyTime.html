@@ -1,10 +1,11 @@
-{% extends "tailwindBase.html" %} 
-{% block title %} Story Time {% endblock %} 
-{% block body %}
+{% extends "tailwindBase.html" %} {% block title %} Story Time {% endblock %} {%
+block header %} {% include 'navbar.html' %} {% endblock %} {% block body %}
 <!-- Content -->
 <div class="h-screen flex flex-col pb-6">
   <div class="h-full flex flex-col justify-center">
-    <div class="-mt-20 max-w-4xl w-full text-center mx-auto px-4 sm:px-6 lg:px-8">
+    <div
+      class="-mt-20 max-w-4xl w-full text-center mx-auto px-4 sm:px-6 lg:px-8"
+    >
       <img
         src="{{ url_for('static', filename='PageOff/assets/images/book.gif') }}"
         alt=""
@@ -57,22 +58,52 @@
     <!-- End Search -->
 
     <!-- Loading Animation -->
-    <div id="loading" class="loading fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50" style="display: none;">
-      <img src="{{ url_for('static', filename='PageOff/assets/images/bmoo.gif') }}" alt="Loading..." class="h-28 w-28 mb-4" />
+    <div
+      id="loading"
+      class="loading fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50"
+      style="display: none"
+    >
+      <img
+        src="{{ url_for('static', filename='PageOff/assets/images/bmoo.gif') }}"
+        alt="Loading..."
+        class="h-28 w-28 mb-4"
+      />
       <p class="text-white text-xl">Generating your story...</p>
     </div>
 
     <!-- Generated Story in Book-Like Format -->
-    <div id="storyContainer" class="book-container mt-10 mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 bg-white shadow-lg rounded-lg" style="display: none;">
+    <div
+      id="storyContainer"
+      class="book-container mt-10 mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 bg-white shadow-lg rounded-lg"
+      style="display: none"
+    >
       <div class="relative bg-gray-100 p-6 rounded-lg">
-        <div class="absolute -top-3 -left-3 w-5 h-5 bg-gray-100 rounded-full shadow"></div>
-        <div class="absolute -top-3 -right-3 w-5 h-5 bg-gray-100 rounded-full shadow"></div>
-        <div class="absolute -bottom-3 -left-3 w-5 h-5 bg-gray-100 rounded-full shadow"></div>
-        <div class="absolute -bottom-3 -right-3 w-5 h-5 bg-gray-100 rounded-full shadow"></div>
+        <div
+          class="absolute -top-3 -left-3 w-5 h-5 bg-gray-100 rounded-full shadow"
+        ></div>
+        <div
+          class="absolute -top-3 -right-3 w-5 h-5 bg-gray-100 rounded-full shadow"
+        ></div>
+        <div
+          class="absolute -bottom-3 -left-3 w-5 h-5 bg-gray-100 rounded-full shadow"
+        ></div>
+        <div
+          class="absolute -bottom-3 -right-3 w-5 h-5 bg-gray-100 rounded-full shadow"
+        ></div>
 
-        <h2 class="book-title text-3xl font-bold text-gray-800 text-center">Your Adventure</h2>
-        <p id="generatedStory" class="book-content text-gray-700 text-lg mt-6 leading-relaxed text-justify"></p>
-        <audio id="storyAudio" controls class="mt-6 w-full" style="display: none;"></audio>
+        <h2 class="book-title text-3xl font-bold text-gray-800 text-center">
+          Your Adventure
+        </h2>
+        <p
+          id="generatedStory"
+          class="book-content text-gray-700 text-lg mt-6 leading-relaxed text-justify"
+        ></p>
+        <audio
+          id="storyAudio"
+          controls
+          class="mt-6 w-full"
+          style="display: none"
+        ></audio>
       </div>
     </div>
   </div>
@@ -80,90 +111,96 @@
 <!-- End Content -->
 
 <script>
-document.getElementById('storyForm').addEventListener('submit', function(event) {
-  event.preventDefault(); // Prevent form submission
-  
-  const storyInput = document.getElementById('storyInput').value;
+  document
+    .getElementById("storyForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent form submission
 
-  // Show loading animation
-  document.getElementById('loading').style.display = 'flex';
-  document.getElementById('storyContainer').style.display = 'none';
+      const storyInput = document.getElementById("storyInput").value;
 
-  fetch('/generate_story', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ story_input: storyInput }),
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Hide loading animation
-    document.getElementById('loading').style.display = 'none';
-    
-    if (data.error) {
-      alert('Error generating story: ' + data.error);
-      return;
-    }
+      // Show loading animation
+      document.getElementById("loading").style.display = "flex";
+      document.getElementById("storyContainer").style.display = "none";
 
-    // Display the generated story and wrap words in span tags
-    document.getElementById('generatedStory').innerHTML = data.story;
-    
-    // Set and play the audio
-    const audioElement = document.getElementById('storyAudio');
-    audioElement.src = data.audio_url;
-    audioElement.style.display = 'block';
-    audioElement.load();
-    
-    // Get all the words in the story
-    const wordElements = document.querySelectorAll("#generatedStory span");
+      fetch("/generate_story", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ story_input: storyInput }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Hide loading animation
+          document.getElementById("loading").style.display = "none";
 
-    // Assuming the total story duration is 60 seconds
-    const totalDuration = 60;  // Total duration in seconds
-    const wordCount = wordElements.length;
-    const timePerWord = totalDuration / wordCount;  // Calculate time per word
+          if (data.error) {
+            alert("Error generating story: " + data.error);
+            return;
+          }
 
-    // Play the audio
-    audioElement.play();
+          // Display the generated story and wrap words in span tags
+          document.getElementById("generatedStory").innerHTML = data.story;
 
-    // Highlight words as the audio plays
-    audioElement.addEventListener('timeupdate', () => {
-      const currentTime = audioElement.currentTime;
+          // Set and play the audio
+          const audioElement = document.getElementById("storyAudio");
+          audioElement.src = data.audio_url;
+          audioElement.style.display = "block";
+          audioElement.load();
 
-      // Calculate which word should be highlighted based on the elapsed time
-      const currentWordIndex = Math.floor(currentTime / timePerWord);
+          // Get all the words in the story
+          const wordElements = document.querySelectorAll(
+            "#generatedStory span"
+          );
 
-      // Reset the previous highlights
-      wordElements.forEach((word, index) => {
-        if (index <= currentWordIndex) {
-          word.classList.add('highlight');
-        } else {
-          word.classList.remove('highlight');
-        }
-      });
+          // Assuming the total story duration is 60 seconds
+          const totalDuration = 60; // Total duration in seconds
+          const wordCount = wordElements.length;
+          const timePerWord = totalDuration / wordCount; // Calculate time per word
+
+          // Play the audio
+          audioElement.play();
+
+          // Highlight words as the audio plays
+          audioElement.addEventListener("timeupdate", () => {
+            const currentTime = audioElement.currentTime;
+
+            // Calculate which word should be highlighted based on the elapsed time
+            const currentWordIndex = Math.floor(currentTime / timePerWord);
+
+            // Reset the previous highlights
+            wordElements.forEach((word, index) => {
+              if (index <= currentWordIndex) {
+                word.classList.add("highlight");
+              } else {
+                word.classList.remove("highlight");
+              }
+            });
+          });
+
+          // Show the story container
+          document.getElementById("storyContainer").style.display = "block";
+
+          // Scroll smoothly to the story section after loading
+          document
+            .getElementById("storyContainer")
+            .scrollIntoView({ behavior: "smooth" });
+        })
+        .catch((error) => {
+          console.error("Error generating story:", error);
+          document.getElementById("loading").style.display = "none";
+        });
     });
 
-    // Show the story container
-    document.getElementById('storyContainer').style.display = 'block';
-
-    // Scroll smoothly to the story section after loading
-    document.getElementById('storyContainer').scrollIntoView({ behavior: 'smooth' });
-  })
-  .catch(error => {
-    console.error('Error generating story:', error);
-    document.getElementById('loading').style.display = 'none';
-  });
-});
-
-// Style for highlighted words
-const style = document.createElement('style');
-style.innerHTML = `
+  // Style for highlighted words
+  const style = document.createElement("style");
+  style.innerHTML = `
   .highlight {
     background-color: yellow;
     font-weight: bold;
   }
 `;
-document.head.appendChild(style);
+  document.head.appendChild(style);
 </script>
 
 {% endblock %}

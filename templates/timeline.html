@@ -1,0 +1,70 @@
+<div class="bg-white border shadow-sm rounded-xl py-2">
+  <h2 class="text-xl font-semibold text-gray-800 p-4">Today's Timeline</h2>
+
+  <div id="timeline-container">
+    {% for item in beemo_daily_usage_timeline %}
+    <!-- Item -->
+    <div
+      class="flex gap-x-3 timeline-item {% if loop.index > 3 %}hidden{% endif %}"
+    >
+      <!-- Left Content -->
+      <div class="w-16 text-end">
+        <span class="text-xs text-gray-500 dark:text-neutral-400"
+          >{{ item.time }}</span
+        >
+      </div>
+      <!-- End Left Content -->
+
+      <!-- Icon -->
+      <div
+        class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-neutral-700"
+      >
+        <div class="relative z-10 size-7 flex justify-center items-center">
+          <div
+            class="size-2 rounded-full bg-gray-400 dark:bg-neutral-600"
+          ></div>
+        </div>
+      </div>
+      <!-- End Icon -->
+
+      <!-- Right Content -->
+      <div class="grow pt-0.5 pb-8">
+        <h3 class="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
+          {{ item.event }}
+        </h3>
+        <p class="mt-1 text-sm text-gray-600 dark:text-neutral-400">
+          {{ item.activity }}
+        </p>
+        <ul class="list-disc ms-6 mt-3 space-y-1.5">
+          <li class="ps-1 text-sm text-gray-600 dark:text-neutral-400">
+            {{ child_name }} was {{ item.emotion_detected.lower() }}.
+          </li>
+          <li class="ps-1 text-sm text-gray-600 dark:text-neutral-400">
+            The interaction lasted about {{ item.duration }}.
+          </li>
+          {% if item.notes %}
+          <li class="ps-1 text-sm text-gray-600 dark:text-neutral-400">
+            {{ item.notes }}
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+      <!-- End Right Content -->
+    </div>
+    <!-- End Item -->
+    {% endfor %}
+  </div>
+
+  <!-- Read More / Read Less Button -->
+  <div class="text-center mt-4">
+    <button
+      id="toggle-timeline"
+      class="text-blue-500 hover:text-blue-700 underline font-medium"
+      onclick="toggleTimeline()"
+    >
+      Read More
+    </button>
+  </div>
+</div>
+
+<script src="./static/js/timeline.js"></script>
