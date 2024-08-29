@@ -1,26 +1,34 @@
-{% extends "tailwindBase.html" %}
-{% block title %} Tom & Jerry Story {% endblock %}
-
-{% block body %}
+{% extends "tailwindBase.html" %} {% block title %} Tom & Jerry Story {%
+endblock %} {% block header %} {% include 'navbar.html' %} {% endblock %} {%
+block body %}
 <div class="min-h-screen bg-gray-100 py-12">
   <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
     <h1 class="text-4xl font-bold mb-6">Tom & Jerry - The Silly Chase!</h1>
-    
+
     <!-- Audio Player -->
-   
 
     <!-- Story Container -->
     <div id="storyContainer" class="text-lg leading-relaxed mb-6 text-gray-700">
       <p id="storyText">
-        Meet Tom, a big, fluffy cat, and Jerry, a tiny, sneaky mouse. Tom is always trying to catch Jerry, but Jerry is super clever and always finds a way to escape! It’s like a big game of hide-and-seek in the house.
-        <br><br>
-        One day, Tom built a trap to catch Jerry, but Jerry zoomed through the house, making silly faces at Tom. Tom tried to chase him, but whoops! He tripped and slid right into a pile of pillows! Jerry giggled and squeaked, “Better luck next time, Tom!”
-        <br><br>
-        Even though they chase each other all the time, deep down, Tom and Jerry are the best of friends. They always end up playing and having fun together, no matter how many times Tom tries to catch Jerry. The end!
+        Meet Tom, a big, fluffy cat, and Jerry, a tiny, sneaky mouse. Tom is
+        always trying to catch Jerry, but Jerry is super clever and always finds
+        a way to escape! It’s like a big game of hide-and-seek in the house.
+        <br /><br />
+        One day, Tom built a trap to catch Jerry, but Jerry zoomed through the
+        house, making silly faces at Tom. Tom tried to chase him, but whoops! He
+        tripped and slid right into a pile of pillows! Jerry giggled and
+        squeaked, “Better luck next time, Tom!”
+        <br /><br />
+        Even though they chase each other all the time, deep down, Tom and Jerry
+        are the best of friends. They always end up playing and having fun
+        together, no matter how many times Tom tries to catch Jerry. The end!
       </p>
     </div>
     <audio id="storyAudio" controls class="w-full mt-6">
-      <source src="{{ url_for('static', filename='/audio/tom.mp3') }}" type="audio/mp3">
+      <source
+        src="{{ url_for('static', filename='/audio/tom.mp3') }}"
+        type="audio/mp3"
+      />
       Your browser does not support the audio element.
     </audio>
   </div>

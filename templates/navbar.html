@@ -109,30 +109,3 @@
   </nav>
 </header>
 <!-- ========== END HEADER ========== -->
-<script>
-  // Get the collapse element
-  const collapseElement = document.getElementById("hs-header-scrollspy");
-
-  // Get the toggle button
-  const toggleButton = document.getElementById("hs-header-scrollspy-collapse");
-
-  // Get all nav links
-  const navLinks = document.querySelectorAll(".nav-link");
-
-  // Function to toggle collapse
-  function toggleCollapse() {
-    collapseElement.classList.toggle("hidden");
-  }
-
-  // Add click event to each nav link
-  navLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      if (window.innerWidth < 768) {
-        toggleCollapse();
-      }
-    });
-  });
-
-  // Add click event to toggle button
-  toggleButton.addEventListener("click", toggleCollapse);
-</script>
