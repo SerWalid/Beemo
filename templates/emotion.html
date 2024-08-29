@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'tailwindBase.html' %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='PageOff/assets/css/emotion.css') }}"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-{% block head %}
-<title>Task Master</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/emotion.css') }}">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script src="https://www.auduno.com/clmtrackr/examples/js/libs/utils.js"></script>
 <script src="https://www.auduno.com/clmtrackr/build/clmtrackr.js"></script>
 <script src="https://www.auduno.com/clmtrackr/models/model_pca_20_svm.js"></script>
@@ -14,57 +14,62 @@
 <script src="https://www.auduno.com/clmtrackr/examples/js/emotion_classifier.js"></script>
 <script src="https://www.auduno.com/clmtrackr/examples/js/emotionmodel.js"></script>
 
-
-{% endblock %}
-
-{% block body %}
-
-    <br><br><br><br><br><br><br>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 offset-lg-2">
-          <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
-            <h4>Test <em>Emotion Detection</em> </h4>
-             <img src="{{ url_for('static', filename='PageOff/assets/images/heading-line-dec.png') }}" alt="" >
-            <p> Beemo detects your emotions via camera, then redirects you to a chatbot page that tailors interactions based on your detected emotion after 10 seconds.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+{% endblock %} {% block body %}
 
 <div id="content">
-<div id="container">
-<video id="videoel" width="500" height="400" preload="auto" loop="" playsinline="" autoplay=""></video>
-<canvas id="overlay" width="500" height="400"></canvas>
-<div id="emotion_container">
-<div id="emotion_icons">
-					<img class="emotion_icon" id="icon1" src="https://dl.dropboxusercontent.com/s/j7ljqofc0dwj0zr/angry.png?dl=0">
-   	<img class="emotion_icon" id="icon2" src="https://dl.dropboxusercontent.com/s/qpnr8ygcb1mwcsz/disgust.png?dl=0">
-     	<img class="emotion_icon" id="icon3" src="https://dl.dropboxusercontent.com/s/exji8myrvkpapjd/scared.png?dl=0">
-					<img class="emotion_icon" id="icon4" src="https://dl.dropboxusercontent.com/s/eie40nw1carr8w7/sad.png?dl=0">
-					<img class="emotion_icon" id="icon5" src="https://dl.dropboxusercontent.com/s/c2j19szoxfzs3nc/surprise.png?dl=0">
-					<img class="emotion_icon" id="icon6" src="https://dl.dropboxusercontent.com/s/20mfy5jlzdb41ul/happy.png?dl=0">
-				</div>
+  <div id="container">
+    <video
+      id="videoel"
+      width="500"
+      height="400"
+      preload="auto"
+      loop=""
+      playsinline=""
+      autoplay=""
+    ></video>
+    <canvas id="overlay" width="500" height="400"></canvas>
+    <div id="emotion_container" class="bg-gray-500">
+      <div id="emotion_icons">
+        <img
+          class="emotion_icon"
+          id="icon1"
+          src="{{ url_for('static', filename='PageOff/assets/images/angry.png') }}"
+        />
+        <img
+          class="emotion_icon"
+          id="icon2"
+          src="{{ url_for('static', filename='PageOff/assets/images/disgusted.png') }}"
+        />
+        <img
+          class="emotion_icon"
+          id="icon3"
+          src="{{ url_for('static', filename='PageOff/assets/images/fear.png') }}"
+        />
+        <img
+          class="emotion_icon"
+          id="icon4"
+          src="{{ url_for('static', filename='PageOff/assets/images/cry.png') }}"
+        />
+        <img
+          class="emotion_icon"
+          id="icon5"
+          src="{{ url_for('static', filename='PageOff/assets/images/surprised.png') }}"
+        />
+        <img
+          class="emotion_icon"
+          id="icon6"
+          src="{{ url_for('static', filename='PageOff/assets/images/laughing.png') }}"
+        />
+      </div>
 
-<div id="emotion_chart"></div>
+      <div id="emotion_chart"></div>
+    </div>
+  </div>
+  <div id="controls">
+    <div class="btn" onclick="startVideo()">SCAN</div>
+  </div>
 </div>
 
-
-
-		</div>
-            <div id="controls">
-				<div class="btn" onclick="startVideo()">SCAN</div>
-            </div>
-
-</div>
-
-
-
-    <script>
-    setTimeout(function(){
-        window.location.href = "{{ url_for('chatbotinterface') }}";
-    }, 10000); // 10000 milliseconds = 10 seconds
-</script>
-            <script src="static/js/emotionDetection.js"></script>
+<script src="static/js/emotionDetection.js"></script>
 
 {% endblock %}
