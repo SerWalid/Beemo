@@ -7,6 +7,11 @@ from groq import Groq
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
+import threading
+import tempfile
+
+import pygame
+import time
 
 # Load environment variables from .env file
 load_dotenv()
@@ -44,7 +49,6 @@ def create_db_connection():
         except Error as e:
             print(f"The error '{e}' occurred while creating the database connection")
 
-
 def get_db_connection():
     global connection
     if connection is None or not connection.is_connected():
@@ -71,40 +75,60 @@ def create_new_chat_session():
     return None
 
 
+import tempfile
+import pygame
+import time
+import threading
+from gtts import gTTS
+from flask import Blueprint, request, jsonify
+
+llm_bp = Blueprint('llm', __name__)
+
+
+def play_audio(file_path):
+    # Initialize pygame mixer
+    pygame.mixer.init()
+
+    # Load and play the MP3 file
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
+
+    # Wait for the playback to finish
+    while pygame.mixer.music.get_busy():
+        time.sleep(1)
+
+    # Stop the mixer to release the file
+    pygame.mixer.music.stop()
+    pygame.mixer.quit()
+
+    # Wait a moment to ensure the file is released
+    time.sleep(0.5)
+
+    # Delete the MP3 file after playback
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+
 @llm_bp.route('/get_response', methods=['POST'])
 def get_response():
-    global Variable, id_last
     data = request.json
     prompt = data['prompt']
     response = get_llm_response(prompt)
 
-    if not Variable:
-        id_last = create_new_chat_session()
-        if id_last is None:
-            return jsonify({'error': 'Failed to create new chat session'}), 500
-        Variable = True
+    # Convert response to speech
+    tts = gTTS(text=response, lang='en')
 
-    connection = get_db_connection()
-    if connection:
-        try:
-            cursor = connection.cursor()
-            # Insert user input and chatbot response into Discussion
-            cursor.execute('''
-                    INSERT INTO Discussion (ID_ForeignKeyChat_History, user_input, chatbo_output)
-                    VALUES (%s, %s, %s)
-                ''', (id_last, prompt, response))
-            connection.commit()
+    # Create a temporary file
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as temp_file:
+        temp_file_path = temp_file.name
+        tts.save(temp_file_path)
 
-        except Error as e:
-            print(f"The error '{e}' occurred during data insertion")
-        finally:
-            cursor.close()
+    # Start a new thread to play the audio
+    threading.Thread(target=play_audio, args=(temp_file_path,)).start()
 
     return jsonify({'response': response})
 
-
 # Function to generate a story using Groq API
-
 def get_llm_story(character):
     prompt = f"Generate a short, engaging story about {character} that lasts around 1 minute when read aloud .captivating, and imaginative story about the character [insert character's name] that is both engaging and easy for young children (ages 4-7) to follow. The story should be whimsical, age-appropriate, and take approximately 30 seconds to read aloud. Focus on simple language, a positive message, and a playful tone that will entertain and inspire young minds. The story should have a clear beginning, middle, and end, with a little adventure or lesson suitable for kids. ONly give me the story without comments and response and don't say here is the story "
     stream = client.chat.completions.create(
@@ -151,6 +175,45 @@ def get_llm_response(prompt):
         if delta_content is not None:
             response += delta_content
     return response
+
+
+
+@llm_bp.route('/transcribe_audio', methods=['POST'])
+def transcribe_audio():
+    if 'audio' not in request.files:
+        return jsonify({'error': 'No audio file provided'}), 400
+
+    audio_file = request.files['audio']
+
+    if audio_file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    # Create a temporary file
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.m4a') as temp_file:
+        temp_file_path = temp_file.name
+        audio_file.save(temp_file_path)
+
+    try:
+        with open(temp_file_path, 'rb') as file:
+            transcription = client.audio.transcriptions.create(
+                file=(temp_file_path, file.read()),
+                model="distil-whisper-large-v3-en",
+                prompt="Specify context or spelling",
+                response_format="json",
+                language="en",
+                temperature=0.0
+            )
+
+        return jsonify({'transcription': transcription.text})
+    except Exception as e:
+        print(f"Error in transcription: {e}")
+        return jsonify({'error': 'Error processing audio file'}), 500
+    finally:
+        # Ensure the file is removed
+        try:
+            os.remove(temp_file_path)
+        except Exception as e:
+            print(f"Error removing file: {e}")
 
 
 def generate_audio(text, filename):
