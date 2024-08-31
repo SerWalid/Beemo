@@ -4,6 +4,7 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
 import os
+from .models import db, Client
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -12,90 +13,6 @@ auth_bp = Blueprint('auth', __name__)
 load_dotenv()
 # Access environment variables
 api_key = os.getenv('API_KEY')
-db_host = os.getenv('DB_HOST')
-db_user = os.getenv('DB_USER')
-db_password = os.getenv('DB_PASSWORD')
-db_name = os.getenv('DB_NAME')
-def create_connection():
-    """
-    Creates a connection to the MySQL database.
-    Returns the connection object if successful, None otherwise.
-    """
-    connection = None
-    try:
-        connection = mysql.connector.connect(
-            host=db_host,
-            user=db_user,
-            password=db_password,
-            database=db_name
-        )
-        if connection.is_connected():
-            print("Connected to MySQL database")
-    except Error as e:
-        print(f"The error '{e}' occurred")
-    return connection
-
-
-def init_db():
-    """
-    Initializes the database by creating the 'clients' table if it doesn't exist.
-    """
-    connection = create_connection()
-    if connection:
-        try:
-            cursor = connection.cursor()
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS clients (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    full_name VARCHAR(255) NOT NULL,
-                    email_address VARCHAR(255) NOT NULL UNIQUE,
-                    phone_number VARCHAR(255) NOT NULL,
-                    birth_date DATE NOT NULL,
-                    gender VARCHAR(50) NOT NULL,
-                    street_address_1 VARCHAR(255) NOT NULL,
-                    street_address_2 VARCHAR(255),
-                    country VARCHAR(100) NOT NULL,
-                    city VARCHAR(100) NOT NULL
-                )
-            ''')
-            connection.commit()
-        except Error as e:
-            print(f"The error '{e}' occurred during table creation")
-        finally:
-            cursor.close()
-            connection.close()
-
-init_db()
-
-
-
-
-
-
-@auth_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    """
-    Handles user login.
-    """
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-
-        connection = create_connection()
-        if connection:
-            cursor = connection.cursor(dictionary=True)
-            cursor.execute("SELECT * FROM clients WHERE email_address = %s", (email,))
-            user = cursor.fetchone()
-            cursor.close()
-            connection.close()
-
-            if user and check_password_hash(user['phone_number'], password):
-                # Login successful
-                return redirect(url_for('main.LoadingHome'))
-            else:
-                return redirect(url_for('auth.login'))
-
-    return render_template('Login.html')
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -110,23 +27,43 @@ def register():
         country = request.form['country']
         city = request.form['city']
 
-        connection = create_connection()
-        if connection:
-            try:
-                cursor = connection.cursor()
-                cursor.execute('''
-                    INSERT INTO clients (
-                        full_name, email_address, phone_number, birth_date, gender, 
-                        street_address_1, street_address_2, country, city
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-                ''', (full_name, email_address, generate_password_hash(password), birth_date, gender, street_address_1, street_address_2, country, city))
-                connection.commit()
-            except Error as e:
-                print(f"The error '{e}' occurred during form submission")
-            finally:
-                cursor.close()
-                connection.close()
+        hashed_password = generate_password_hash(password)
 
-        return redirect(url_for('auth.login'))
+        new_client = Client(
+            full_name=full_name, 
+            email_address=email_address, 
+            phone_number=hashed_password, 
+            birth_date=birth_date, 
+            gender=gender, 
+            street_address_1=street_address_1, 
+            street_address_2=street_address_2, 
+            country=country, 
+            city=city
+        )
+
+        try:
+            db.session.add(new_client)
+            db.session.commit()
+            return redirect(url_for('auth.login'))
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            db.session.rollback()
 
     return render_template('register.html')
+
+
+@auth_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        client = Client.query.filter_by(email_address=email).first()
+
+        if client and check_password_hash(client.phone_number, password):
+            # Login successful
+            return redirect(url_for('main.LoadingHome'))
+        else:
+            return redirect(url_for('auth.login'))
+
+    return render_template('Login.html')

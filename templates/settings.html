@@ -110,10 +110,9 @@ endblock %} {% block content %}
           </p>
         </div>
         <!-- Select -->
-        <form class="flex flex-col md:flex-row gap-4">
-          <select
-            multiple=""
-            data-hs-select='{
+        <select
+          multiple=""
+          data-hs-select='{
 "placeholder": "Select option...",
 "dropdownClasses": "mt-2 z-50 w-full max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300",
 "optionClasses": "py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50",
@@ -124,115 +123,221 @@ endblock %} {% block content %}
 "optionTemplate": "<div class=\"flex items-center\"><div class=\"size-8 me-2\" data-icon></div><div><div class=\"text-sm font-semibold text-gray-800 \" data-title></div><div class=\"text-xs text-gray-500 \" data-description></div></div><div class=\"ms-auto\"><span class=\"hidden hs-selected:block\"><svg class=\"shrink-0 size-4 text-blue-600\" xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z\"/></svg></span></div></div>",
 "extraMarkup": "<div class=\"absolute top-1/2 end-3 -translate-y-1/2\"><svg class=\"shrink-0 size-3.5 text-gray-500 \" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m7 15 5 5 5-5\"/><path d=\"m7 9 5-5 5 5\"/></svg></div>"
 }'
-            class="hidden"
-          >
-            <option value="">Choose</option>
-            {% for topic in selected_topics %}
-            <option value="{{ topic.id }}" selected>{{ topic.topic }}</option>
-            {% endfor %}
-          </select>
-          <button
-            type="button"
-            class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-          >
-            Save
-            <svg
-              class="shrink-0 size-4"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="size-6"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-        </form>
+          class="hidden"
+        >
+          <option value="">Choose</option>
+          {% for topic in selected_topics %}
+          <option value="{{ topic.id }}" selected>{{ topic.topic }}</option>
+          {% endfor %}
+        </select>
         <!-- End Select -->
       </div>
 
       <div class="grid border-b py-6 sm:grid-cols-2">
         <div class="">
           <h2 class="text-lg font-semibold leading-4 text-slate-700">
-            Repetitive Questions Notification
+            Sleep Time
           </h2>
-          <p class="font- text-slate-600 mt-2">
-            Get notified when the child repeatedly asks the same question to
-            Beemo within a short period.
-          </p>
+          <div class="mt-4 flex gap-4 md:items-center flex-col md:flex-row">
+            <select
+              class="py-3 px-4 pe-9 block border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <option disabled selected="">Open this select menu</option>
+              <option>8:00 PM</option>
+              <option>8:15 PM</option>
+              <option>8:30 PM</option>
+            </select>
+            <span class="text-sm text-gray-500">To</span>
+            <select
+              class="py-3 px-4 pe-9 bloc border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <option disabled selected="">Open this select menu</option>
+              <option>8:00 PM</option>
+              <option>8:15 PM</option>
+              <option>8:30 PM</option>
+            </select>
+          </div>
         </div>
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
             <label
-              for="email-2"
+              for="sleep-time"
               class="relative inline-flex cursor-pointer items-center"
             >
               <input
                 type="checkbox"
-                value=""
-                id="email-2"
+                value="on"
+                id="sleep-time"
                 class="peer sr-only"
               />
               <div
                 class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
               ></div>
-              <span class="ml-3 text-sm font-medium text-gray-900">Email</span>
-            </label>
-            <label
-              for="sms-2"
-              class="relative inline-flex cursor-pointer items-center"
-            >
-              <input type="checkbox" value="" id="sms-2" class="peer sr-only" />
-              <div
-                class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
-              ></div>
-              <span class="ml-3 text-sm font-medium text-gray-900">SMS</span>
             </label>
           </div>
         </div>
       </div>
+
       <div class="grid border-b py-6 sm:grid-cols-2">
         <div class="">
           <h2 class="text-lg font-semibold leading-4 text-slate-700">
-            Agitated Behavior Detection
+            Daily usage limit
           </h2>
-          <p class="font- text-slate-600">
-            Get notified when the child displays signs of agitation or distress
-            during interactions with Beemo.
-          </p>
+          <div class="mt-4 flex gap-2 items-center">
+            <input
+              type="text"
+              class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+              placeholder="Set the daily usage limit for beemo"
+            />
+            <span class="text-large text-gray-500">minutes</span>
+          </div>
         </div>
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
             <label
-              for="email-3"
+              for="daily-usage"
               class="relative inline-flex cursor-pointer items-center"
             >
               <input
                 type="checkbox"
-                value=""
-                id="email-3"
+                value="on"
+                id="daily-usage"
                 class="peer sr-only"
               />
               <div
                 class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
               ></div>
-              <span class="ml-3 text-sm font-medium text-gray-900">Email</span>
-            </label>
-            <label
-              for="sms-3"
-              class="relative inline-flex cursor-pointer items-center"
-            >
-              <input type="checkbox" value="" id="sms-3" class="peer sr-only" />
-              <div
-                class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
-              ></div>
-              <span class="ml-3 text-sm font-medium text-gray-900">SMS</span>
             </label>
           </div>
         </div>
+      </div>
+      <div class="grid border-b py-6">
+        <div class="">
+          <h2 class="text-lg font-semibold leading-4 text-slate-700">
+            Learning Goals
+          </h2>
+
+          <div class="py-6 flex flex-col lg:flex-row lg:items-center">
+            <div class="relative mb-6 lg:mb-0 lg:grow">
+              <label for="word-goal-slider" class="sr-only"
+                >New Words per Week</label
+              >
+              <input
+                id="word-goal-slider"
+                type="range"
+                value="{{ word_goal | default(25) }}"
+                min="1"
+                max="50"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                oninput="updateWordGoal(this.value)"
+              />
+              <div
+                class="flex justify-between text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6 w-full"
+              >
+                <span>1 word</span>
+                <span>17 words</span>
+                <span>33 words</span>
+                <span>50 words</span>
+              </div>
+            </div>
+            <div class="text-center mt-2 lg:mt-0 lg:ml-4 lg:text-right">
+              <span class="text-gray-700 dark:text-gray-300"
+                >Selected Goal:
+                <span id="word-goal-value">{{ word_goal | default(25) }}</span>
+                new words per week</span
+              >
+            </div>
+          </div>
+
+          <div class="py-6 flex flex-col lg:flex-row lg:items-center">
+            <div class="relative mb-6 lg:mb-0 lg:grow">
+              <label for="reading-time-slider" class="sr-only"
+                >Reading Time per Day</label
+              >
+              <input
+                id="reading-time-slider"
+                type="range"
+                value="{{ reading_time | default(30) }}"
+                min="5"
+                max="120"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                oninput="updateReadingTime(this.value)"
+              />
+              <div
+                class="flex justify-between text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6 w-full"
+              >
+                <span>5 minutes</span>
+                <span>45 minutes</span>
+                <span>80 minutes</span>
+                <span>120 minutes</span>
+              </div>
+            </div>
+            <div class="text-center mt-2 lg:mt-0 lg:ml-4 lg:text-right">
+              <span class="text-gray-700 dark:text-gray-300"
+                >Selected Goal:
+                <span id="reading-time-value"
+                  >{{ reading_time | default(30) }}</span
+                >
+                minutes of reading per day</span
+              >
+            </div>
+          </div>
+
+          <div class="py-6 flex flex-col lg:flex-row lg:items-center">
+            <div class="relative mb-6 lg:mb-0 lg:grow">
+              <label for="sessions-per-week-slider" class="sr-only"
+                >Interactive Sessions per Week</label
+              >
+              <input
+                id="sessions-per-week-slider"
+                type="range"
+                value="{{ sessions_per_week | default(1) }}"
+                min="1"
+                max="14"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                oninput="updateSessionsPerWeek(this.value)"
+              />
+              <div
+                class="flex justify-between text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6 w-full"
+              >
+                <span>1 session</span>
+                <span>5 sessions</span>
+                <span>10 sessions</span>
+                <span>14 sessions</span>
+              </div>
+            </div>
+            <div class="text-center mt-2 lg:mt-0 lg:ml-4 lg:text-right">
+              <span class="text-gray-700 dark:text-gray-300"
+                >Selected Goal:
+                <span id="sessions-per-week-value"
+                  >{{ sessions_per_week | default(1) }}</span
+                >
+                interactive sessions per week</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end my-2">
+        <button
+          type="button"
+          class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+        >
+          Save
+          <svg
+            class="shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -412,6 +517,23 @@ endblock %} {% block content %}
       section.classList.add("hidden");
     });
     document.getElementById(sectionId).classList.remove("hidden");
+  }
+</script>
+
+<script>
+  function updateWordGoal(value) {
+    document.getElementById("word-goal-value").innerText = value;
+    // You would send the new value to the server using an AJAX request or a form submission
+  }
+
+  function updateReadingTime(value) {
+    document.getElementById("reading-time-value").innerText = value;
+    // You would send the new value to the server using an AJAX request or a form submission
+  }
+
+  function updateSessionsPerWeek(value) {
+    document.getElementById("sessions-per-week-value").innerText = value;
+    // You would send the new value to the server using an AJAX request or a form submission
   }
 </script>
 
