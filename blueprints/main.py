@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session
+from .utils import login_required  # Import the decorator
+from .models import User
 
 main_bp = Blueprint('main', __name__)
 
@@ -95,40 +97,53 @@ def RelaxMenu():
     return render_template('RelaxMenu.html')
 
 @main_bp.route('/sidebar')
+@login_required
 def sidebar():
     return render_template('sidebar.html')
 
 @main_bp.route('/test')
+@login_required
 def Test():
     return render_template('test.html')
+
 @main_bp.route('/home')
+@login_required
 def Home():
     return render_template('homePage.html')
 @main_bp.route('/story-time')
+@login_required
 def Story():
     return render_template('storyTime.html')
 
 
 @main_bp.route('/batman_story')
+@login_required
 def batman_story():
     return render_template('batman_story.html')
 
 
 @main_bp.route('/spiderman-story')
+@login_required
 def spiderman_story():
     return render_template('spiderman_story.html')
 
 
 @main_bp.route('/tom-and-jerry-story')
+@login_required
 def tom_and_jerry_story():
     return render_template('tom_and_jerry_story.html')
 
 @main_bp.route('/LoadingHome')
+@login_required
 def LoadingHome():
     return render_template('LoadingHome.html')
 
 @main_bp.route('/parent')
+@login_required
 def parent():
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+
     child_name="Alex"
     parent_name="John"
     goals = [
@@ -256,13 +271,16 @@ def parent():
     }
 ]
 
-    return render_template('dashboardHome.html', child_name=child_name, parent_name=parent_name, goals=goals, beemo_daily_usage_timeline=beemo_daily_usage_timeline, dashboard_stats=dashboard_stats)
+    return render_template('dashboardHome.html', child_name=child_name, parent_name=parent_name, goals=goals, beemo_daily_usage_timeline=beemo_daily_usage_timeline, dashboard_stats=dashboard_stats, user=user)
 
 @main_bp.route('/settings')
+@login_required
 def settings():
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
     selected_topics = [
         {'id': '1', 'topic': 'Hate'},
         {'id': '2', 'topic': 'Sadness'},
         # Add more selected topics as needed
     ]
-    return render_template('settings.html', selected_topics=selected_topics)
+    return render_template('settings.html', selected_topics=selected_topics, user=user)

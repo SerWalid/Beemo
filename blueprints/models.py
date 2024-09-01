@@ -93,6 +93,7 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     country = db.Column(db.String(50), nullable=False)
+    pin_code = db.Column(db.String(50), nullable=True)
 
     reports = db.relationship('Report', backref='user', lazy=True)
     notifications = db.relationship('Notification', backref='user', lazy=True)
@@ -100,13 +101,3 @@ class User(db.Model):
     settings = db.relationship('Settings', backref='user', uselist=False)
     
     subscriptions = db.relationship('Subscription', backref='user', lazy=True, foreign_keys='Subscription.user_id')  # One-to-many relationship
-
-
-
-
-
-
-
-
-
-

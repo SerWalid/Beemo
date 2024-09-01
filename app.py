@@ -7,10 +7,14 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy
 from blueprints.models import db  # Import db from models.py
+from datetime import timedelta
 
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY')
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Set session duration to 7 days
+
 # Configure the SQLAlchemy part of the app to use PyMySQL
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT', '3306')}/{os.getenv('DB_NAME')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
