@@ -27,6 +27,7 @@ db_host = os.getenv('DB_HOST')
 db_user = os.getenv('DB_USER')
 db_password = os.getenv('DB_PASSWORD')
 db_name = os.getenv('DB_NAME')
+db_port = os.getenv('DB_PORT')
 
 client = Groq(api_key=api_key)
 
@@ -42,7 +43,8 @@ def create_db_connection():
                 host=db_host,
                 user=db_user,
                 password=db_password,
-                database=db_name
+                database=db_name,
+                port=int(db_port)
             )
             if connection.is_connected():
                 print("Connected to MySQL database")
