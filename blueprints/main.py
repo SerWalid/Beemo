@@ -109,7 +109,7 @@ def Story():
     return render_template('storyTime.html')
 
 
-@main_bp.route('/batman_story')
+@main_bp.route('/batman_story', methods=['GET'])
 def batman_story():
     return render_template('batman_story.html')
 
