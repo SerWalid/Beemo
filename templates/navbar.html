@@ -3,12 +3,12 @@
   class="sticky top-0 inset-x-0 bg-white border-b border-gray-200 flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full"
 >
   <nav
-    class="relative max-w-[85rem] w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 px-4 sm:px-6 lg:px-8 py-4"
+    class="relative max-w-[85rem] w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 px-4 sm:px-6 lg:px-8 py-8"
   >
     <!-- Logo w/ Collapse Button -->
     <div class="flex items-center justify-between">
       <!-- Logo -->
-      <a href="{{ url_for('main.PageOff') }}" class="logo">
+      <a href="{{ url_for('main.Home') }}" class="logo">
         <p class="text-2xl font-bold text-blue-600">Beemo</p>
       </a>
       <!-- End Logo -->
@@ -73,35 +73,44 @@
       >
         <div
           data-hs-scrollspy="#scrollspy"
-          class="py-2 md:py-0 [--scrollspy-offset:220] md:[--scrollspy-offset:70] flex flex-col md:flex-row md:items-center md:justify-end gap-0.5 md:gap-1"
+          class="py-2 md:py-0 [--scrollspy-offset:220] md:[--scrollspy-offset:70] flex flex-col md:flex-row md:items-center md:justify-end gap-0.5 md:gap-4"
         >
           <a
-            class="nav-link p-2 font-medium flex items-center text-sm text-gray-800 hover:bg-blue-100 rounded-lg focus:outline-none focus:bg-blue-100 focus:text-blue-500 hover:text-blue-500"
-            href="#landing"
+            class="nav-link font-medium p-2 flex items-center text-base text-gray-800 rounded-lg focus:outline-none focus:text-blue-500 hover:text-blue-500"
+            href="{{ url_for('main.Home') }}"
           >
             Home
           </a>
 
           <a
-            class="nav-link p-2 font-medium flex items-center text-sm text-gray-800 hover:bg-blue-100 rounded-lg focus:outline-none focus:bg-blue-100 focus:text-blue-500 hover:text-blue-500"
-            href="#account"
+            class="nav-link font-medium p-2 flex items-center text-base text-gray-800 rounded-lg focus:outline-none focus:text-blue-500 hover:text-blue-500"
+            href="{{ url_for('main.Test') }}"
           >
             Beemo
           </a>
 
           <a
-            class="nav-link p-2 font-medium flex items-center text-sm text-gray-800 hover:bg-blue-100 rounded-lg focus:outline-none focus:bg-blue-100 focus:text-blue-500 hover:text-blue-500"
-            href="#work"
+            class="nav-link font-medium p-2 flex items-center text-base text-gray-800 rounded-lg focus:outline-none focus:text-blue-500 hover:text-blue-500"
+            href="{{ url_for('main.sidebar') }}"
           >
             Kids Zone
           </a>
 
           <a
-            class="nav-link p-2 font-medium flex items-center text-sm text-gray-800 hover:bg-blue-100 rounded-lg focus:outline-none focus:bg-blue-100 focus:text-blue-500 hover:text-blue-500"
-            href="#work"
+            class="nav-link font-medium p-2 flex items-center text-base text-gray-800 rounded-lg focus:outline-none focus:text-blue-500 hover:text-blue-500"
+            href="{{ url_for('main.parent') }}"
           >
             Parent Zone
           </a>
+
+          <form method="post" action="{{ url_for('auth.logout') }}">
+            <button
+              type="submit"
+              class="nav-link font-medium p-2 flex items-center text-base text-gray-800 rounded-lg focus:outline-none focus:text-blue-500 hover:text-blue-500"
+            >
+              Logout
+            </button>
+          </form>
         </div>
       </div>
     </div>

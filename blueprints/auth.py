@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from mysql.connector import Error
@@ -64,22 +64,34 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        # Log the input data for debugging (optional)
-        print(f"Login attempt - Email: {email}")
-
         # Query the user by email
         user = User.query.filter_by(email=email).first()
 
         # Check if the user exists and if the password is correct
         if user and check_password_hash(user.password, password):
-            # Login successful
+            # Store user information in the session
+            session['user_id'] = user.id
+            session['user_email'] = user.email
+
             print(f"Login successful for user: {user.email}")
+
+            # Redirect to the home page or another route
             return redirect(url_for('main.LoadingHome'))
         else:
             # Login failed, redirect back to login page
-            print(f"Login failed for user: {email}")
-            flash('Invalid email or password. Please try again.', 'danger')
             return redirect(url_for('auth.login'))
 
     # Render the login form
     return render_template('Login.html')
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    # Clear user information from the session
+    session.pop('user_id', None)
+    session.pop('user_email', None)
+
+    # Optionally, you can clear the entire session
+    # session.clear()
+
+    # Redirect to login page or homepage after logout
+    return redirect(url_for('auth.login'))
