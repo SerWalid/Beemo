@@ -1,14 +1,17 @@
-from flask import Blueprint, render_template, session
-from .utils import login_required  # Import the decorator
+from flask import Blueprint, render_template, session, flash, request, redirect, url_for
+from .utils import login_required, pin_required, logged_in_restricted  # Import the decorator
 from .models import User
+from datetime import datetime, timedelta
 
 main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
+@logged_in_restricted
 def index():
     return render_template('index.html')
 
 @main_bp.route('/PageOff')
+@logged_in_restricted
 def PageOff():
     return render_template('PageOff.html')
 
@@ -140,9 +143,11 @@ def LoadingHome():
 
 @main_bp.route('/parent')
 @login_required
+@pin_required
 def parent():
     user_id = session.get('user_id')
     user = User.query.get(user_id)
+    print("parent_zone_pin", session.get('parent_zone_pin'))
 
     child_name="Alex"
     parent_name="John"
@@ -284,3 +289,15 @@ def settings():
         # Add more selected topics as needed
     ]
     return render_template('settings.html', selected_topics=selected_topics, user=user)
+
+@main_bp.route('/show-pin-modal', methods=['GET', 'POST'])
+def show_pin_modal():
+    if request.method == 'POST':
+        entered_pin = ''.join(request.form.getlist('pin'))
+        if entered_pin == '1234':
+            session['parent_zone_pin'] = entered_pin
+            return redirect(url_for('main.parent'))
+        else:
+            flash('Invalid PIN code. Please try again.')
+    
+    return render_template('pinModal.html')

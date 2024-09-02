@@ -1,0 +1,110 @@
+{% extends "tailwindBase.html" %} {% block title %} Beemo The Chatbot {%
+endblock %}{% block header %} {% include 'navbar.html' %} {% endblock %} {%
+block body %}
+<div
+  id="pin-modal"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50"
+>
+  <div class="bg-white rounded-lg shadow-lg max-w-sm w-full p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-bold text-gray-800">Enter PIN Code</h3>
+    </div>
+    <p class="text-sm text-gray-600 mb-4">
+      This modal ensures that only the parent can access the parent dashboard.
+      Please type the PIN code <strong>1234</strong> to test this feature.
+    </p>
+    <form
+      id="pin-form"
+      method="post"
+      action="{{ url_for('main.show_pin_modal') }}"
+    >
+      <div class="flex justify-center gap-x-3 mb-4">
+        <input
+          type="password"
+          maxlength="1"
+          name="pin"
+          class="w-12 h-12 text-center text-lg border rounded-md focus:border-blue-500 focus:ring-blue-500"
+          required
+        />
+        <input
+          type="password"
+          maxlength="1"
+          name="pin"
+          class="w-12 h-12 text-center text-lg border rounded-md focus:border-blue-500 focus:ring-blue-500"
+          required
+        />
+        <input
+          type="password"
+          maxlength="1"
+          name="pin"
+          class="w-12 h-12 text-center text-lg border rounded-md focus:border-blue-500 focus:ring-blue-500"
+          required
+        />
+        <input
+          type="password"
+          maxlength="1"
+          name="pin"
+          class="w-12 h-12 text-center text-lg border rounded-md focus:border-blue-500 focus:ring-blue-500"
+          required
+        />
+      </div>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <p id="error-message" class="text-red-500 text-center mb-4">
+        {{ messages[0] }}
+      </p>
+      {% endif %} {% endwith %}
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:bg-blue-700"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const pinInputs = document.querySelectorAll(
+      "#pin-form input[type='password']"
+    );
+    const pinForm = document.getElementById("pin-form");
+
+    pinInputs.forEach((input, index) => {
+      input.addEventListener("input", (event) => {
+        if (input.value.length === 1 && index < pinInputs.length - 1) {
+          pinInputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Backspace" &&
+          input.value.length === 0 &&
+          index > 0
+        ) {
+          pinInputs[index - 1].focus();
+        }
+      });
+    });
+
+    pinForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      let fullPin = "";
+      pinInputs.forEach((input) => {
+        fullPin += input.value;
+      });
+
+      if (fullPin.length === 4) {
+        pinForm.submit();
+      } else {
+        document.getElementById("error-message").textContent =
+          "Please enter the full PIN code.";
+        document.getElementById("error-message").classList.remove("hidden");
+      }
+    });
+  });
+</script>
+{% endblock %}
