@@ -84,21 +84,21 @@
 
           <a
             class="nav-link font-medium p-2 flex items-center text-base text-gray-800 rounded-lg focus:outline-none focus:text-blue-500 hover:text-blue-500"
-            href="{{ url_for('main.Test') }}"
+            href="{{ url_for('main.Chat') }}"
           >
             Beemo
           </a>
 
           <a
             class="nav-link font-medium p-2 flex items-center text-base text-gray-800 rounded-lg focus:outline-none focus:text-blue-500 hover:text-blue-500"
-            href="{{ url_for('main.sidebar') }}"
+            href="{{ url_for('main.game_zone') }}"
           >
             Kids Zone
           </a>
 
           <button
             class="nav-link font-medium p-2 flex items-center text-base text-gray-800 rounded-lg focus:outline-none focus:text-blue-500 hover:text-blue-500"
-            id="open-modal"
+            id="open-parent-modal"
           >
             Parent Zone
           </button>
@@ -128,7 +128,7 @@
     <div class="flex justify-between items-center mb-4">
       <h3 class="text-lg font-bold text-gray-800">Enter PIN Code</h3>
       <button
-        id="close-modal"
+        id="close-parent-modal"
         class="text-gray-600 hover:text-gray-800 focus:outline-none"
       >
         <svg
@@ -148,8 +148,8 @@
       </button>
     </div>
     <p class="text-sm text-gray-600 mb-4">
-      This modal ensures that only the parent can access the parent dashboard. Please
-      type the PIN code <strong>1234</strong> to test this feature.
+      This modal ensures that only the parent can access the parent dashboard.
+      Please type the PIN code <strong>1234</strong> to test this feature.
     </p>
     <form id="pin-form">
       <div class="flex justify-center gap-x-3 mb-4">
@@ -199,8 +199,8 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const modal = document.getElementById("pin-modal");
-    const openModalButton = document.getElementById("open-modal");
-    const closeModalButton = document.getElementById("close-modal");
+    const openModalButton = document.getElementById("open-parent-modal");
+    const closeModalButton = document.getElementById("close-parent-modal");
     const pinForm = document.getElementById("pin-form");
     const pinInputs = modal.querySelectorAll('input[type="password"]');
     const errorMessage = document.getElementById("error-message");
