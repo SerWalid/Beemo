@@ -99,14 +99,14 @@ def Campfire():
 def RelaxMenu():
     return render_template('RelaxMenu.html')
 
-@main_bp.route('/sidebar')
+@main_bp.route('/game-zone')
 @login_required
-def sidebar():
+def game_zone():
     return render_template('sidebar.html')
 
-@main_bp.route('/test')
+@main_bp.route('/chat')
 @login_required
-def Test():
+def Chat():
     return render_template('test.html')
 
 @main_bp.route('/home')

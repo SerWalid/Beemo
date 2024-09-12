@@ -196,29 +196,31 @@ block body %}
             <div class="flex items-center gap-x-1">
               <!-- Mic Button -->
               <!-- Mic Button -->
-<button
-  type="button"
-  id="mic-button"
-  class="inline-flex shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:bg-gray-100 focus:z-10 focus:outline-none focus:bg-gray-100"
->
-  <svg
-    class="shrink-0 size-4"
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-    <line x1="12" x2="12" y1="19" y2="22" />
-  </svg>
-</button>
-<!-- End Mic Button -->
+              <button
+                type="button"
+                id="mic-button"
+                class="inline-flex shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:bg-gray-100 focus:z-10 focus:outline-none focus:bg-gray-100"
+              >
+                <svg
+                  class="shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"
+                  />
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                  <line x1="12" x2="12" y1="19" y2="22" />
+                </svg>
+              </button>
+              <!-- End Mic Button -->
 
               <!-- End Mic Button -->
 
@@ -283,20 +285,20 @@ block body %}
 </script>
 <script>
   const openModalButton = document.getElementById("open-modal");
-  const modal = document.getElementById("new-modal");
+  const newModal = document.getElementById("new-modal");
   const closeModalButton = document.getElementById("close-modal");
 
   openModalButton.addEventListener("click", function () {
-    modal.classList.remove("hidden");
+    newModal.classList.remove("hidden");
   });
 
   closeModalButton.addEventListener("click", function () {
-    modal.classList.add("hidden");
+    newModal.classList.add("hidden");
   });
 </script>
 
 <script>
-  document.getElementById('mic-button').addEventListener('click', async () => {
+  document.getElementById("mic-button").addEventListener("click", async () => {
     try {
       // Use the Web Audio API to record audio
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -305,38 +307,37 @@ block body %}
 
       mediaRecorder.ondataavailable = (event) => chunks.push(event.data);
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(chunks, { type: 'audio/m4a' });
+        const audioBlob = new Blob(chunks, { type: "audio/m4a" });
         const formData = new FormData();
-        formData.append('audio', audioBlob, 'recorded_audio.m4a');
+        formData.append("audio", audioBlob, "recorded_audio.m4a");
 
         // Send the audio file to the Flask server for transcription
-        const response = await fetch('/transcribe_audio', {
-          method: 'POST',
+        const response = await fetch("/transcribe_audio", {
+          method: "POST",
           body: formData,
         });
 
         const result = await response.json();
         if (result.transcription) {
           // Send the transcription to the LLM endpoint
-          const llmResponse = await fetch('/get_response', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const llmResponse = await fetch("/get_response", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: result.transcription }),
           });
 
           const llmResult = await llmResponse.json();
           // Handle the LLM response (e.g., display it on the page)
-          console.log('LLM Response:', llmResult.response);
+          console.log("LLM Response:", llmResult.response);
         }
       };
 
       mediaRecorder.start();
       setTimeout(() => mediaRecorder.stop(), 5000); // Record for 5 seconds
     } catch (err) {
-      console.error('Error accessing microphone', err);
+      console.error("Error accessing microphone", err);
     }
   });
 </script>
-
 
 {% endblock %}

@@ -72,7 +72,9 @@ endblock %} {% block content %}
         </li>
       </ul>
     </div>
-    <div
+    <form
+      method="POST"
+      action="{{ url_for('main.settings') }}"
       id="beemo-settings-section"
       class="col-span-8 overflow-hidden rounded-xl px-8 border settings-section"
     >
@@ -143,6 +145,7 @@ endblock %} {% block content %}
           </h2>
           <div class="mt-4 flex gap-4 md:items-center flex-col md:flex-row">
             <select
+              id="start-time"
               class="py-3 px-4 pe-9 block border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
             >
               <option disabled selected="">Start time</option>
@@ -152,6 +155,7 @@ endblock %} {% block content %}
             </select>
             <span class="text-sm text-gray-500">To</span>
             <select
+              id="end-time"
               class="py-3 px-4 pe-9 bloc border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
             >
               <option disabled selected="">End time</option>
@@ -188,6 +192,7 @@ endblock %} {% block content %}
           </h2>
           <div class="mt-4 flex gap-2 items-center">
             <input
+              id="daily-usage-limit"
               type="text"
               class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
               placeholder="Set the daily usage limit for beemo"
@@ -204,7 +209,7 @@ endblock %} {% block content %}
               <input
                 type="checkbox"
                 value="on"
-                id="daily-usage"
+                id="daily-usage-checkbox"
                 class="peer sr-only"
               />
               <div
@@ -231,11 +236,11 @@ endblock %} {% block content %}
                 value="{{ word_goal | default(25) }}"
                 min="1"
                 max="50"
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 oninput="updateWordGoal(this.value)"
               />
               <div
-                class="flex justify-between text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6 w-full"
+                class="flex justify-between text-sm text-gray-500 absolute start-0 -bottom-6 w-full"
               >
                 <span>1 word</span>
                 <span>17 words</span>
@@ -244,7 +249,7 @@ endblock %} {% block content %}
               </div>
             </div>
             <div class="text-center mt-2 lg:mt-0 lg:ml-4 lg:text-right">
-              <span class="text-gray-700 dark:text-gray-300"
+              <span class="text-gray-700"
                 >Selected Goal:
                 <span id="word-goal-value">{{ word_goal | default(25) }}</span>
                 new words per week</span
@@ -263,11 +268,11 @@ endblock %} {% block content %}
                 value="{{ reading_time | default(30) }}"
                 min="5"
                 max="120"
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 oninput="updateReadingTime(this.value)"
               />
               <div
-                class="flex justify-between text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6 w-full"
+                class="flex justify-between text-sm text-gray-500 absolute start-0 -bottom-6 w-full"
               >
                 <span>5 minutes</span>
                 <span>45 minutes</span>
@@ -276,7 +281,7 @@ endblock %} {% block content %}
               </div>
             </div>
             <div class="text-center mt-2 lg:mt-0 lg:ml-4 lg:text-right">
-              <span class="text-gray-700 dark:text-gray-300"
+              <span class="text-gray-700"
                 >Selected Goal:
                 <span id="reading-time-value"
                   >{{ reading_time | default(30) }}</span
@@ -297,11 +302,11 @@ endblock %} {% block content %}
                 value="{{ sessions_per_week | default(1) }}"
                 min="1"
                 max="14"
-                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                 oninput="updateSessionsPerWeek(this.value)"
               />
               <div
-                class="flex justify-between text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6 w-full"
+                class="flex justify-between text-sm text-gray-500 absolute start-0 -bottom-6 w-full"
               >
                 <span>1 session</span>
                 <span>5 sessions</span>
@@ -310,7 +315,7 @@ endblock %} {% block content %}
               </div>
             </div>
             <div class="text-center mt-2 lg:mt-0 lg:ml-4 lg:text-right">
-              <span class="text-gray-700 dark:text-gray-300"
+              <span class="text-gray-700"
                 >Selected Goal:
                 <span id="sessions-per-week-value"
                   >{{ sessions_per_week | default(1) }}</span
@@ -323,8 +328,8 @@ endblock %} {% block content %}
       </div>
       <div class="flex justify-end my-2">
         <button
-          type="button"
-          class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+          type="submit"
+          class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
         >
           Save
           <svg
@@ -342,7 +347,7 @@ endblock %} {% block content %}
           </svg>
         </button>
       </div>
-    </div>
+    </form>
 
     <div
       id="notifications-settings-section"
@@ -539,6 +544,43 @@ endblock %} {% block content %}
     document.getElementById("sessions-per-week-value").innerText = value;
     // You would send the new value to the server using an AJAX request or a form submission
   }
+</script>
+
+<script>
+  const sleepCheckbox = document.getElementById("sleep-time");
+  const startTimeSelect = document.getElementById("start-time");
+  const endTimeSelect = document.getElementById("end-time");
+
+  sleepCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+      startTimeSelect.disabled = false;
+      endTimeSelect.disabled = false;
+    } else {
+      startTimeSelect.selectedIndex = 0; // Reset to default option
+      endTimeSelect.selectedIndex = 0; // Reset to default option
+      startTimeSelect.disabled = true;
+      endTimeSelect.disabled = true;
+    }
+  });
+
+  // Initial state: Disable the selects by default
+  startTimeSelect.disabled = true;
+  endTimeSelect.disabled = true;
+
+  const dailyUsageCheckbox = document.getElementById("daily-usage-checkbox");
+  const dailyUsageLimitInput = document.getElementById("daily-usage-limit");
+
+  dailyUsageCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+      dailyUsageLimitInput.disabled = false;
+    } else {
+      dailyUsageLimitInput.value = ""; // Clear the input field
+      dailyUsageLimitInput.disabled = true;
+    }
+  });
+
+  // Initial state: Disable the input field by default
+  dailyUsageLimitInput.disabled = true;
 </script>
 
 {% endblock %}
