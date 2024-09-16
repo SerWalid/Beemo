@@ -1,0 +1,93 @@
+{% extends 'sidebar.html' %}
+
+{% block head %}
+<title>Task Master</title>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing Evaluation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.0/dist/tailwind.min.css">
+    <style>
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            position: relative; /* Add this */
+            z-index: 1; /* Add this */
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="flex justify-center items-center h-screen">
+        <div class="card">
+            <h1 class="text-2xl font-bold mb-4">Drawing Evaluation</h1>
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold">Your Drawing</h2>
+                <div id="randomNumber" class="text-2xl font-bold text-center"></div>
+            </div>
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold">Evaluation Criteria</h2>
+                <ul class="list-disc ml-6">
+                    <li>Creativity</li>
+                    <li>Accuracy</li>
+                    <li>Use of Colors</li>
+                </ul>
+            </div>
+            <div class="chart-container mb-6">
+                <h2 class="text-xl font-semibold mb-2">Evaluation Chart</h2>
+                <canvas id="evaluationChart"></canvas>
+            </div>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Submit Feedback
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('evaluationChart').getContext('2d');
+        var evaluationChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Creativity', 'Accuracy', 'Use of Colors'],
+                datasets: [{
+                    label: 'Evaluation Score',
+                    data: [8, 7, 9], // Example data
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+        // Generate a random number between 50 and 90
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // Set the random number to the div
+        document.getElementById('randomNumber').textContent = getRandomNumber(50, 90);
+    </script>
+{% endblock %}

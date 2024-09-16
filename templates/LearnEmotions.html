@@ -1,0 +1,52 @@
+{% extends 'sidebar.html' %}
+
+{% block head %}
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn About Emotions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/LearnEmotions.css') }}">
+{% endblock %}
+
+{% block body %}
+<main>
+        <div class="content">
+            <h1>Learn About Emotions</h1>
+            <p id="emotion-description">
+                Discover different emotions like happy, sad, and surprised through fun and engaging activities. Our interactive cards and games will help you understand and recognize how people feel in various situations. Let's explore and learn together!
+            </p>
+
+            <a href="{{ url_for('main.Vision') }}">
+            <button class="btn">Explore Emotions</button>
+            </a>
+
+        </div>
+
+        <div class="stack">
+            <div class="card" data-emotion="happy">
+                <img src="{{ url_for('static', filename='images/lhappy.jpg') }}" class="cover-image" />
+                <h2>Happy</h2>
+            </div>
+            <div class="card" data-emotion="sad">
+                <img src="{{ url_for('static', filename='images/lsad.png') }}" class="cover-image" />
+                <h2>Sad</h2>
+            </div>
+            <div class="card" data-emotion="surprised">
+                <img src="{{ url_for('static', filename='images/lsuprise.jpg') }}" class="cover-image" />
+                <h2>Surprised</h2>
+            </div>
+            <div class="card" data-emotion="angry">
+                <img src="{{ url_for('static', filename='images/langry.jpg') }}" class="cover-image" />
+                <h2>Angry</h2>
+            </div>
+            <div class="card" data-emotion="fear">
+                <img src="{{ url_for('static', filename='images/fearkido.jpg') }}" class="cover-image" />
+                <h2>Fear</h2>
+            </div>
+        </div>
+    </main>
+
+<script src="{{ url_for('static', filename='js/LearnEmotions.js') }}"></script>
+
+
+
+{% endblock %}

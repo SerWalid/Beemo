@@ -1,9 +1,27 @@
-from flask import Blueprint, render_template, session, flash, request, redirect, url_for
+from flask import Blueprint, render_template, session, flash, request, redirect, url_for, jsonify
 from .utils import login_required, pin_required, logged_in_restricted  # Import the decorator
 from .models import User
 from datetime import datetime, timedelta
+import os
+import random
 
-main_bp = Blueprint('main', __name__)
+main_bp = Blueprint('main', __name__, static_folder='static')
+
+
+
+# Ensure the uploads directory exists
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+questions = [
+    {"emotion": "happy", "images": ["happykid1.jpg", "happykid2.jpg"]},
+    {"emotion": "sad", "images": ["sadkid1.jpg", "sadkid2.jpg"]},
+    {"emotion": "surprised", "images": ["surprisekid1.jpg", "surprisekid2.jpg"]},
+    {"emotion": "angry", "images": ["angrykid1.jpg", "angrykid2.jpg"]},
+    {"emotion": "fear", "images": ["fearkid1.jpg", "fearkid2.jpg"]}
+]
+
+
 
 @main_bp.route('/')
 @logged_in_restricted
@@ -23,9 +41,29 @@ def Games():
 def painting():
     return render_template('painting.html')
 
+@main_bp.route('/art')
+@login_required
+def art():
+    return render_template('art.html')
+
+
+@main_bp.route('/ImageChoice')
+@login_required
+def ImageChoice():
+    return render_template('ImageChoice.html')
+
+
+
+
+
 @main_bp.route('/Number')
 def Number():
     return render_template('Number.html')
+
+
+@main_bp.route('/EvaluatePainting')
+def EvaluatePainting():
+    return render_template('EvaluatePainting.html')
 
 @main_bp.route('/MemoryGame')
 def MemoryGame():
@@ -87,22 +125,11 @@ def dashboard():
 def beemo():
     return render_template('beemo.html')
 
-@main_bp.route('/christmas')
-def christmas():
-    return render_template('christmas.html')
-
-@main_bp.route('/Campfire')
-def Campfire():
-    return render_template('Campfire.html')
-
-@main_bp.route('/RelaxMenu')
-def RelaxMenu():
-    return render_template('RelaxMenu.html')
 
 @main_bp.route('/game-zone')
 @login_required
 def game_zone():
-    return render_template('sidebar.html')
+    return render_template('First.html')
 
 @main_bp.route('/chat')
 @login_required
@@ -140,6 +167,27 @@ def tom_and_jerry_story():
 @login_required
 def LoadingHome():
     return render_template('LoadingHome.html')
+
+@main_bp.route('/LearnEmotions')
+@login_required
+def LearnEmotions():
+    return render_template('LearnEmotions.html')
+
+@main_bp.route('/quiz')
+@login_required
+def quiz():
+    return render_template('quiz.html')
+
+@main_bp.route('/Vision')
+@login_required
+def Vision():
+    return render_template('vision.html')
+
+@main_bp.route('/dashboardActivities')
+@login_required
+def dashboardActivities():
+    return render_template('dashboardActivities.html')
+
 
 @main_bp.route('/parent')
 @login_required

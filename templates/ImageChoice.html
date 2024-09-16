@@ -1,0 +1,62 @@
+{% extends 'sidebar.html' %}
+
+{% block head %}
+<title>Task Master</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ImageChoice.css') }}">
+<script>
+  var baseUrl = "{{ url_for('static', filename='images/images_painting/') }}";
+</script>
+{% endblock %}
+
+{% block body %}
+
+
+
+
+
+
+
+
+<section>
+  <!-- Random image -->
+  <img id="random" src="https://res.cloudinary.com/beumsk/image/upload/v1506068916/pokeball.png" alt="random image" title="Click and see your image">
+</section>
+
+
+
+
+
+
+
+    <div class="container">
+
+
+
+
+
+    <a href="{{ url_for('main.art') }}" class="button button--pen">
+        <div class="button__wrapper">
+            <span class="button__text">ENTRY</span>
+        </div>
+        <div class="characterBox">
+            <div class="character wakeup">
+                <div class="character__face"></div>
+                <div class="charactor__face2"></div>
+            </div>
+            <div class="character wakeup">
+                <div class="character__face"></div>
+                <div class="charactor__face2"></div>
+            </div>
+            <div class="character">
+                <div class="character__face"></div>
+                <div class="charactor__face2"></div>
+            </div>
+        </div>
+    </a>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/ImageChoice.js') }}"></script>
+{% endblock %}

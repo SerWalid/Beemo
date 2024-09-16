@@ -1,0 +1,55 @@
+{% extends 'sidebar.html' %}
+
+{% block head %}
+    <title>AuraAI's Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/features.css') }}">
+{% endblock %}
+
+{% block body %}
+     <img
+          class="h-40 w-auto"
+          src="https://25.media.tumblr.com/tumblr_m8uwjcLps41rdkjxgo1_500.gif"
+        />
+    <div id="feature-intro">
+<div class="flex items-center space-x-4 p-4">
+  <!-- Example logo as an icon -->
+  <svg class="w-12 h-12 text-blue-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <!-- Example icon, you can replace this with your logo SVG -->
+    <path d="M12 2L2 22h20L12 2z" />
+  </svg>
+  <!-- Text -->
+  <h1 class="text-4xl font-extrabold text-gray-900">Welcome to Beemo's Project</h1>
+</div>
+        <br>
+
+       <!-- Section for Listing Features -->
+<section id="features-list">
+    <div class="feature">
+        <h2>Fun Puzzles and Games</h2>
+        <p>Enjoy a variety of puzzles and games including chess, Tetris, memory game, and cube challenges.</p>
+    </div>
+
+    <div class="feature">
+        <h2>Art and Crafting</h2>
+        <p>Receive an image to draw, and then have your artwork evaluated to see how well you captured the original.</p>
+    </div>
+
+    <div class="feature">
+        <h2>Music for Mood Regulation</h2>
+        <p>Enjoy music curated to regulate emotions and provide relaxation.</p>
+    </div>
+
+    <div class="feature">
+        <h2>Emotion Learning Room & Quiz</h2>
+        <p>Learn about emotions through engaging activities and take quizzes to test your emotional knowledge.</p>
+    </div>
+
+    <div class="feature">
+        <h2>Achievements</h2>
+        <p>Unlock achievements based on your progress in games, quizzes, and other activities.</p>
+    </div>
+</section>
+
+
+    </div>
+{% endblock %}
