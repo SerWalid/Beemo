@@ -203,7 +203,7 @@ endblock %} {% block content %}
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
             <label
-              for="daily-usage"
+              for="daily-usage-checkbox"
               class="relative inline-flex cursor-pointer items-center"
             >
               <input
@@ -567,20 +567,36 @@ endblock %} {% block content %}
   startTimeSelect.disabled = true;
   endTimeSelect.disabled = true;
 
+  // Get references to the checkbox and the daily usage input field
   const dailyUsageCheckbox = document.getElementById("daily-usage-checkbox");
   const dailyUsageLimitInput = document.getElementById("daily-usage-limit");
 
-  dailyUsageCheckbox.addEventListener("change", function () {
-    if (this.checked) {
+  // Function to handle the checkbox change
+  function handleCheckboxChange() {
+    if (dailyUsageCheckbox.checked) {
       dailyUsageLimitInput.disabled = false;
+      dailyUsageLimitInput.value = ""; // Optionally clear the value when enabled
     } else {
-      dailyUsageLimitInput.value = ""; // Clear the input field
       dailyUsageLimitInput.disabled = true;
+      dailyUsageLimitInput.value = ""; // Reset the value to an empty string
     }
-  });
+  }
 
-  // Initial state: Disable the input field by default
-  dailyUsageLimitInput.disabled = true;
+  // Function to filter input to digits only
+  function handleInput(event) {
+    const input = event.target;
+    // Allow only digits and empty string
+    input.value = input.value.replace(/[^0-9]/g, "");
+  }
+
+  // Initialize the state based on the current checkbox state
+  handleCheckboxChange();
+
+  // Add event listener for the checkbox change event
+  dailyUsageCheckbox.addEventListener("input", handleCheckboxChange);
+
+  // Add event listener for input validation
+  dailyUsageLimitInput.addEventListener("input", handleInput);
 </script>
 
 {% endblock %}
