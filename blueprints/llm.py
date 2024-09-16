@@ -12,6 +12,8 @@ import tempfile
 
 import pygame
 import time
+import base64
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -325,6 +327,55 @@ def batman_story():
 
     # Render the story page and pass the simple story text
     return render_template('batman_story.html', story=story_text)
+
+
+
+# Function to encode the image
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+@llm_bp.route('/analyze', methods=['POST'])
+def analyze_image():
+    # Get the image from the request
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image provided'}), 400
+
+    image = request.files['image']
+
+    # Save the image temporarily
+    image_path = os.path.join('uploads', image.filename)
+    image.save(image_path)
+
+    # Encode the image
+    base64_image = encode_image(image_path)
+
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "What's in this image?"},
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64,{base64_image}",
+                        },
+                    },
+                ],
+            }
+        ],
+        model="llava-v1.5-7b-4096-preview",
+    )
+
+    # Get the response
+    response_text = chat_completion.choices[0].message.content
+
+    # Remove the temporarily saved image
+    os.remove(image_path)
+
+    # Return the result as JSON
+    return jsonify({'response': response_text})
 
 
 

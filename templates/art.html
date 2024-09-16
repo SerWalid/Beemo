@@ -1,0 +1,40 @@
+{% extends 'sidebar.html' %}
+
+{% block head %}
+<title>Paiting Room</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/art.css') }}">
+         <!-- Importing GSAP TweenMax -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.4/TweenMax.min.js"></script>
+
+  <!-- Importing Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.min.js"></script>
+
+  <!-- Importing OBJLoader.js -->
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/356608/OBJLoader.js"></script>
+
+  <!-- Importing Paper.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.4/paper-core.min.js"></script>
+{% endblock %}
+
+{% block body %}
+
+    <a href="{{ url_for('main.EvaluatePainting') }}">
+<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    Done
+</button>
+</a>
+
+
+
+    <div id="wrapper">
+	<div id="bg"></div>
+            <div id="intro"></div>
+	        <div id="sketchpad"></div>
+	        <canvas id="sketch"></canvas>
+	        <canvas id="pencil3D"></canvas>
+</div>
+
+
+        <script src="static/js/art.js"></script>
+
+{% endblock %}

@@ -1,0 +1,252 @@
+{% extends 'sidebar.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class="device">
+    <div class="status">
+        <h1 class="title">Emotions Quiz</h1>
+        <div class="status-bar">
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Card gradient backgrounds -->
+    <div class="bg-card bg-card--01"></div>
+    <div class="bg-card bg-card--02"></div>
+    <div class="bg-card bg-card--03"></div>
+    <div class="bg-card bg-card--04"></div>
+    <div class="bg-card bg-card--05"></div>
+
+    <!-- Background decorations -->
+    <div class="bg-wrapper">
+        <div class="bg bg--alt-01"></div>
+        <div class="bg bg--alt-02"></div>
+        <div class="bg bg--alt-03"></div>
+    </div>
+
+    <!-- Intro -->
+    <div class="intro">
+        <div class="intro-panel">
+            <div class="intro-panel-images">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="intro-panel-text">
+                <h2>Ready to play?</h2>
+                <p>Look at the images and choose the correct emotion.</p>
+                <input type="checkbox" class="intro-done" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards">
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='images/happykid.jpg') }}" class="cover-image" />
+                </div>
+                <div class="card-details">
+                    <div class="card-question-number">1</div>
+                    <h3>What emotion is the child showing?</h3>
+                    <div class="options">
+                        <label>
+                            <input type="radio" name="question-01" class="option answer" value="Happy" /> Happy
+                        </label>
+                        <label>
+                            <input type="radio" name="question-01" class="option" value="Sad" /> Sad
+                        </label>
+                        <label>
+                            <input type="radio" name="question-01" class="option" value="Angry" /> Angry
+                        </label>
+                    </div>
+                    <br />
+                    <input type="checkbox" class="submit" />
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='images/sadkid.jpg') }}" class="cover-image" />
+                </div>
+                <div class="card-details">
+                    <div class="card-question-number">2</div>
+                    <h3>What emotion is the child showing?</h3>
+                    <div class="options">
+                        <label>
+                            <input type="radio" name="question-02" class="option" value="Happy" /> Happy
+                        </label>
+                        <label>
+                            <input type="radio" name="question-02" class="option answer" value="Sad" /> Sad
+                        </label>
+                        <label>
+                            <input type="radio" name="question-02" class="option" value="Surprised" /> Surprised
+                        </label>
+                    </div>
+                    <br />
+                    <input type="checkbox" class="submit" />
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='images/surprisekid.jpg') }}" class="cover-image" />
+                </div>
+                <div class="card-details">
+                    <div class="card-question-number">3</div>
+                    <h3>What emotion is the child showing?</h3>
+                    <div class="options">
+                        <label>
+                            <input type="radio" name="question-03" class="option" value="Happy" /> Happy
+                        </label>
+                        <label>
+                            <input type="radio" name="question-03" class="option answer" value="Surprised" /> Surprised
+                        </label>
+                        <label>
+                            <input type="radio" name="question-03" class="option" value="Angry" /> Angry
+                        </label>
+                    </div>
+                    <br />
+                    <input type="checkbox" class="submit" />
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='images/angrykid.jpg') }}" class="cover-image" />
+                </div>
+                <div class="card-details">
+                    <div class="card-question-number">4</div>
+                    <h3>What emotion is the child showing?</h3>
+                    <div class="options">
+                        <label>
+                            <input type="radio" name="question-04" class="option" value="Sad" /> Sad
+                        </label>
+                        <label>
+                            <input type="radio" name="question-04" class="option" value="Surprised" /> Surprised
+                        </label>
+                        <label>
+                            <input type="radio" name="question-04" class="option answer" value="Angry" /> Angry
+                        </label>
+                    </div>
+                    <br />
+                    <input type="checkbox" class="submit" />
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='images/fearkid.jpg') }}" class="cover-image" />
+                </div>
+                <div class="card-details">
+                    <div class="card-question-number">5</div>
+                    <h3>What emotion is the child showing?</h3>
+                    <div class="options">
+                        <label>
+                            <input type="radio" name="question-05" class="option answer" value="Fear" /> Fear
+                        </label>
+                        <label>
+                            <input type="radio" name="question-05" class="option" value="Happy" /> Happy
+                        </label>
+                        <label>
+                            <input type="radio" name="question-05" class="option" value="Disgust" /> Disgust
+                        </label>
+                    </div>
+                    <br />
+                    <input type="checkbox" class="submit" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+        <div class="summary-panel">
+            <h2 class="summary-title">Congratulations! 🥳 🎉</h2>
+            <p class="summary-text">You completed the Emotions Quiz . Here's a detailed review of your performance:</p>
+
+            <!-- Detailed Feedback -->
+            <div class="feedback">
+                <h3 class="feedback-title">Feedback:</h3>
+                <div class="feedback-content" id="feedbackContent"></div>
+            </div>
+
+            <!-- Button -->
+            <button id="closeButton" class="btn-close">Learn More about emotions</button>
+
+
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<script>
+    const correctAnswers = ['Happy', 'Sad', 'Surprised', 'Angry', 'Fear'];
+    const feedbackContent = document.getElementById('feedbackContent');
+    let score = 0;
+
+    function generateFeedback() {
+        feedbackContent.innerHTML = ''; // Clear feedback content before updating
+
+        document.querySelectorAll('.cards .card').forEach((card, index) => {
+            const selectedOption = card.querySelector('input[type="radio"]:checked');
+            const feedbackItem = document.createElement('div');
+            feedbackItem.classList.add('feedback-item');
+
+            if (selectedOption) {
+                const userAnswer = selectedOption.value;
+                const isCorrect = userAnswer === correctAnswers[index];
+
+                if (isCorrect) {
+                    feedbackItem.classList.add('correct');
+                    feedbackItem.innerHTML = `
+                        <h4>Question ${index + 1}: "What emotion is the child showing?"</h4>
+                        <p class="feedback-description">Correct! The child is showing "${correctAnswers[index]}".</p>
+                    `;
+                    score++;
+                } else {
+                    feedbackItem.classList.add('incorrect');
+                    feedbackItem.innerHTML = `
+                        <h4>Question ${index + 1}: "What emotion is the child showing?"</h4>
+                        <p class="feedback-description">You answered incorrectly. The child is showing "${correctAnswers[index]}".</p>
+                    `;
+                }
+            } else {
+                feedbackItem.classList.add('incorrect');
+                feedbackItem.innerHTML = `
+                    <h4>Question ${index + 1}: "What emotion is the child showing?"</h4>
+                    <p class="feedback-description">No answer selected. The child is showing "${correctAnswers[index]}".</p>
+                `;
+            }
+
+            feedbackContent.appendChild(feedbackItem);
+        });
+
+        document.querySelector('.points-inline').textContent = score;
+    }
+
+    document.querySelectorAll('.submit').forEach(submitBtn => {
+        submitBtn.addEventListener('change', generateFeedback);
+    });
+
+
+</script>
+
+
+{% endblock %}

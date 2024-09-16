@@ -1,0 +1,51 @@
+img {
+    position: relative;
+    top: -250px; /* Moves the image down */
+    left: 490px; /* Moves the image right */
+
+}
+svg{
+  position: absolute;
+  right:1000px;
+}
+
+#feature-intro {
+  padding: 20px;
+  color: #fff;
+    position: absolute;
+    left:250px;
+}
+
+#feature-intro h1 {
+  text-align: center;
+  color: #ffcc00;
+}
+
+#features-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.feature {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+  width: 45%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.feature h2 {
+  color: #ffcc00;
+}
+
+.feature p {
+  color: #dcdcdc;
+}
+
+h1{
+  position: absolute;
+  right:400px;
+}
