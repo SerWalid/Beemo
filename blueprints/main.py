@@ -33,6 +33,11 @@ def index():
 def PageOff():
     return render_template('PageOff.html')
 
+@main_bp.route('/LoaderWriting')
+@login_required
+def LoaderWriting():
+    return render_template('LoaderWriting.html')
+
 @main_bp.route('/Games')
 def Games():
     return render_template('Games.html')
@@ -135,6 +140,11 @@ def game_zone():
 @login_required
 def Chat():
     return render_template('test.html')
+
+@main_bp.route('/writing')
+@login_required
+def writing():
+    return render_template('writing.html')
 
 @main_bp.route('/home')
 @login_required
