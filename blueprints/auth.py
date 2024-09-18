@@ -4,7 +4,9 @@ import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
 import os
-from .models import db, User
+from .models import db, User, Settings
+import json
+
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -45,6 +47,18 @@ def register():
             # Add the new user to the session and commit to the database
             db.session.add(new_client)
             db.session.commit()
+            goals = {
+            "wordGoal": 1,
+            "readingTimeGoal": 1,
+            "sessionsPerWeekGoal": 1}
+    
+            # Convert the object to a JSON-formatted string
+            goals_string = json.dumps(goals)
+            settings = Settings(user_id=new_client.id, daily_usage_limit=0, goals=goals_string)        
+            
+            db.session.add(settings)
+            db.session.commit()
+
             return redirect(url_for('auth.login'))
         except Exception as e:
             # Log the error and rollback the transaction
@@ -52,7 +66,19 @@ def register():
             db.session.rollback()
             # Optionally, provide feedback to the user
     # Render the registration form
-    return render_template('register.html')
+    african_countries = [
+    "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", 
+    "Cabo Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", 
+    "Democratic Republic of the Congo", "Republic of the Congo", "Djibouti", 
+    "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", 
+    "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", 
+    "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", 
+    "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", 
+    "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", 
+    "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", 
+    "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe"
+]
+    return render_template('register.html', countries=african_countries)
 
 
 

@@ -6,14 +6,15 @@ class Settings(db.Model):
     __tablename__ = 'settings'
     
     id = db.Column(db.Integer, primary_key=True)
-    sleep_time_start = db.Column(db.Time, nullable=False)
-    sleep_time_end = db.Column(db.Time, nullable=False)
-    daily_usage_limit = db.Column(db.Integer, nullable=False)  # in minutes
-    education_level = db.Column(db.String(255), nullable=False)
-    beemo_voice_tune = db.Column(db.String(255), nullable=False)
-    notifications_preferences = db.Column(db.JSON, nullable=True)  # Use JSON if supported
-    banned_topics = db.Column(db.String(255), nullable=True)
-    goals = db.Column(db.JSON, nullable=True)  # Use JSON if supported
+    sleep_time_start = db.Column(db.String(255), nullable=True)
+    sleep_time_end = db.Column(db.String(255), nullable=True)
+    daily_usage_limit = db.Column(db.Integer, nullable=True)
+    education_level = db.Column(db.String(255), nullable=True)  
+    beemo_voice_tune = db.Column(db.String(255), nullable=True)  
+    notifications_preferences = db.Column(db.JSON, nullable=True)  
+    banned_topics = db.Column(db.String(1000), nullable=True)  
+    alert_topics = db.Column(db.String(1000), nullable=True)  
+    goals = db.Column(db.JSON, nullable=True)  
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -46,18 +47,21 @@ class Notification(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
+    topic = db.Column(db.String(255), nullable=True)
+    notification_type = db.Column(db.String(255), nullable=True)
     viewed = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     chat_id = db.Column(db.Integer, db.ForeignKey('chats.id'))
+    interaction_id = db.Column(db.Integer, db.ForeignKey('interactions.id'))
 
 
 class Chat(db.Model):
     __tablename__ = 'chats'
     
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.Text, nullable=False)
+    title = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -72,11 +76,15 @@ class Interaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     interaction_type = db.Column(db.String(255), nullable=True)
     message = db.Column(db.Text, nullable=False)
+    response = db.Column(db.Text, nullable=False)
     emotion_points = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     chat_id = db.Column(db.Integer, db.ForeignKey('chats.id'))
+
+    notifications = db.relationship('Notification', backref='interaction', lazy=True)
+
 
 
 class User(db.Model):
