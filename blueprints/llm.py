@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, send_file, after_this_request, url_for, current_app as app, \
+from flask import Blueprint, jsonify, request, send_file, session, after_this_request, url_for, current_app as app, \
     render_template
 import os
 import tempfile
@@ -9,6 +9,9 @@ from mysql.connector import Error
 from dotenv import load_dotenv
 import threading
 import tempfile
+from .models import User, Settings, db, Interaction, Chat, Notification
+from .utils import calculate_age, time_difference_from_today, split_message  # Import the decorator
+from datetime import date
 
 import pygame
 import time
@@ -115,12 +118,50 @@ def play_audio(file_path):
 
 @llm_bp.route('/get_response', methods=['POST'])
 def get_response():
+    # Retrieve the user ID from the session
+    user_id = session.get('user_id')
+    # Get today's date
+    today = date.today()
+    # Format today's date as a string (e.g., 'September 18, 2024')
+    today_str = today.strftime("%B %d, %Y")
+
+    # Check if there's already a chat for today for the current user
+    chat = Chat.query.filter(db.func.date(Chat.created_at) == today, Chat.user_id == user_id).first()
+
+    # If no chat exists for today, create a new one
+    if not chat:
+        chat = Chat(title=f"Chat for {today_str}", user_id=user_id)
+        db.session.add(chat)
+        db.session.commit()
     data = request.json
     prompt = data['prompt']
     response = get_llm_response(prompt)
+    text, metadata = split_message(response)
+    interaction = Interaction(
+        message=prompt,
+        response=text,
+        user_id=user_id,
+        chat_id=chat.id
+    )
+    db.session.add(interaction)
+    db.session.commit()
 
+    if(metadata):
+        topic = metadata.get('topic')
+        summary = metadata.get('summary')
+        message_type = metadata.get('type')
+        notification = Notification(
+            message= summary,
+            topic=topic,
+            notification_type=message_type,
+            user_id=user_id,
+            chat_id=chat.id,
+            interaction_id=interaction.id
+        )
+        db.session.add(notification)
+        db.session.commit()
     # Convert response to speech
-    tts = gTTS(text=response, lang='en')
+    tts = gTTS(text=text, lang='en')
 
     # Create a temporary file
     with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as temp_file:
@@ -130,11 +171,29 @@ def get_response():
     # Start a new thread to play the audio
     threading.Thread(target=play_audio, args=(temp_file_path,)).start()
 
-    return jsonify({'response': response})
+    return jsonify({'response': text})
 
 # Function to generate a story using Groq API
 def get_llm_story(character):
-    prompt = f"Generate a short, engaging story about {character} that lasts around 1 minute when read aloud .captivating, and imaginative story about the character [insert character's name] that is both engaging and easy for young children (ages 4-7) to follow. The story should be whimsical, age-appropriate, and take approximately 30 seconds to read aloud. Focus on simple language, a positive message, and a playful tone that will entertain and inspire young minds. The story should have a clear beginning, middle, and end, with a little adventure or lesson suitable for kids. ONly give me the story without comments and response and don't say here is the story "
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    child_birthday=user.child_birth_date
+    child_age = time_difference_from_today(child_birthday)
+    prompt = (
+    f"Generate a short, engaging story about {character} that lasts around 1 minute when read aloud. "
+    f"A captivating and imaginative story about the character that is both engaging and easy for young children (around {child_age}) to follow. "
+    f"This story is for a child with ASD (Autism Spectrum Disorder), so it should be particularly clear, structured, and easy to understand, while still being fun. "
+    "The story should be whimsical, age-appropriate, and take approximately 30 seconds to read aloud. "
+    "Focus on simple language, a positive message, and a playful tone that will entertain and inspire young minds. "
+    "The story should have a clear beginning, middle, and end, with a little adventure or lesson suitable for kids. "
+    "Only give me the story without comments or responses, and don't say 'here is the story'."
+)
+    system_message = (
+    f"You are a professional children's storyteller. You are creating a story for a child who's age is around {child_age} and has Autism Spectrum Disorder (ASD). "
+    "The child may benefit from stories that are clear, well-structured, and predictable, while still being fun and imaginative. "
+    "Craft a concise, engaging story about the character that should take around 1 minute to read aloud. "
+    "Ensure the story is easy to follow, with simple language and a gentle pace to accommodate the child's needs."
+)
     stream = client.chat.completions.create(
         messages=[
             {"role": "system",
@@ -159,10 +218,55 @@ def get_llm_story(character):
 
 # Function to generate a response using Groq API
 def get_llm_response(prompt):
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    child_name=user.child_name
+    child_birthday=user.child_birth_date
+    child_age = time_difference_from_today(child_birthday)
+    country = user.country
+    settings = Settings.query.filter_by(user_id=user_id).first()
+
+    system_message = (
+        f"You are Beemo, a compassionate and supportive mental health assistant. "
+        f"You are speaking to a child named {child_name}, who is {child_age} years old, and may have Autism Spectrum Disorder (ASD). "
+        f"Please try to address {child_name} by their name often to create a personal connection. "
+        "Your role is to provide empathetic and constructive support, ensuring your responses are clear, structured, and calming. "
+        "If the child expresses feelings of sadness, hopelessness, or talks about sensitive topics such as suicide, offer care and reassurance in a gentle and supportive manner. "
+        "Acknowledge their feelings, remind them that they are not alone, and suggest reaching out to a trusted adult. "
+        f"In case of crisis, provide the suicide hotline number for their country, {country}, and encourage them to seek immediate help if necessary."
+        "Please avoid using informal or non-professional language such as 'BEEP BEEP' or 'OH NOOO'."
+    )
+
+    if settings and settings.banned_topics:
+        blocked_topics_list = settings.banned_topics.split(",")  # Assuming banned_topics is a comma-separated string
+        banned_topics_formatted = ", ".join(blocked_topics_list)
+        system_message += (
+            f" Additionally, if the child mentions any of the following banned topics: {banned_topics_formatted}, "
+            "do not engage in discussing these topics. Instead, gently redirect the conversation. "
+            "You might use phrases such as, 'Let's talk about something else that's really fun!' or 'How about we discuss something different that you enjoy?' "
+            "If {child_name} asks specifically about the banned topics or why they can't talk about them, do not respond directly to the question. "
+            "Instead, continue the redirection without addressing the topic. "
+            "Make sure not to include the banned topic in your response. "
+            "For any mention of banned topics, append the following format at the end of your message: "
+            "'metadata: [{'topic': 'banned_topic', 'summary': 'brief_summary', 'type': 'banned'}]'. "
+            "Replace 'banned_topic' with the actual topic mentioned and provide a brief summary of the discussion prior to redirection."
+        )
+
+    if settings and settings.alert_topics:
+        alert_topics_list = settings.alert_topics.split(",")  # Assuming alert_topics is a comma-separated string
+        alert_topics_formatted = ", ".join(alert_topics_list)
+        system_message += (
+            f" Additionally, if the child mentions any of the following alert topics: {alert_topics_formatted}, "
+            "engage with the child normally, providing reassurance if necessary. "
+            "For any mention of alert topics, you have to append the following format at the end of your message: "
+            "'metadata: [{'topic': 'alert_topic', 'summary': 'brief_summary', 'type': 'alert'}]'. "
+            "Replace 'alert_topic' with the actual mentioned topic and 'brief_summary' with a summary of the discussion."
+        )
+
     stream = client.chat.completions.create(
         messages=[
             {"role": "system",
-             "content": "You are BMO, a compassionate and supportive mental health assistant. Your role is to provide empathetic and constructive support to users. Please avoid using informal or non-professional language such as 'BEEP BEEP' or 'OH NOOO'."},
+             "content": system_message},
             {"role": "user", "content": prompt}
         ],
         model="llama3-70b-8192",

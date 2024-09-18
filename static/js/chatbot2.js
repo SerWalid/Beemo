@@ -102,7 +102,7 @@ function addUserMessage(message) {
         </div>
       </div>
       <span class="shrink-0 inline-flex items-center justify-center size-[38px] rounded-md bg-gray-600">
-        <span class="text-sm font-medium text-white leading-none">AZ</span>
+        <span class="text-sm font-medium text-white leading-none">ME</span>
       </span>
     `;
   chatBubbles.appendChild(userBubble);

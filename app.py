@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy
 from blueprints.models import db  # Import db from models.py
+from flask_migrate import Migrate
 from datetime import timedelta
 
 load_dotenv()
@@ -22,6 +23,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the app with the SQLAlchemy instance
 db.init_app(app)
+migrate = Migrate(app, db)
+
 
 # Register blueprints
 app.register_blueprint(main_bp)

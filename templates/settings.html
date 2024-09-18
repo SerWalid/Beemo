@@ -1,8 +1,9 @@
 {% extends "dashboard2.html" %} {% block title %} Parent Dashboard | Settings {%
 endblock %} {% block content %}
 <div class="mx-4 min-h-screen max-w-screen-xl sm:mx-8">
+  <div id="toast-container" class="fixed top-4 right-4 z-50"></div>
   <h1 class="border-b py-6 text-4xl font-semibold">Settings</h1>
-  <div class="grid grid-cols-8 pt-3 sm:grid-cols-10">
+  <div class="grid grid-cols-8 py-3 sm:grid-cols-10">
     <div class="relative my-4 w-56 sm:hidden">
       <input
         class="peer hidden"
@@ -74,7 +75,6 @@ endblock %} {% block content %}
     </div>
     <form
       method="POST"
-      action="{{ url_for('main.settings') }}"
       id="beemo-settings-section"
       class="col-span-8 overflow-hidden rounded-xl px-8 border settings-section"
     >
@@ -96,6 +96,7 @@ endblock %} {% block content %}
         </div>
         <!-- Select -->
         <select
+          id="language-select"
           class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
         >
           <option value="" disabled>Open this select menu</option>
@@ -109,13 +110,12 @@ endblock %} {% block content %}
             Blocked Topics
           </h2>
           <p class="font- text-slate-600 mt-2">
-            Type each topic into the input field and press Enter to add it.
-            Click the "Save" button at the bottom of the page to apply your
-            changes.
+            Type each topic that should be restricted into the input field and press Enter to add it to the list. Beemo will avoid discussing these blocked topics. If any of these topics are mentioned, Beemo will handle them discreetly and ensure the parent is notified. To save your changes, click the "Save" button at the bottom of the page.
           </p>
         </div>
         <!-- Select -->
         <select
+          id="blocked_topics"
           multiple=""
           data-hs-select='{
 "placeholder": "Select option...",
@@ -131,55 +131,90 @@ endblock %} {% block content %}
           class="hidden"
         >
           <option value="">Choose</option>
-          {% for topic in selected_topics %}
-          <option value="{{ topic.id }}" selected>{{ topic.topic }}</option>
+          {% for topic in banned_topics %}
+          <option value="{{ topic.topic }}" selected>{{ topic.topic }}</option>
           {% endfor %}
         </select>
         <!-- End Select -->
+        <div class="py-4">
+          <h2 class="text-lg font-semibold leading-4 text-slate-700">
+            Alert Topics
+          </h2>
+          <p class="font- text-slate-600 mt-2">
+            Enter each topic into the input field and press Enter to add it to the list. Beemo will be allowed to discuss these topics but will notify the parent if they are mentioned. To save your changes, click the "Save" button at the bottom of the page.
+          </p>
+        </div>
+        <!-- Select -->
+        <select
+          id="alert-topics"
+          multiple=""
+          data-hs-select='{
+"placeholder": "Select option...",
+"dropdownClasses": "mt-2 z-50 w-full max-h-72 p-1 space-y-0.5 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300",
+"optionClasses": "py-2 px-4 w-full text-sm text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50",
+"mode": "tags",
+"wrapperClasses": "relative ps-0.5 pe-9 min-h-[46px] flex items-center flex-wrap text-nowrap w-full border border-gray-200 rounded-lg text-start text-sm focus:border-blue-500 focus:ring-blue-500",
+"tagsItemTemplate": "<div class=\"flex flex-nowrap items-center relative z-10 bg-white border border-gray-200 rounded-full p-1 m-1 \"><div class=\"size-6 me-1\" data-icon></div><div class=\"whitespace-nowrap text-gray-800 \" data-title></div><div class=\"inline-flex shrink-0 justify-center items-center size-5 ms-2 rounded-full text-gray-800 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 text-sm cursor-pointer\" data-remove><svg class=\"shrink-0 size-3\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/></svg></div></div>",
+"tagsInputClasses": "py-3 px-2 rounded-lg order-1 text-sm outline-none",
+"optionTemplate": "<div class=\"flex items-center\"><div class=\"size-8 me-2\" data-icon></div><div><div class=\"text-sm font-semibold text-gray-800 \" data-title></div><div class=\"text-xs text-gray-500 \" data-description></div></div><div class=\"ms-auto\"><span class=\"hidden hs-selected:block\"><svg class=\"shrink-0 size-4 text-blue-600\" xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" viewBox=\"0 0 16 16\"><path d=\"M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z\"/></svg></span></div></div>",
+"extraMarkup": "<div class=\"absolute top-1/2 end-3 -translate-y-1/2\"><svg class=\"shrink-0 size-3.5 text-gray-500 \" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m7 15 5 5 5-5\"/><path d=\"m7 9 5-5 5 5\"/></svg></div>"
+}'
+          class="hidden"
+        >
+          <option value="">Choose</option>
+          {% for topic in alert_topics %}
+          <option value="{{ topic.topic }}" selected>{{ topic.topic }}</option>
+          {% endfor %}
+        </select>
       </div>
 
+      
+      
       <div class="grid border-b py-6 sm:grid-cols-2">
         <div class="">
-          <h2 class="text-lg font-semibold leading-4 text-slate-700">
-            Sleep Time
-          </h2>
+          <h2 class="text-lg font-semibold leading-4 text-slate-700">Sleep Time</h2>
           <div class="mt-4 flex gap-4 md:items-center flex-col md:flex-row">
             <select
               id="start-time"
               class="py-3 px-4 pe-9 block border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+              {% if not sleep_time_start %}disabled{% endif %}
             >
-              <option disabled selected="">Start time</option>
-              <option>8:00 PM</option>
-              <option>8:15 PM</option>
-              <option>8:30 PM</option>
+              <option disabled value="" {% if sleep_time_start is none %}selected{% endif %}>Start time</option>
+              {% for time in time_array %}
+              <option value="{{ time }}" {% if sleep_time_start == time %}selected{% endif %}>
+                {{ time }}
+              </option>
+              {% endfor %}
             </select>
+      
             <span class="text-sm text-gray-500">To</span>
+      
             <select
               id="end-time"
               class="py-3 px-4 pe-9 bloc border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+              {% if not sleep_time_end %}disabled{% endif %}
             >
-              <option disabled selected="">End time</option>
-              <option>8:00 PM</option>
-              <option>8:15 PM</option>
-              <option>8:30 PM</option>
+              <option disabled value="" {% if sleep_time_end is none %}selected{% endif %}>End time</option>
+              {% for time in time_array %}
+              <option value="{{ time }}" {% if sleep_time_end == time %}selected{% endif %}>
+                {{ time }}
+              </option>
+              {% endfor %}
             </select>
           </div>
+          <span id="sleep-time-error" class="text-red-500 text-sm"></span>
         </div>
+      
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
-            <label
-              for="sleep-time"
-              class="relative inline-flex cursor-pointer items-center"
-            >
+            <label for="sleep-time" class="relative inline-flex cursor-pointer items-center">
               <input
                 type="checkbox"
-                value="on"
                 id="sleep-time"
                 class="peer sr-only"
+                {% if sleep_time_end and sleep_time_start %}checked{% endif %}
               />
-              <div
-                class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
-              ></div>
+              <div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300"></div>
             </label>
           </div>
         </div>
@@ -194,11 +229,14 @@ endblock %} {% block content %}
             <input
               id="daily-usage-limit"
               type="text"
+              value="{{ daily_usage_limit if daily_usage_limit is not none else '' }}"
               class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
               placeholder="Set the daily usage limit for beemo"
             />
             <span class="text-large text-gray-500">minutes</span>
           </div>
+          <span id="daily-usage-error" class="text-red-500 text-sm"></span>
+
         </div>
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
@@ -211,6 +249,10 @@ endblock %} {% block content %}
                 value="on"
                 id="daily-usage-checkbox"
                 class="peer sr-only"
+                checked="{{daily_usage_limit
+                is
+                not
+                none and daily_usage_limit > 0}}"
               />
               <div
                 class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
@@ -233,7 +275,7 @@ endblock %} {% block content %}
               <input
                 id="word-goal-slider"
                 type="range"
-                value="{{ word_goal | default(25) }}"
+                value="{{ word_goal | default(1) }}"
                 min="1"
                 max="50"
                 class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
@@ -251,7 +293,7 @@ endblock %} {% block content %}
             <div class="text-center mt-2 lg:mt-0 lg:ml-4 lg:text-right">
               <span class="text-gray-700"
                 >Selected Goal:
-                <span id="word-goal-value">{{ word_goal | default(25) }}</span>
+                <span id="word-goal-value">{{ word_goal }}</span>
                 new words per week</span
               >
             </div>
@@ -265,7 +307,7 @@ endblock %} {% block content %}
               <input
                 id="reading-time-slider"
                 type="range"
-                value="{{ reading_time | default(30) }}"
+                value="{{ reading_time_goal }}"
                 min="5"
                 max="120"
                 class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
@@ -284,7 +326,7 @@ endblock %} {% block content %}
               <span class="text-gray-700"
                 >Selected Goal:
                 <span id="reading-time-value"
-                  >{{ reading_time | default(30) }}</span
+                  >{{ reading_time_goal }}</span
                 >
                 minutes of reading per day</span
               >
@@ -299,7 +341,7 @@ endblock %} {% block content %}
               <input
                 id="sessions-per-week-slider"
                 type="range"
-                value="{{ sessions_per_week | default(1) }}"
+                value="{{ sessions_per_week_goal }}"
                 min="1"
                 max="14"
                 class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
@@ -318,7 +360,7 @@ endblock %} {% block content %}
               <span class="text-gray-700"
                 >Selected Goal:
                 <span id="sessions-per-week-value"
-                  >{{ sessions_per_week | default(1) }}</span
+                  >{{ sessions_per_week_goal | default(1) }}</span
                 >
                 interactive sessions per week</span
               >
@@ -328,6 +370,7 @@ endblock %} {% block content %}
       </div>
       <div class="flex justify-end my-2">
         <button
+          id="save-button"
           type="submit"
           class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
         >
@@ -349,8 +392,9 @@ endblock %} {% block content %}
       </div>
     </form>
 
-    <div
+    <form
       id="notifications-settings-section"
+      method="POST"
       class="col-span-8 overflow-hidden rounded-xl px-8 border settings-section hidden"
     >
       <div class="border-b pt-4 pb-8">
@@ -372,6 +416,8 @@ endblock %} {% block content %}
         </div>
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
+            {% set high_email_checked = high_emotional_engagement == 'email' or high_emotional_engagement == 'both' %}
+            {% set high_sms_checked = high_emotional_engagement == 'sms' or high_emotional_engagement == 'both' %}            
             <label
               for="email-1"
               class="relative inline-flex cursor-pointer items-center"
@@ -381,7 +427,7 @@ endblock %} {% block content %}
                 value=""
                 id="email-1"
                 class="peer sr-only"
-              />
+                {% if high_email_checked %}checked{% endif %}/>
               <div
                 class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
               ></div>
@@ -391,7 +437,7 @@ endblock %} {% block content %}
               for="sms-1"
               class="relative inline-flex cursor-pointer items-center"
             >
-              <input type="checkbox" value="" id="sms-1" class="peer sr-only" />
+              <input {% if high_sms_checked %}checked{% endif %} type="checkbox" value="" id="sms-1" class="peer sr-only" />
               <div
                 class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
               ></div>
@@ -413,6 +459,8 @@ endblock %} {% block content %}
         </div>
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
+            {% set repetitive_email_checked = repetitive_questions == 'email' or repetitive_questions == 'both' %}
+            {% set repetitive_sms_checked = repetitive_questions == 'sms' or repetitive_questions == 'both' %}  
             <label
               for="email-2"
               class="relative inline-flex cursor-pointer items-center"
@@ -422,6 +470,7 @@ endblock %} {% block content %}
                 value=""
                 id="email-2"
                 class="peer sr-only"
+                {% if repetitive_email_checked %}checked{% endif %}
               />
               <div
                 class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
@@ -432,7 +481,7 @@ endblock %} {% block content %}
               for="sms-2"
               class="relative inline-flex cursor-pointer items-center"
             >
-              <input type="checkbox" value="" id="sms-2" class="peer sr-only" />
+              <input {% if repetitive_sms_checked %}checked{% endif %}  type="checkbox" value="" id="sms-2" class="peer sr-only" />
               <div
                 class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
               ></div>
@@ -453,6 +502,8 @@ endblock %} {% block content %}
         </div>
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
+            {% set agitated_email_checked = agitated_behavior == 'email' or agitated_behavior == 'both' %}
+            {% set agitated_sms_checked = agitated_behavior == 'sms' or agitated_behavior == 'both' %}
             <label
               for="email-3"
               class="relative inline-flex cursor-pointer items-center"
@@ -462,6 +513,7 @@ endblock %} {% block content %}
                 value=""
                 id="email-3"
                 class="peer sr-only"
+                {% if agitated_email_checked %}checked{% endif %}
               />
               <div
                 class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
@@ -472,7 +524,7 @@ endblock %} {% block content %}
               for="sms-3"
               class="relative inline-flex cursor-pointer items-center"
             >
-              <input type="checkbox" value="" id="sms-3" class="peer sr-only" />
+              <input {% if agitated_sms_checked %}checked{% endif %} type="checkbox" value="" id="sms-3" class="peer sr-only" />
               <div
                 class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 :ring-blue-800"
               ></div>
@@ -481,7 +533,29 @@ endblock %} {% block content %}
           </div>
         </div>
       </div>
-    </div>
+      <div class="flex justify-end my-2">
+        <button
+          id="save-button"
+          type="submit"
+          class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Save
+          <svg
+            class="shrink-0 size-4"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="size-6"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+    </form>
     <div id="account-settings-section" class="settings-section hidden">
       <!-- Account settings HTML -->
     </div>
@@ -548,37 +622,48 @@ endblock %} {% block content %}
 
 <script>
   const sleepCheckbox = document.getElementById("sleep-time");
-  const startTimeSelect = document.getElementById("start-time");
-  const endTimeSelect = document.getElementById("end-time");
+const startTimeSelect = document.getElementById("start-time");
+const endTimeSelect = document.getElementById("end-time");
 
-  sleepCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-      startTimeSelect.disabled = false;
-      endTimeSelect.disabled = false;
-    } else {
-      startTimeSelect.selectedIndex = 0; // Reset to default option
-      endTimeSelect.selectedIndex = 0; // Reset to default option
-      startTimeSelect.disabled = true;
-      endTimeSelect.disabled = true;
-    }
-  });
-
-  // Initial state: Disable the selects by default
+// Initialize state on page load based on the checkbox status
+if (sleepCheckbox.checked) {
+  startTimeSelect.disabled = false;
+  endTimeSelect.disabled = false;
+} else {
   startTimeSelect.disabled = true;
   endTimeSelect.disabled = true;
+}
+
+// Toggle state when checkbox changes
+sleepCheckbox.addEventListener("change", function () {
+  if (this.checked) {
+    startTimeSelect.disabled = false;
+    endTimeSelect.disabled = false;
+  } else {
+    startTimeSelect.selectedIndex = 0; // Reset to default option
+    endTimeSelect.selectedIndex = 0;   // Reset to default option
+    startTimeSelect.disabled = true;
+    endTimeSelect.disabled = true;
+  }
+});
 
   // Get references to the checkbox and the daily usage input field
   const dailyUsageCheckbox = document.getElementById("daily-usage-checkbox");
   const dailyUsageLimitInput = document.getElementById("daily-usage-limit");
 
+  // Store the initial value passed from the server
+  const initialValue = dailyUsageLimitInput.value;
+
   // Function to handle the checkbox change
   function handleCheckboxChange() {
     if (dailyUsageCheckbox.checked) {
       dailyUsageLimitInput.disabled = false;
-      dailyUsageLimitInput.value = ""; // Optionally clear the value when enabled
+      // Show the initial value if available
+      dailyUsageLimitInput.value = initialValue;
     } else {
       dailyUsageLimitInput.disabled = true;
-      dailyUsageLimitInput.value = ""; // Reset the value to an empty string
+      // Reset the value to an empty string
+      dailyUsageLimitInput.value = "";
     }
   }
 
@@ -593,10 +678,205 @@ endblock %} {% block content %}
   handleCheckboxChange();
 
   // Add event listener for the checkbox change event
-  dailyUsageCheckbox.addEventListener("input", handleCheckboxChange);
+  dailyUsageCheckbox.addEventListener("change", handleCheckboxChange);
 
   // Add event listener for input validation
   dailyUsageLimitInput.addEventListener("input", handleInput);
 </script>
 
+<script>
+document
+  .getElementById("beemo-settings-section")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    // Disable the save button
+    const saveButton = document.getElementById("save-button");
+    saveButton.disabled = true;
+
+    // Extract values
+    const language = document.getElementById("language-select").value;
+    const blockedTopics = document.getElementById("blocked_topics");
+    const select = window.HSSelect.getInstance(blockedTopics);
+    const alertTopics = document.getElementById("alert-topics");
+    const alertSelect = window.HSSelect.getInstance(alertTopics);
+    const sleepTimeCheckbox = document.getElementById("sleep-time");
+    const startTime = document.getElementById("start-time").value;
+    const dailyUsageCheckbox = document.getElementById("daily-usage-checkbox");
+    const endTime = document.getElementById("end-time").value;
+    const dailyUsageLimit = document.getElementById("daily-usage-limit").value;
+
+    // Extract the goal values
+    const wordGoal = document.getElementById("word-goal-slider").value;
+    const readingTimeGoal = document.getElementById(
+      "reading-time-slider"
+    ).value;
+    const sessionsPerWeekGoal = document.getElementById(
+      "sessions-per-week-slider"
+    ).value;
+
+    // Create a goals object
+    const goals = {
+      wordGoal: wordGoal || null,
+      readingTimeGoal: readingTimeGoal || null,
+      sessionsPerWeekGoal: sessionsPerWeekGoal || null,
+    };
+
+    function validateForm() {
+      let valid = true;
+
+      // Sleep Time Validation
+      if (sleepTimeCheckbox.checked && (!startTime || !endTime)) {
+        document.getElementById("sleep-time-error").textContent =
+          "Please select both start and end times.";
+        valid = false;
+      } else {
+        document.getElementById("sleep-time-error").textContent = "";
+      }
+
+      // Daily Usage Validation
+      if (dailyUsageCheckbox.checked && !dailyUsageLimit) {
+        document.getElementById("daily-usage-error").textContent =
+          "Please provide a daily usage limit.";
+        valid = false;
+      } else {
+        document.getElementById("daily-usage-error").textContent = "";
+      }
+
+      return valid;
+    }
+
+    if (!validateForm()) {
+      saveButton.disabled = false; // Enable the button again if validation fails
+      return;
+    }
+
+    // Create a data object
+    const formData = {
+      bannedTopics:
+        select.selectedItems.length > 0 ? select.selectedItems.join(",") : "",
+      alertTopics:
+        alertSelect.selectedItems.length > 0
+          ? alertSelect.selectedItems.join(",")
+          : "",
+      startTime: startTime || null,
+      endTime: endTime || null,
+      dailyUsageLimit: dailyUsageLimit || null,
+      goals: JSON.stringify(goals), // Convert goals to a JSON string
+    };
+
+
+    // Send the data to the backend
+    fetch("/save-settings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Settings saved:", data);
+        displayToast("Settings saved successfully!");
+
+        // Scroll to the top of the page
+        window.scrollTo(0, 0);
+
+        saveButton.disabled = false;
+      })
+      .catch((error) => {
+        console.error("Error saving settings:", error);
+        saveButton.disabled = false;
+      });
+  });
+
+</script>
+
+<script>
+  document.getElementById('notifications-settings-section').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Get the current states of the checkboxes
+    const highEmotionalEngagement = getPreference('email-1', 'sms-1');
+    const repetitiveQuestions = getPreference('email-2', 'sms-2');
+    const agitatedBehavior = getPreference('email-3', 'sms-3');
+    console.log(highEmotionalEngagement, repetitiveQuestions, agitatedBehavior);
+
+    // Create the notification preferences object
+    const notificationPreference = {
+      highEmotionalEngagement,
+      repetitiveQuestions,
+      agitatedBehavior
+    };
+
+    // Send the form data as a stringified JSON object to /save-settings
+    try {
+      const response = await fetch('/save-settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ notificationPreferences: JSON.stringify(notificationPreference) })
+      });
+
+      if (response.ok) {
+        displayToast("Settings saved successfully!");
+      } else {
+        alert('Failed to save settings.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while saving settings.');
+    }
+  });
+
+  function getPreference(emailId, smsId) {
+    const emailChecked = document.getElementById(emailId).checked;
+    const smsChecked = document.getElementById(smsId).checked;
+
+    if (emailChecked && smsChecked) {
+      return 'both';
+    } else if (emailChecked) {
+      return 'email';
+    } else if (smsChecked) {
+      return 'sms';
+    } else {
+      return 'none';
+    }
+  }
+
+  function displayToast(message) {
+  // Create toast element
+  const toast = document.createElement("div");
+  toast.className =
+    "max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-800 dark:border-neutral-700 fade";
+  toast.setAttribute("role", "alert");
+  toast.setAttribute("tabindex", "-1");
+
+  toast.innerHTML = `
+    <div class="flex p-4">
+      <div class="shrink-0">
+        <svg class="shrink-0 size-4 text-teal-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+        </svg>
+      </div>
+      <div class="ms-3">
+        <p class="text-sm text-gray-700 dark:text-neutral-400">${message}</p>
+      </div>
+    </div>`;
+
+  // Append to the container
+  const toastContainer = document.getElementById("toast-container");
+  toastContainer.appendChild(toast);
+
+  // Fade out after 3 seconds
+  setTimeout(() => {
+    toast.style.transition = "opacity 0.5s ease";
+    toast.style.opacity = "0";
+    setTimeout(() => {
+      toast.remove();
+    }, 500); // Wait for the fade-out transition to complete
+  }, 3000);
+}
+</script>
 {% endblock %}

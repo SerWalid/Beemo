@@ -186,10 +186,9 @@
                   <div class="select-box">
                     <select name="country">
                       <option hidden>Country</option>
-                      <option value="Tunisia">Tunisia</option>
-                      <option value="Algeria">Algeria</option>
-                      <option value="Maroc">Maroc</option>
-                      <option value="Libya">Libya</option>
+                      {% for country in countries %}
+                      <option value="{{ country }}">{{ country }}</option>
+                      {% endfor %}
                     </select>
                   </div>
                 </div>
