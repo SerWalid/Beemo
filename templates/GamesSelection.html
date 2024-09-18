@@ -1,0 +1,90 @@
+{% extends 'sidebar.html' %}
+
+{% block head %}
+<title>Games</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/GamesSelection.css') }}">
+
+{% endblock %}
+
+{% block body %}
+    <div class="container mt30">
+<div class="wrapper">
+    <ul class="stage clearfix">
+        <!-- Memory Game Card -->
+
+        <li class="scene">
+             <a href="{{ url_for('main.MemoryGame') }}" alt="Mythrill" >
+            <div class="movie" onclick="return true">
+                <div class="poster">
+
+                </div>
+                <div class="info">
+                    <header>
+                        <h1>Memory Game</h1>
+                        <span class="year">2024</span>
+                        <span class="rating">Everyone</span>
+                        <span class="duration">Varies</span>
+                    </header>
+                    <p>
+                        Test and improve your memory with our engaging Memory Game. Match pairs of cards to improve your cognitive skills and have fun!
+                    </p>
+                </div>
+            </div>
+             </a>
+        </li>
+
+
+
+
+        <!-- Chess Card -->
+        <li class="scene">
+             <a href="{{ url_for('main.Cube') }}" alt="b" >
+            <div class="movie" onclick="return true">
+                <div class="poster">
+
+                </div>
+                <div class="info">
+                    <header>
+                        <h1>Chess</h1>
+                        <span class="year">2024</span>
+                        <span class="rating">Everyone</span>
+                        <span class="duration">Varies</span>
+                    </header>
+                    <p>
+                        Challenge your strategic thinking with our Chess game. Play against opponents or practice your skills in a virtual environment.
+                    </p>
+                </div>
+            </div>
+                   </a>
+        </li>
+
+
+
+
+        <!-- Cube Card -->
+        <li class="scene">
+             <a href="{{ url_for('main.BoxCube') }}" alt="c" >
+            <div class="movie" onclick="return true">
+                <div class="poster">
+
+                </div>
+                <div class="info">
+                    <header>
+                        <h1>Cube</h1>
+                        <span class="year">2024</span>
+                        <span class="rating">Everyone</span>
+                        <span class="duration">Varies</span>
+                    </header>
+                    <p>
+                        Solve puzzles and unlock levels in our Cube game. Enhance your problem-solving skills with a fun and interactive experience.
+                    </p>
+                </div>
+            </div>
+                   </a>
+        </li>
+
+
+    </ul>
+</div>
+</div>
+{% endblock %}

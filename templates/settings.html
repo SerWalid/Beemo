@@ -168,8 +168,8 @@ endblock %} {% block content %}
         </select>
       </div>
 
-      
-      
+
+
       <div class="grid border-b py-6 sm:grid-cols-2">
         <div class="">
           <h2 class="text-lg font-semibold leading-4 text-slate-700">Sleep Time</h2>
@@ -186,9 +186,9 @@ endblock %} {% block content %}
               </option>
               {% endfor %}
             </select>
-      
+
             <span class="text-sm text-gray-500">To</span>
-      
+
             <select
               id="end-time"
               class="py-3 px-4 pe-9 bloc border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
@@ -204,7 +204,7 @@ endblock %} {% block content %}
           </div>
           <span id="sleep-time-error" class="text-red-500 text-sm"></span>
         </div>
-      
+
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
             <label for="sleep-time" class="relative inline-flex cursor-pointer items-center">
@@ -417,7 +417,7 @@ endblock %} {% block content %}
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
             {% set high_email_checked = high_emotional_engagement == 'email' or high_emotional_engagement == 'both' %}
-            {% set high_sms_checked = high_emotional_engagement == 'sms' or high_emotional_engagement == 'both' %}            
+            {% set high_sms_checked = high_emotional_engagement == 'sms' or high_emotional_engagement == 'both' %}
             <label
               for="email-1"
               class="relative inline-flex cursor-pointer items-center"
@@ -460,7 +460,7 @@ endblock %} {% block content %}
         <div class="mt-4 flex items-center sm:justify-end">
           <div class="flex flex-col gap-3">
             {% set repetitive_email_checked = repetitive_questions == 'email' or repetitive_questions == 'both' %}
-            {% set repetitive_sms_checked = repetitive_questions == 'sms' or repetitive_questions == 'both' %}  
+            {% set repetitive_sms_checked = repetitive_questions == 'sms' or repetitive_questions == 'both' %}
             <label
               for="email-2"
               class="relative inline-flex cursor-pointer items-center"

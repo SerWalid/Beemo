@@ -7,14 +7,13 @@ import os
 from .models import db, User, Settings
 import json
 
-
 auth_bp = Blueprint('auth', __name__)
-
 
 # Load environment variables from .env file
 load_dotenv()
 # Access environment variables
 api_key = os.getenv('API_KEY')
+
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -48,14 +47,14 @@ def register():
             db.session.add(new_client)
             db.session.commit()
             goals = {
-            "wordGoal": 1,
-            "readingTimeGoal": 1,
-            "sessionsPerWeekGoal": 1}
-    
+                "wordGoal": 1,
+                "readingTimeGoal": 1,
+                "sessionsPerWeekGoal": 1}
+
             # Convert the object to a JSON-formatted string
             goals_string = json.dumps(goals)
-            settings = Settings(user_id=new_client.id, daily_usage_limit=0, goals=goals_string)        
-            
+            settings = Settings(user_id=new_client.id, daily_usage_limit=0, goals=goals_string)
+
             db.session.add(settings)
             db.session.commit()
 
@@ -67,20 +66,18 @@ def register():
             # Optionally, provide feedback to the user
     # Render the registration form
     african_countries = [
-    "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", 
-    "Cabo Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", 
-    "Democratic Republic of the Congo", "Republic of the Congo", "Djibouti", 
-    "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", 
-    "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", 
-    "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", 
-    "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", 
-    "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", 
-    "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", 
-    "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe"
-]
+        "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi",
+        "Cabo Verde", "Cameroon", "Central African Republic", "Chad", "Comoros",
+        "Democratic Republic of the Congo", "Republic of the Congo", "Djibouti",
+        "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia",
+        "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast",
+        "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi",
+        "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia",
+        "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal",
+        "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan",
+        "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe"
+    ]
     return render_template('register.html', countries=african_countries)
-
-
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
@@ -109,6 +106,7 @@ def login():
 
     # Render the login form
     return render_template('Login.html')
+
 
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
