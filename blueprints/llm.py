@@ -200,7 +200,7 @@ def get_llm_story(character):
              "content": "You are a professional children's storyteller. Craft a concise and engaging story about the character that should take around 1 minute to read aloud."},
             {"role": "user", "content": prompt}
         ],
-        model="llama3-70b-8192",
+        model="llama-3.1-70b-versatile",
         temperature=0.5,
         max_tokens=500,
         top_p=1,
@@ -423,14 +423,7 @@ def download_audio(filename):
 story_bp = Blueprint('story', __name__)
 
 
-# Route to serve the Batman story
-@llm_bp.route('/batman_story', methods=['GET'])
-def batman_story():
-    # Simple story text
-    story_text = "Once upon a time in Gotham, there was a hero named Batman."
 
-    # Render the story page and pass the simple story text
-    return render_template('batman_story.html', story=story_text)
 
 
 
