@@ -6,6 +6,7 @@ from .models import User, Settings, db, Chat, Interaction
 from datetime import datetime, timedelta, date
 import os
 import random
+from .settings import create_user_settings
 
 main_bp = Blueprint('main', __name__, static_folder='static')
 
@@ -403,23 +404,7 @@ def settings():
     # Retrieve the user's settings
     settings = Settings.query.filter_by(user_id=user_id).first()
     if settings is None:
-        goals_to_set = {
-            "wordGoal": 1,
-            "readingTimeGoal": 1,
-            "sessionsPerWeekGoal": 1
-        }
-        goals_string = json.dumps(goals_to_set)
-        notifications_preferences_to_set = {
-            "highEmotionalEngagement": "none",
-            "repetitiveQuestions": "none",
-            "agitatedBehavior": "none"
-        }
-        notifications_preferences_string = json.dumps(notifications_preferences_to_set)
-        settings = Settings(user_id=user_id, daily_usage_limit=0, goals=goals_string,
-                            notifications_preferences=notifications_preferences_string)
-
-        db.session.add(settings)
-        db.session.commit()
+        settings = create_user_settings(user_id)
     # If `banned_topics` exists in settings, convert it to an array of dictionaries
     if settings.banned_topics:
         topics_list = settings.banned_topics.split(',')  # Split string by commas
@@ -492,8 +477,8 @@ def save_settings():
 
     if not settings:
         # Create new settings if none exists for the user
-        settings = Settings(user_id=user_id)
-        db.session.add(settings)
+        settings = create_user_settings(user_id)
+
 
     # Get the JSON data sent from the frontend
     data = request.get_json()

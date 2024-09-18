@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 import os
 from .models import db, User, Settings
 import json
+from .settings import create_user_settings
+
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -46,18 +48,7 @@ def register():
             # Add the new user to the session and commit to the database
             db.session.add(new_client)
             db.session.commit()
-            goals = {
-                "wordGoal": 1,
-                "readingTimeGoal": 1,
-                "sessionsPerWeekGoal": 1}
-
-            # Convert the object to a JSON-formatted string
-            goals_string = json.dumps(goals)
-            settings = Settings(user_id=new_client.id, daily_usage_limit=0, goals=goals_string)
-
-            db.session.add(settings)
-            db.session.commit()
-
+            create_user_settings(new_client.id)
             return redirect(url_for('auth.login'))
         except Exception as e:
             # Log the error and rollback the transaction
