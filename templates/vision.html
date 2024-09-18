@@ -18,16 +18,18 @@
 <form class="form-container" enctype='multipart/form-data'>
         <div class="upload-files-container">
             <div class="drag-file-area">
-                <span class="material-icons-outlined upload-icon"> file_upload </span>
-                <h3 class="dynamic-message"> Drag & drop any file here </h3>
-                <label class="label"> or
-                    <span class="browse-files">
-                        <input type="file" class="default-file-input"/>
-                        <span class="browse-files-text">browse file</span>
-                        <span>from device</span>
-                    </span>
-                </label>
+                    <span class="material-icons-outlined upload-icon"> file_upload </span>
+                    <h3 class="dynamic-message"> Drag & drop any file here </h3>
+                    <img id="uploaded-image-preview" style="display:none; max-width: 100%; height: 160px;" />
+                    <label class="label"> or
+                        <span class="browse-files">
+                            <input type="file" class="default-file-input"/>
+                            <span class="browse-files-text">browse file</span>
+                            <span>from device</span>
+                        </span>
+                    </label>
             </div>
+
             <span class="cannot-upload-message">
                 <span class="material-icons-outlined">error</span>
                 Please select a file first
@@ -36,8 +38,7 @@
             <div class="file-block">
                 <div class="file-info">
                     <span class="material-icons-outlined file-icon">description</span>
-                    <span class="file-name"> </span> |
-                    <span class="file-size">  </span>
+
                 </div>
                 <span class="material-icons remove-file-icon">delete</span>
                 <div class="progress-bar"></div>
@@ -46,62 +47,58 @@
         </div>
     </form>
 <div id="output-container" class="success">
-    <h3>Analysis Result</h3>
+<h3>🔍 Emotion Analysis Result 🧠</h3>
     <p id="output-message"></p>
 </div>
 
     <script>
-        var isAdvancedUpload = function() {
-            var div = document.createElement('div');
-            return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
-        }();
+       var isAdvancedUpload = function() {
+    var div = document.createElement('div');
+    return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+}();
 
-        let draggableFileArea = document.querySelector(".drag-file-area");
-        let browseFileText = document.querySelector(".browse-files");
-        let uploadIcon = document.querySelector(".upload-icon");
-        let dragDropText = document.querySelector(".dynamic-message");
-        let fileInput = document.querySelector(".default-file-input");
-        let cannotUploadMessage = document.querySelector(".cannot-upload-message");
-        let cancelAlertButton = document.querySelector(".cancel-alert-button");
-        let uploadedFile = document.querySelector(".file-block");
-        let fileName = document.querySelector(".file-name");
-        let fileSize = document.querySelector(".file-size");
-        let progressBar = document.querySelector(".progress-bar");
-        let removeFileButton = document.querySelector(".remove-file-icon");
-        let uploadButton = document.querySelector(".upload-button");
-        let fileFlag = 0;
+let draggableFileArea = document.querySelector(".drag-file-area");
+let browseFileText = document.querySelector(".browse-files");
+let uploadIcon = document.querySelector(".upload-icon");
+let dragDropText = document.querySelector(".dynamic-message");
+let fileInput = document.querySelector(".default-file-input");
+let cannotUploadMessage = document.querySelector(".cannot-upload-message");
+let cancelAlertButton = document.querySelector(".cancel-alert-button");
+let uploadedFile = document.querySelector(".file-block");
+let fileName = document.querySelector(".file-name");
+let fileSize = document.querySelector(".file-size");
+let progressBar = document.querySelector(".progress-bar");
+let removeFileButton = document.querySelector(".remove-file-icon");
+let uploadButton = document.querySelector(".upload-button");
+let fileFlag = 0;
+let uploadedImagePreview = document.createElement('img'); // Create an img element
+uploadedImagePreview.id = 'uploaded-image-preview';
+uploadedImagePreview.style.display = 'none'; // Initially hide it
+draggableFileArea.appendChild(uploadedImagePreview); // Append image element inside the drag-file-area
 
-        fileInput.addEventListener("click", () => {
-            fileInput.value = '';
-        });
+fileInput.addEventListener("click", () => {
+    fileInput.value = '';
+    uploadedImagePreview.style.display = 'none'; // Hide the preview when a new file is chosen
+    showUploadElements(); // Restore the "Drag & drop" message and upload icon
+});
 
-        fileInput.addEventListener("change", e => {
-            uploadIcon.innerHTML = 'check_circle';
-            dragDropText.innerHTML = 'File Dropped Successfully!';
-            document.querySelector(".label").innerHTML = `drag & drop or <span class="browse-files">
-                <input type="file" class="default-file-input" style=""/>
-                <span class="browse-files-text" style="top: 0;"> browse file</span></span>`;
-            uploadButton.innerHTML = `Upload`;
-            fileName.innerHTML = fileInput.files[0].name;
-            fileSize.innerHTML = (fileInput.files[0].size / 1024).toFixed(1) + " KB";
-            uploadedFile.style.cssText = "display: flex;";
-            progressBar.style.width = 0;
-            fileFlag = 0;
-        });
+fileInput.addEventListener("change", e => {
+    displayUploadedFile(fileInput.files[0]); // Call the function to display the image
+});
 
-        uploadButton.addEventListener("click", () => {
-            let isFileUploaded = fileInput.value;
-            if (isFileUploaded != '') {
-                if (fileFlag == 0) {
-                    fileFlag = 1;
-                    uploadFileToServer(fileInput.files[0]);
-                }
-            } else {
-                cannotUploadMessage.style.cssText = "display: flex; animation: fadeIn linear 1.5s;";
-            }
-        });
+uploadButton.addEventListener("click", () => {
+    let isFileUploaded = fileInput.value;
+    if (isFileUploaded != '') {
+        if (fileFlag == 0) {
+            fileFlag = 1;
+            uploadFileToServer(fileInput.files[0]);
+        }
+    } else {
+        cannotUploadMessage.style.cssText = "display: flex; animation: fadeIn linear 1.5s;";
+    }
+});
 
-        function uploadFileToServer(file) {
+function uploadFileToServer(file) {
     let formData = new FormData();
     formData.append("image", file);
 
@@ -140,48 +137,76 @@
     });
 }
 
-        removeFileButton.addEventListener("click", () => {
-            uploadedFile.style.cssText = "display: none;";
-            fileInput.value = '';
-            uploadIcon.innerHTML = 'file_upload';
-            dragDropText.innerHTML = 'Drag & drop any file here';
-            document.querySelector(".label").innerHTML = `or <span class="browse-files">
-                <input type="file" class="default-file-input"/>
-                <span class="browse-files-text">browse file</span> <span>from device</span>
-            </span>`;
-            uploadButton.innerHTML = `Upload`;
+function displayUploadedFile(file) {
+    // Only proceed if the file is an image
+    if (file && file.type.startsWith('image/')) {
+        let reader = new FileReader();
+
+        reader.onload = function(e) {
+            uploadedImagePreview.src = e.target.result; // Set the image source to the uploaded file
+            uploadedImagePreview.style.display = 'block'; // Display the image
+            uploadedImagePreview.style.maxWidth = '100%'; // Adjust the size of the preview
+            uploadedImagePreview.style.height = 'auto'; // Maintain the aspect ratio
+
+            hideUploadElements(); // Hide the upload icon, message, and input label
+            fileFlag = 0;
+        };
+
+        reader.readAsDataURL(file); // Read the file as Data URL for preview
+    }
+}
+
+function hideUploadElements() {
+    uploadIcon.style.display = 'none'; // Hide the upload icon
+    dragDropText.style.display = 'none'; // Hide the "Drag & drop" text
+    document.querySelector(".label").style.display = 'none'; // Hide the browse file input
+}
+
+function showUploadElements() {
+    uploadIcon.style.display = 'inline-block'; // Show the upload icon again
+    dragDropText.style.display = 'block'; // Show the "Drag & drop" text again
+    document.querySelector(".label").style.display = 'block'; // Show the browse file input again
+}
+
+removeFileButton.addEventListener("click", () => {
+    uploadedFile.style.cssText = "display: none;";
+    fileInput.value = '';
+    uploadIcon.innerHTML = 'file_upload';
+    dragDropText.innerHTML = 'Drag & drop any file here';
+    uploadedImagePreview.style.display = 'none'; // Hide the image when file is removed
+    showUploadElements(); // Restore the upload elements when file is removed
+    document.querySelector(".label").innerHTML = `or <span class="browse-files">
+        <input type="file" class="default-file-input"/>
+        <span class="browse-files-text">browse file</span> <span>from device</span>
+    </span>`;
+    uploadButton.innerHTML = `Upload`;
+});
+
+if (isAdvancedUpload) {
+    ["drag", "dragstart", "dragend", "dragover", "dragenter", "dragleave", "drop"].forEach(evt =>
+        draggableFileArea.addEventListener(evt, e => {
+            e.preventDefault();
+            e.stopPropagation();
+        })
+    );
+
+    ["dragover", "dragenter"].forEach(evt => {
+        draggableFileArea.addEventListener(evt, e => {
+            uploadIcon.innerHTML = 'file_download';
+            dragDropText.innerHTML = 'Drop your file here!';
         });
+    });
 
-        if (isAdvancedUpload) {
-            ["drag", "dragstart", "dragend", "dragover", "dragenter", "dragleave", "drop"].forEach(evt =>
-                draggableFileArea.addEventListener(evt, e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                })
-            );
+    draggableFileArea.addEventListener("drop", e => {
+        let files = e.dataTransfer.files;
+        fileInput.files = files;
+        displayUploadedFile(files[0]); // Display the image preview
+    });
+}
 
-            ["dragover", "dragenter"].forEach(evt => {
-                draggableFileArea.addEventListener(evt, e => {
-                    uploadIcon.innerHTML = 'file_download';
-                    dragDropText.innerHTML = 'Drop your file here!';
-                });
-            });
+cancelAlertButton.addEventListener("click", () => {
+    cannotUploadMessage.style.cssText = "display: none;";
+});
 
-            draggableFileArea.addEventListener("drop", e => {
-                uploadIcon.innerHTML = 'check_circle';
-                dragDropText.innerHTML = 'File Dropped Successfully!';
-                let files = e.dataTransfer.files;
-                fileInput.files = files;
-                fileName.innerHTML = files[0].name;
-                fileSize.innerHTML = (files[0].size / 1024).toFixed(1) + " KB";
-                uploadedFile.style.cssText = "display: flex;";
-                progressBar.style.width = 0;
-                fileFlag = 0;
-            });
-        }
-
-        cancelAlertButton.addEventListener("click", () => {
-            cannotUploadMessage.style.cssText = "display: none;";
-        });
     </script>
 {% endblock %}

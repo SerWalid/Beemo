@@ -1,171 +1,149 @@
-
-
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-
+/* Base adjustments */
 .form-container {
-	width: 100vw;
-	height: 100vh;
-	display: flex;
-   	justify-content: center;
-	align-items: center;
-
-
-
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    position: relative;
+    left: 50px;
 }
+
+/* Container styling with background gradient to match base.html */
 .upload-files-container {
-	background-color: #f7fff7;
-	width: 420px;
-	padding: 30px 60px;
-	border-radius: 40px;
-	display: flex;
-   	align-items: center;
-   	justify-content: center;
-	flex-direction: column;
-	box-shadow: rgba(0, 0, 0, 0.24) 0px 10px 20px, rgba(0, 0, 0, 0.28) 0px 6px 6px;
+    background-color: rgba(255, 255, 255, 0.85); /* Softer white background */
+    width: 420px;
+    padding: 30px 60px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Slightly darker shadow */
 }
+
+/* Draggable area for files */
 .drag-file-area {
-	border: 2px dashed #7b2cbf;
-	border-radius: 40px;
-	margin: 10px 0 15px;
-	padding: 30px 50px;
-	width: 350px;
-	text-align: center;
+    border: 2px dashed #6f7aa6; /* Lighter blue to match gradient */
+    border-radius: 40px;
+    margin: 10px 0 15px;
+    padding: 30px 50px;
+    width: 350px;
+    text-align: center;
+    background-color: rgba(100, 149, 237, 0.15); /* Softer cornflower blue */
 }
 .drag-file-area .upload-icon {
-	font-size: 50px;
+    font-size: 60px;
+    color: #6f7aa6; /* Muted blue for icon */
 }
 .drag-file-area h3 {
-	font-size: 26px;
-	margin: 15px 0;
+    font-size: 28px;
+    color: #f0f8ff; /* Light pastel blue for text */
 }
 .drag-file-area label {
-	font-size: 19px;
+    font-size: 20px;
 }
 .drag-file-area label .browse-files-text {
-	color: #7b2cbf;
-	font-weight: bolder;
-	cursor: pointer;
-}
-.browse-files span {
-	position: relative;
-	top: -25px;
+    color: #6f7aa6; /* Matched blue for the clickable text */
+    font-weight: bold;
+    cursor: pointer;
 }
 .default-file-input {
-	opacity: 0;
+    opacity: 0;
 }
-.cannot-upload-message {
-	background-color: #ffc6c4;
-	font-size: 17px;
-	display: flex;
-	align-items: center;
-	margin: 5px 0;
-	padding: 5px 10px 5px 30px;
-	border-radius: 5px;
-	color: #BB0000;
-	display: none;
-}
-@keyframes fadeIn {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
-}
-.cannot-upload-message span, .upload-button-icon {
-	padding-right: 10px;
-}
-.cannot-upload-message span:last-child {
-	padding-left: 20px;
-	cursor: pointer;
-}
+
+/* File info block */
 .file-block {
-	color: #f7fff7;
-	background-color: #7b2cbf;
-  	transition: all 1s;
-	width: 390px;
-	position: relative;
-	display: none;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	margin: 10px 0 15px;
-	padding: 10px 20px;
-	border-radius: 25px;
-	cursor: pointer;
+    background-color: #162561; /* Deep blue to match the gradient */
+    color: white;
+    width: 100%;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 25px;
+    margin-top: 20px;
 }
 .file-info {
-	display: flex;
-	align-items: center;
-	font-size: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
 }
-.file-icon {
-	margin-right: 10px;
-}
-.file-name, .file-size {
-	padding: 0 3px;
-}
-.remove-file-icon {
-	cursor: pointer;
-}
-.progress-bar {
-	display: flex;
-	position: absolute;
-	bottom: 0;
-	left: 4.5%;
-	width: 0;
-	height: 5px;
-	border-radius: 25px;
-	background-color: #4BB543;
-}
+
+/* Upload button */
 .upload-button {
-	font-family: 'Montserrat';
-	background-color: #7b2cbf;
-	color: #f7fff7;
-	display: flex;
-	align-items: center;
-	font-size: 18px;
-	border: none;
-	border-radius: 20px;
-	margin: 10px;
-	padding: 7.5px 50px;
-	cursor: pointer;
-	z-index: 1;
+    background-color: #202e64; /* Dark blue for button */
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 60px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.upload-button:hover {
+    background-color: #162561; /* Darker blue on hover */
 }
 
- #output-container {
-    margin-top: 20px; /* Ensure it appears with a gap below the form */
-    display: none; /* Hidden by default */
-    width: 50%;
-    background: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Error message */
+.cannot-upload-message {
+    background-color: #ffcccc;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
     border-radius: 10px;
-    padding: 20px;
-    font-family: 'Roboto', sans-serif;
-    transition: all 0.3s ease-in-out;
-	 position: relative;
-	 margin-left: -200px;
-	 right:100px;
+    margin-top: 10px;
+    color: #040a22; /* Dark blue text */
+    display: none;
 }
 
-    /* Heading style */
-    #output-container h3 {
-        font-size: 18px;
-        font-weight: 500;
-        color: #333;
-        margin-bottom: 15px;
-    }
+/* Adjusted Output Container for Black & White Theme */
+#output-container {
+    margin-top: 20px;
+    display: none;
+    width: 60%;
+    background: #f9f9f9; /* Clean white background */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    border-radius: 20px;
+    padding: 25px;
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Kid-friendly font */
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    margin-left: -200px;
+    right: 40px;
+    border: 3px solid #000; /* Solid black border for a professional look */
+}
 
-    /* Message text style */
-    #output-message {
-        font-size: 16px;
-        line-height: 1.5;
-        color: #555;
-    }
+/* Heading style in black & white */
+#output-container h3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000; /* Black text for heading */
+    margin-bottom: 20px;
+    text-align: center;
+}
 
-    /* Success message style */
-    #output-container.success {
-        border-left: 5px solid #28a745;
-    }
+/* Message text style with black and white contrast */
+#output-message {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #000; /* Black text for better readability */
+    text-align: center;
+    padding: 10px;
+    background-color: #fff; /* White background for clarity */
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    border: 2px solid #000; /* Solid black border */
+}
 
-    /* Error message style */
-    #output-container.error {
-        border-left: 5px solid #dc3545;
-    }
+/* Success message style with a subtle green indicator */
+#output-container.success {
+    border-left: 10px solid #28a745; /* Green for success feedback */
+}
+
+/* Error message style with a subtle red indicator */
+#output-container.error {
+    border-left: 10px solid #dc3545; /* Red for error feedback */
+}

@@ -1,0 +1,105 @@
+{% extends 'sidebar.html' %}
+
+{% block head %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essay Feedback</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/writing.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container mx-auto p-8 bg-white shadow-md rounded-lg z-10 w-2/4" style="max-height: 700px; overflow-y: auto;">
+    <h2 id="heading" class="text-2xl font-bold text-center mb-6 text-blue-800">Share Your Wonderful Essay!</h2>
+
+    <form id="upload-form" enctype="multipart/form-data" class="space-y-6">
+        <div id="file-input-container">
+            <label for="image" id="file-label" class="block text-blue-700 font-medium mb-2">Pick your drawing or essay image:</label>
+            <input type="file" id="image" name="image" accept="image/*" required
+                class="block w-full text-blue-900 border border-blue-300 rounded-lg bg-blue-50 p-2.5 cursor-pointer focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition duration-200">
+        </div>
+
+        <div class="text-center">
+            <button type="submit"
+    class="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+    Send Your Work!
+</button>
+        </div>
+    </form>
+
+    <!-- Image Preview -->
+    <div id="image-preview" class="mt-4 hidden">
+<img id="uploaded-image" src="" alt="Uploaded Image Preview" class="w-[600px] h-[270px] rounded-lg shadow-md">
+    </div>
+
+    <div id="feedback" class="mt-8 p-6 bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-400 text-yellow-800 rounded-lg shadow-lg hidden">
+        <div class="flex items-center space-x-4">
+            <!-- Smiley face icon -->
+            <img src="https://img.icons8.com/color/48/000000/happy.png" alt="Happy Face" class="w-10 h-10">
+            <h3 class="font-semibold text-xl">Great Job! Here's What We Think:</h3>
+        </div>
+        <p id="response-text" class="mt-4 text-gray-700 leading-relaxed"></p>
+
+        <!-- Fun icons for emotions -->
+        <div class="mt-4 flex space-x-4 justify-center">
+            <img src="https://img.icons8.com/color/48/000000/happy.png" alt="Happy Face" class="w-10 h-10">
+            <img src="https://img.icons8.com/emoji/48/000000/red-heart.png" alt="Love Face" class="w-10 h-10">
+            <img src="https://img.icons8.com/color/48/000000/cool.png" alt="Cool Face" class="w-10 h-10">
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('upload-form');
+    const feedback = document.getElementById('feedback');
+    const responseText = document.getElementById('response-text');
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('image-preview');
+    const uploadedImage = document.getElementById('uploaded-image');
+    const heading = document.getElementById('heading');
+    const fileInputContainer = document.getElementById('file-input-container');
+    const fileLabel = document.getElementById('file-label');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+
+        // Hide heading and file input fields when image is uploaded
+        hideUploadElements();
+
+        fetch('/analyzeWriting', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            responseText.textContent = data.response;
+            feedback.classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    // Preview the uploaded image and hide form elements
+    imageInput.addEventListener('change', function(event) {
+        const file = imageInput.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImage.src = e.target.result;
+                imagePreview.classList.remove('hidden'); // Show image preview
+                hideUploadElements(); // Hide heading, file input, and label
+            };
+            reader.readAsDataURL(file); // Read the file to show the image preview
+        }
+    });
+
+    // Hide the upload form elements
+    function hideUploadElements() {
+        heading.style.display = 'none'; // Hide heading
+        fileInputContainer.style.display = 'none'; // Hide the file input container
+        fileLabel.style.display = 'none'; // Hide the label for the file input
+    }
+</script>
+{% endblock %}

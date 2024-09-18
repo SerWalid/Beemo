@@ -1,0 +1,19 @@
+    .container {
+        max-height: 400px;
+        overflow: auto;
+    }
+
+    /* Hide scroll bar for Webkit browsers */
+    .container::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scroll bar for Firefox */
+    .container {
+        scrollbar-width: none; /* Firefox */
+    }
+
+    /* Hide scroll bar for Internet Explorer and Edge */
+    .container {
+        -ms-overflow-style: none; /* Internet Explorer and Edge */
+    }
