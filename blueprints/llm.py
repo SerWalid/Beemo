@@ -200,7 +200,7 @@ def get_llm_story(character):
              "content": "You are a professional children's storyteller. Craft a concise and engaging story about the character that should take around 1 minute to read aloud."},
             {"role": "user", "content": prompt}
         ],
-        model="llama3-70b-8192",
+        model="llama-3.1-70b-versatile",
         temperature=0.5,
         max_tokens=500,
         top_p=1,
@@ -269,7 +269,7 @@ def get_llm_response(prompt):
              "content": system_message},
             {"role": "user", "content": prompt}
         ],
-        model="llama3-70b-8192",
+        model="llama-3.1-70b-versatile",
         temperature=0.5,
         max_tokens=1024,
         top_p=1,
