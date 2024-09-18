@@ -11,7 +11,7 @@
           alt=""
           class="h-28 w-auto mx-auto mix-blend-multiply"
         />
-
+  
         <h1 class="text-3xl font-bold text-gray-800 sm:text-4xl">
           Create Your Own Story!
         </h1>
@@ -21,7 +21,7 @@
           ideas into a fun adventure just for you!
         </p>
       </div>
-
+  
       <!-- Search -->
       <div class="mt-10 max-w-2xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div class="relative">
@@ -56,7 +56,7 @@
         </div>
       </div>
       <!-- End Search -->
-
+  
         <!-- Loading Animation -->
         <div id="loading" class="loading fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50" style="display: none">
           <img src="{{ url_for('static', filename='PageOff/assets/images/bmoo.gif') }}" alt="Loading..." class="h-28 w-28 mb-4" />
@@ -65,7 +65,7 @@
             <div id="progressBar" class="h-2.5 rounded-full" style="background-color: #58D68D;"></div>
           </div>
         </div>
-
+  
       <!-- Generated Story in Book-Like Format -->
       <div
         id="storyContainer"
@@ -85,7 +85,7 @@
           <div
             class="absolute -bottom-3 -right-3 w-5 h-5 bg-gray-100 rounded-full shadow"
           ></div>
-
+  
           <h2 class="book-title text-3xl font-bold text-gray-800 text-center">
             Your Adventure
           </h2>
@@ -104,28 +104,28 @@
     </div>
   </div>
   <!-- End Content -->
-
+  
   <script>
     document
       .getElementById("storyForm")
       .addEventListener("submit", function (event) {
         event.preventDefault(); // Prevent form submission
-
+  
         const storyInput = document.getElementById("storyInput").value;
-
+  
         // Show loading animation
         document.getElementById("loading").style.display = "flex";
         document.getElementById("storyContainer").style.display = "none";
         const progressBar = document.getElementById("progressBar");
         progressBar.style.width = "0%";
         let progress = 0;
-
+      
         const progressInterval = setInterval(() => {
           progress += 4;
           progressBar.style.width = progress + "%";
           if (progress >= 100) clearInterval(progressInterval);
         }, 500);
-
+  
         fetch("/generate_story", {
           method: "POST",
           headers: {
@@ -137,41 +137,41 @@
           .then((data) => {
             // Hide loading animation
             document.getElementById("loading").style.display = "none";
-
+  
             if (data.error) {
               alert("Error generating story: " + data.error);
               return;
             }
-
+  
             // Display the generated story and wrap words in span tags
             document.getElementById("generatedStory").innerHTML = data.story;
-
+  
             // Set and play the audio
             const audioElement = document.getElementById("storyAudio");
             audioElement.src = data.audio_url;
             audioElement.style.display = "block";
             audioElement.load();
-
+  
             // Get all the words in the story
             const wordElements = document.querySelectorAll(
               "#generatedStory span"
             );
-
+  
             // Assuming the total story duration is 60 seconds
             const totalDuration = 60; // Total duration in seconds
             const wordCount = wordElements.length;
             const timePerWord = totalDuration / wordCount; // Calculate time per word
-
+  
             // Play the audio
             audioElement.play();
-
+  
             // Highlight words as the audio plays
             audioElement.addEventListener("timeupdate", () => {
               const currentTime = audioElement.currentTime;
-
+  
               // Calculate which word should be highlighted based on the elapsed time
               const currentWordIndex = Math.floor(currentTime / timePerWord);
-
+  
               // Reset the previous highlights
               wordElements.forEach((word, index) => {
                 if (index <= currentWordIndex) {
@@ -181,10 +181,10 @@
                 }
               });
             });
-
+  
             // Show the story container
             document.getElementById("storyContainer").style.display = "block";
-
+  
             // Scroll smoothly to the story section after loading
             document
               .getElementById("storyContainer")
@@ -195,7 +195,7 @@
             document.getElementById("loading").style.display = "none";
           });
       });
-
+  
     // Style for highlighted words
     const style = document.createElement("style");
     style.innerHTML = `
@@ -206,5 +206,5 @@
   `;
     document.head.appendChild(style);
   </script>
-
+  
   {% endblock %}
