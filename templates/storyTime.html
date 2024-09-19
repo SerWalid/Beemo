@@ -1,24 +1,24 @@
-{% extends "tailwindBase.html" %} 
-{% block title %} Story Time {% endblock %} 
-{% block header %} 
-  {% include 'navbar.html' %} 
-{% endblock %} 
+{% extends "tailwindBase.html" %}
+{% block title %} Story Time {% endblock %}
+{% block header %}
+  {% include 'navbar.html' %}
+{% endblock %}
 
 {% block body %}
 <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 
 <style>
   #generatedStory {
-    font-family: 'Comic Neue', cursive; 
+    font-family: 'Comic Neue', cursive;
     font-weight: bold;
   }
   .book-title {
-    color: #58D68D; 
+    color: #58D68D;
   }
 </style>
   <!-- Content -->
-  <div class="h-screen flex flex-col pb-6">
-    <div class="h-full flex flex-col justify-center">
+  <div class="h-screen flex flex-col pb-6 h-[250vh]">
+    <div class="h-full flex flex-col justify-start mt-32">
       <div class="-mt-20 max-w-4xl w-full text-center mx-auto px-4 sm:px-6 lg:px-8">
         <img
           src="{{ url_for('static', filename='PageOff/assets/images/book.gif') }}"

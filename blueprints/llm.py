@@ -16,7 +16,7 @@ from datetime import date
 import pygame
 import time
 import base64
-from openai import OpenAI
+import openai
 
 
 
@@ -36,8 +36,11 @@ db_password = os.getenv('DB_PASSWORD')
 db_name = os.getenv('DB_NAME')
 db_port = os.getenv('DB_PORT')
 
+
+
 client = Groq(api_key=api_key)
-client1 = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 Variable = False;
 # Global connection object
@@ -83,16 +86,6 @@ def create_new_chat_session():
         finally:
             cursor.close()
     return None
-
-
-import tempfile
-import pygame
-import time
-import threading
-from gtts import gTTS
-from flask import Blueprint, request, jsonify
-
-llm_bp = Blueprint('llm', __name__)
 
 
 def play_audio(file_path):
@@ -371,32 +364,36 @@ def generate_story():
         data = request.get_json()
         story_input = data.get('story_input')
 
-        # Define the image prompt using the story input
-        image_prompt = f"Create a vibrant and whimsical children's book illustration about '{story_input}', designed with a hand-drawn or watercolor aesthetic. The image should be high resolution, with expressive characters and intricate background details. Use a colorful palette and soft, warm lighting that feels inviting and suitable for kids. Ensure the composition feels like a scene from a storybook, with playful, imaginative elements."
-
         # Validate input
         if not story_input:
             return jsonify({'error': 'Invalid input'}), 400
 
+        # Define the image prompt using the story input
+        image_prompt = (f"Create a vibrant and whimsical children's book illustration about '{story_input}', "
+                        "designed with a hand-drawn or watercolor aesthetic. The image should be high resolution, "
+                        "with expressive characters and intricate background details. Use a colorful palette and "
+                        "soft, warm lighting that feels inviting and suitable for kids. Ensure the composition feels "
+                        "like a scene from a storybook, with playful, imaginative elements.")
+
         # Generate the story using LLM based on user input
-        story = get_llm_story(story_input)
+        story = get_llm_story(story_input)  # Ensure this function is defined
 
         # Format the story with spans for word highlighting
-        formatted_story = format_story_with_spans(story)
+        formatted_story = format_story_with_spans(story)  # Ensure this function is defined
 
         # Generate the audio for the story
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as temp_file:
             temp_file_name = temp_file.name
-            generate_audio(story, temp_file_name)
+            generate_audio(story, temp_file_name)  # Ensure this function is defined
 
         # Generate the image based on the image prompt
-        image_response = client1.images.generate(
+        image_response = openai.Image.create(
             model="dall-e-3",
             prompt=image_prompt,
             n=1,
             size="1024x1024"
         )
-        image_url = image_response.data[0].url  # Extract image URL
+        image_url = image_response['data'][0]['url']  # Extract image URL
 
         # Get the audio URL for the story
         audio_url = url_for('llm.download_audio', filename=os.path.basename(temp_file_name), _external=True)
@@ -436,13 +433,6 @@ def download_audio(filename):
             return jsonify({'error': 'File not found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-
-story_bp = Blueprint('story', __name__)
-
-
-
-
 
 
 # Function to encode the image
