@@ -1,0 +1,37 @@
+{% extends 'sidebar.html' %}
+
+{% block head %}
+<title>Loading</title>
+<style>
+#animationWindow {
+ width: 100%;
+ height: 100%;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.8.0/bodymovin.min.js"></script>
+
+<div id="animationWindow">
+</div>
+
+    <script>
+    	var animData = {
+		wrapper: document.querySelector('#animationWindow'),
+		animType: 'svg',
+		loop: true,
+		prerender: true,
+		autoplay: true,
+		path: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/35984/LEGO_loader_chrisgannon.json'
+	};
+	var anim = bodymovin.loadAnimation(animData);
+anim.setSpeed(3.24);
+
+
+    setTimeout(function() {
+        window.location.href = "{{ url_for('main.GamesSelection') }}";
+    }, 2000);
+
+    </script>
+{% endblock %}

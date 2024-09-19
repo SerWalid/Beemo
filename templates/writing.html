@@ -8,42 +8,42 @@
 {% endblock %}
 
 {% block body %}
-<div class="container mx-auto p-8 bg-white shadow-md rounded-lg z-10 w-2/4" style="max-height: 700px; overflow-y: auto;">
-    <h2 id="heading" class="text-2xl font-bold text-center mb-6 text-blue-800">Share Your Wonderful Essay!</h2>
+<div class="container mx-auto p-8 bg-white bg-opacity-90 shadow-lg rounded-lg z-10 w-2/4" style="max-height: 700px; overflow-y: auto;">
+<h2 id="heading" class="text-3xl font-extrabold text-center mb-6" style="color: #3B82F6;">Share Your Wonderful Essay!</h2>
 
     <form id="upload-form" enctype="multipart/form-data" class="space-y-6">
         <div id="file-input-container">
-            <label for="image" id="file-label" class="block text-blue-700 font-medium mb-2">Pick your drawing or essay image:</label>
+            <label for="image" id="file-label" class="block text-teal-200 font-medium mb-2" style="color: #3B82F6;">Pick your drawing or essay image:</label>
             <input type="file" id="image" name="image" accept="image/*" required
-                class="block w-full text-blue-900 border border-blue-300 rounded-lg bg-blue-50 p-2.5 cursor-pointer focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition duration-200">
+                class="block w-full text-teal-900 border border-teal-200 rounded-full bg-teal-50 p-3 cursor-pointer focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-300 transition duration-200" >
         </div>
 
         <div class="text-center">
             <button type="submit"
-    class="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-md">
     Send Your Work!
 </button>
         </div>
     </form>
 
     <!-- Image Preview -->
-    <div id="image-preview" class="mt-4 hidden">
-<img id="uploaded-image" src="" alt="Uploaded Image Preview" class="w-[600px] h-[270px] rounded-lg shadow-md">
+    <div id="image-preview" class="mt-6 hidden">
+        <img id="uploaded-image" src="" alt="Uploaded Image Preview" class="w-[600px] h-[270px] rounded-lg shadow-lg border-4 border-blue-400">
     </div>
 
-    <div id="feedback" class="mt-8 p-6 bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-400 text-yellow-800 rounded-lg shadow-lg hidden">
+    <div id="feedback" class="mt-8 p-6 bg-gradient-to-r from-teal-100 to-teal-200 border border-teal-400 text-teal-900 rounded-lg shadow-lg hidden">
         <div class="flex items-center space-x-4">
             <!-- Smiley face icon -->
-            <img src="https://img.icons8.com/color/48/000000/happy.png" alt="Happy Face" class="w-10 h-10">
-            <h3 class="font-semibold text-xl">Great Job! Here's What We Think:</h3>
+            <img src="https://img.icons8.com/color/48/000000/happy.png" alt="Happy Face" class="w-12 h-12">
+            <h3 class="font-extrabold text-2xl text-teal-600">Great Job! Here's What We Think:</h3>
         </div>
-        <p id="response-text" class="mt-4 text-gray-700 leading-relaxed"></p>
+        <p id="response-text" class="mt-4 text-gray-800 leading-relaxed font-semibold text-lg"></p>
 
         <!-- Fun icons for emotions -->
-        <div class="mt-4 flex space-x-4 justify-center">
-            <img src="https://img.icons8.com/color/48/000000/happy.png" alt="Happy Face" class="w-10 h-10">
-            <img src="https://img.icons8.com/emoji/48/000000/red-heart.png" alt="Love Face" class="w-10 h-10">
-            <img src="https://img.icons8.com/color/48/000000/cool.png" alt="Cool Face" class="w-10 h-10">
+        <div class="mt-6 flex space-x-6 justify-center">
+            <img src="https://img.icons8.com/color/48/000000/happy.png" alt="Happy Face" class="w-12 h-12">
+            <img src="https://img.icons8.com/emoji/48/000000/red-heart.png" alt="Love Face" class="w-12 h-12">
+            <img src="https://img.icons8.com/color/48/000000/cool.png" alt="Cool Face" class="w-12 h-12">
         </div>
     </div>
 </div>
