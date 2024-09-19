@@ -32,6 +32,7 @@
         {% if metric.change_percentage is defined %}
         <dl class="flex justify-center items-center divide-x divide-gray-200">
           <dt class="pe-3">
+            {% if metric.change_direction == 'up' %}
             <span class="text-green-600">
               <svg
                 class="inline-block size-4 self-center"
@@ -50,6 +51,26 @@
                 {{ metric.change_percentage }}%
               </span>
             </span>
+            {% else %}
+            <span class="text-red-600">
+              <svg
+                class="inline-block size-4 self-center"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
+                />
+              </svg>
+              <span class="inline-block text-sm">
+                {{ metric.change_percentage }}
+              </span>
+            </span>
+            {% endif %}
             <span class="block text-sm text-gray-500">change</span>
           </dt>
           <dd class="text-start ps-3">
