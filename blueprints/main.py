@@ -2,12 +2,13 @@ import json
 from flask import Blueprint, render_template, session, flash, request, redirect, url_for, jsonify
 from .utils import login_required, pin_required, logged_in_restricted, generate_time_array, calculate_age, \
     time_difference_from_today  # Import the decorator
-from .models import User, Settings, db, Chat, Interaction
+from .models import User, Settings, db, Chat, Interaction, Notification
 from datetime import datetime, timedelta, date
 import os
 import random
 from .settings import create_user_settings
-
+from .notifications import get_notifications
+from .interactions import count_interactions_today_yesterday
 main_bp = Blueprint('main', __name__, static_folder='static')
 
 # Ensure the uploads directory exists
@@ -253,6 +254,7 @@ def parent():
     user_id = session.get('user_id')
     user = User.query.get(user_id)
     # Retrieve all chats for the specific user
+    today_count, yesterday_count, rate_comparison = count_interactions_today_yesterday(user_id)
     chats = Chat.query.filter_by(user_id=user_id).all()
 
     # Convert the chats into a JSON-serializable format
@@ -366,11 +368,11 @@ def parent():
     dashboard_stats = [
         {
             "title": "Today's Total Interactions",
-            "icon_color": "bg-gray-500",
-            "value": 36,
-            "change_percentage": 1.7,
-            "change_direction": "up",
-            "previous_value": 30,
+            "icon_color": rate_comparison > 0 and "bg-green-500" or "bg-red-500",
+            "value": today_count,
+            "change_percentage": abs(rate_comparison),
+            "change_direction": rate_comparison > 0 and "up" or "down",
+            "previous_value": yesterday_count,
             "previous_period": "Yesterday"
         },
         {
@@ -390,9 +392,12 @@ def parent():
         }
     ]
 
+    notification_list = []
+    notification_list, unviewed_count = get_notifications(user_id)
+
     return render_template('dashboardHome.html', chats=chat_list, child_name=child_name, parent_name=parent_name,
                            goals=goals, beemo_daily_usage_timeline=beemo_daily_usage_timeline,
-                           dashboard_stats=dashboard_stats, user=user)
+                           dashboard_stats=dashboard_stats, user=user, notification_list=notification_list, unviewed_count=unviewed_count)
 
 
 @main_bp.route('/settings')
@@ -457,13 +462,16 @@ def settings():
             'title': chat.title
         }
         chat_list.append(chat_data)
+    
+    notification_list = []
+    notification_list, unviewed_count = get_notifications(user_id)
 
     return render_template('settings.html', chats=chat_list, banned_topics=selected_topics, user=user,
                            time_array=time_array, sleep_time_start=sleep_time_start, sleep_time_end=sleep_time_end,
                            daily_usage_limit=daily_usage_limit, word_goal=word_goal,
                            reading_time_goal=reading_time_goal, sessions_per_week_goal=sessions_per_week_goal,
                            alert_topics=alert_topics, high_emotional_engagement=high_emotional_engagement,
-                           repetitive_questions=repetitive_questions, agitated_behavior=agitated_behavior)
+                           repetitive_questions=repetitive_questions, agitated_behavior=agitated_behavior, notification_list=notification_list, unviewed_count=unviewed_count)
 
 
 @main_bp.route('/save-settings', methods=['POST'])
@@ -521,9 +529,20 @@ def show_pin_modal():
 
     return render_template('pinModal.html')
 
+@main_bp.route('/mark-notifications-as-read', methods=['POST'])
+def mark_notifications_as_read():
+    # Get the current user
+    user_id = session.get('user_id')  # Implement this according to your authentication system
+
+    # Mark all unread notifications as viewed
+    Notification.query.filter_by(user_id=user_id, viewed=False).update({'viewed': True})
+    db.session.commit()
+
+    return jsonify({'message': 'Notifications marked as read'}), 200
 
 @main_bp.route('/chats/<int:id>', methods=['GET'])
 def get_chat_by_id(id):
+    interaction_to_highlight_id = request.args.get('highlight')
     user_id = session.get('user_id')
     user = User.query.get(user_id)
     chats = Chat.query.filter_by(user_id=user_id).all()
@@ -540,11 +559,15 @@ def get_chat_by_id(id):
 
     if not chat:
         return jsonify({"error": "Chat not found"}), 404
-
+    
+    notification_list = []
+    notification_list, unviewed_count = get_notifications(user_id)
     # Prepare the data to return (you can use the to_dict method if defined)
     interactions = Interaction.query.filter_by(chat_id=chat.id).all()
 
     chat_data = []
+    chat_date = chat.created_at  # Assign default value
+    number_of_interactions = 0
     for interaction in interactions:
         interaction_data = {
             'id': interaction.id,
@@ -559,4 +582,4 @@ def get_chat_by_id(id):
         chat_date = chat.created_at
         number_of_interactions = len(interactions)
     return render_template('chat-history.html', interactions=chat_data, user=user, chats=chat_list, chat_date=chat_date,
-                           number_of_interactions=number_of_interactions)
+                           number_of_interactions=number_of_interactions, notification_list=notification_list, interaction_to_highlight_id= interaction_to_highlight_id, unviewed_count = unviewed_count)
