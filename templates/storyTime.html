@@ -67,40 +67,48 @@
         </div>
   
       <!-- Generated Story in Book-Like Format -->
-      <div
-        id="storyContainer"
-        class="book-container mt-10 mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 bg-white shadow-lg rounded-lg"
-        style="display: none"
-      >
-        <div class="relative bg-gray-100 p-6 rounded-lg">
-          <div
-            class="absolute -top-3 -left-3 w-5 h-5 bg-gray-100 rounded-full shadow"
-          ></div>
-          <div
-            class="absolute -top-3 -right-3 w-5 h-5 bg-gray-100 rounded-full shadow"
-          ></div>
-          <div
-            class="absolute -bottom-3 -left-3 w-5 h-5 bg-gray-100 rounded-full shadow"
-          ></div>
-          <div
-            class="absolute -bottom-3 -right-3 w-5 h-5 bg-gray-100 rounded-full shadow"
-          ></div>
-  
-          <h2 class="book-title text-3xl font-bold text-gray-800 text-center">
-            Your Adventure
-          </h2>
-          <p
-            id="generatedStory"
-            class="book-content text-gray-700 text-lg mt-6 leading-relaxed text-justify"
-          ></p>
-          <audio
-            id="storyAudio"
-            controls
-            class="mt-6 w-full"
-            style="display: none"
-          ></audio>
-        </div>
-      </div>
+     <div
+  id="storyContainer"
+  class="book-container mt-10 mx-auto max-w-3xl px-6 py-8 sm:px-8 lg:px-10 shadow-xl rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+  style="
+    display: none;
+    background: linear-gradient(145deg, #f3f4f7, #e8e9ed);
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1), -10px -10px 30px rgba(255, 255, 255, 0.5);
+  "
+>
+  <div
+    class="relative bg-white p-8 rounded-lg shadow-md"
+    style="background: linear-gradient(135deg, #ffffff, #f7f8fa);"
+  >
+    <!-- Decorative corner circles -->
+    <div class="absolute -top-4 -left-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
+    <div class="absolute -top-4 -right-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
+    <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
+    <div class="absolute -bottom-4 -right-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
+
+    <!-- Story Title -->
+    <h2 class="book-title text-4xl font-semibold text-gray-900 text-center tracking-wide">
+      Your Adventure Begins
+    </h2>
+      <i class="fas fa-book-open"></i>
+
+    <!-- Story Content -->
+    <p
+      id="generatedStory"
+      class="book-content text-gray-800 text-lg mt-8 leading-loose text-justify"
+    ></p>
+
+    <!-- Audio Player -->
+    <audio
+      id="storyAudio"
+      controls
+      class="mt-6 w-full border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+      style="display: none"
+    ></audio>
+  </div>
+</div>
+
+
     </div>
   </div>
   <!-- End Content -->

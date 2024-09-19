@@ -1,5 +1,8 @@
-{% extends "tailwindBase.html" %} {% block title %} Beemo {% endblock %} {%
-block head %}
+{% extends "tailwindBase.html" %}
+
+{% block title %} Beemo {% endblock %}
+
+{% block head %}
 <link
   rel="stylesheet"
   href="{{ url_for('static', filename='PageOff/assets/css/home.css') }}"
@@ -713,6 +716,74 @@ block body %}
     <!-- End Card -->
     
 <!-- End Card Blog -->
+
+    <!-- Please heart it if you like! -->
+    <div id='bookContainer'>
+
+<div id='book'>
+  <div id='top'></div>
+  <div id='front'></div>
+  <div id='right'></div>
+  <div id='bottom'></div>
+  <div id='shadow'></div>
+  <div id='bookmark'>
+    <div>
+      <div>
+        <div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id='bookmark-shadow'></div>
+</div>
+<div id='flip'>
+  <div id='front'>
+    <div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <div>
+                    <div>
+                      <div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id='back'>
+    <div>
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <div>
+                    <div>
+                      <div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
 
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 
