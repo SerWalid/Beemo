@@ -16,6 +16,8 @@ from datetime import date
 import pygame
 import time
 import base64
+from openai import OpenAI
+
 
 
 # Load environment variables from .env file
@@ -35,6 +37,7 @@ db_name = os.getenv('DB_NAME')
 db_port = os.getenv('DB_PORT')
 
 client = Groq(api_key=api_key)
+client1 = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 Variable = False;
 # Global connection object
@@ -361,34 +364,49 @@ def character_story_audio(character):
         return jsonify({'error': str(e)}), 500
 
 
-# Route to handle story generation from user input (POST)
 @llm_bp.route('/generate_story', methods=['POST'])
 def generate_story():
     try:
+        # Get the story input from the user
         data = request.get_json()
         story_input = data.get('story_input')
 
-        # Validate the input
+        # Define the image prompt using the story input
+        image_prompt = f"Create a vibrant and whimsical children's book illustration about '{story_input}', designed with a hand-drawn or watercolor aesthetic. The image should be high resolution, with expressive characters and intricate background details. Use a colorful palette and soft, warm lighting that feels inviting and suitable for kids. Ensure the composition feels like a scene from a storybook, with playful, imaginative elements."
+
+        # Validate input
         if not story_input:
             return jsonify({'error': 'Invalid input'}), 400
 
-        # Generate the story using LLM based on user input (this function needs to be implemented)
+        # Generate the story using LLM based on user input
         story = get_llm_story(story_input)
 
         # Format the story with spans for word highlighting
         formatted_story = format_story_with_spans(story)
 
-        # Use a temporary file for the audio
+        # Generate the audio for the story
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as temp_file:
             temp_file_name = temp_file.name
             generate_audio(story, temp_file_name)
 
-        # Return both the formatted story and the audio URL
+        # Generate the image based on the image prompt
+        image_response = client1.images.generate(
+            model="dall-e-3",
+            prompt=image_prompt,
+            n=1,
+            size="1024x1024"
+        )
+        image_url = image_response.data[0].url  # Extract image URL
+
+        # Get the audio URL for the story
         audio_url = url_for('llm.download_audio', filename=os.path.basename(temp_file_name), _external=True)
 
-        return jsonify({'story': formatted_story, 'audio_url': audio_url}), 200
+        # Return the formatted story, audio URL, and image URL in the response
+        return jsonify({'story': formatted_story, 'audio_url': audio_url, 'image_url': image_url}), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 
 # Serve the audio file
