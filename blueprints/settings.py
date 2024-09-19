@@ -151,3 +151,49 @@ def save_settings():
     # Commit the changes to the database
     db.session.commit()
     return jsonify({'status': 'success', 'message': 'Settings saved successfully'}), 200
+
+
+@settings_bp.route('/chats/<int:id>', methods=['GET'])
+def get_chat_by_id(id):
+    interaction_to_highlight_id = request.args.get('highlight')
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    chats = Chat.query.filter_by(user_id=user_id).all()
+    # Convert the chats into a JSON-serializable format
+    chat_list = []
+    for chat in chats:
+        chat_data = {
+            'id': chat.id,
+            'title': chat.title
+        }
+        chat_list.append(chat_data)
+    # Query the Chat model using the id from the URL
+    chat = Chat.query.get(id)
+
+    if not chat:
+        return jsonify({"error": "Chat not found"}), 404
+
+    notification_list = []
+    notification_list, unviewed_count = get_notifications(user_id)
+    # Prepare the data to return (you can use the to_dict method if defined)
+    interactions = Interaction.query.filter_by(chat_id=chat.id).all()
+
+    chat_data = []
+    chat_date = chat.created_at  # Assign default value
+    number_of_interactions = 0
+    for interaction in interactions:
+        interaction_data = {
+            'id': interaction.id,
+            'interaction_type': interaction.interaction_type,
+            'message': interaction.message,
+            'response': interaction.response,
+            'emotion_points': interaction.emotion_points,
+            'created_at': interaction.created_at,
+            'updated_at': interaction.updated_at,
+        }
+        chat_data.append(interaction_data)
+        chat_date = chat.created_at
+        number_of_interactions = len(interactions)
+    return render_template('chat-history.html', interactions=chat_data, user=user, chats=chat_list, chat_date=chat_date,
+                           number_of_interactions=number_of_interactions, notification_list=notification_list,
+                           interaction_to_highlight_id=interaction_to_highlight_id, unviewed_count=unviewed_count)
