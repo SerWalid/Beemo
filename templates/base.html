@@ -32,17 +32,17 @@
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="{{ url_for('main.PageOff') }}" class="logo">
+            <a href="{{ url_for('main.index') }}" class="logo">
               <img src="{{ url_for('static', filename='PageOff/assets/images/cc.png') }}" alt="Chain App Dev" >
             </a>
             <!-- ***** Logo End ***** -->
             <!-- ***** Menu Start ***** -->
             <ul class="nav">
-              <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
-              <li class="scroll-to-section"><a href="#services">Services</a></li>
-              <li class="scroll-to-section"><a href="#about">About</a></li>
-              <li class="scroll-to-section"><a href="#pricing">Pricing</a></li>
-              <li class="scroll-to-section"><a href="#newsletter">Newsletter</a></li>
+              <li class="scroll-to-section"><a href="{{ url_for('main.index') }}" class="active">Home</a></li>
+            <li class="scroll-to-section"><a href="{{ url_for('main.index') }}#services">Services</a></li>
+                <li class="scroll-to-section"><a href="{{ url_for('main.index') }}#members">Members</a></li>
+              <li class="scroll-to-section"><a href="{{ url_for('main.index') }}#price">Pricing</a></li>
+
             </ul>
             <a class='menu-trigger'>
                 <span>Menu</span>

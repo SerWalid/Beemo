@@ -3,20 +3,19 @@
 {% block head %}
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn About Emotions</title>
+    <title>EmoVision</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/LearnEmotions.css') }}">
 {% endblock %}
 
 {% block body %}
 <main>
         <div class="content">
-            <h1>Learn About Emotions</h1>
+            <h1>Learn With EmoVisionAI </h1>
             <p id="emotion-description">
-                Discover different emotions like happy, sad, and surprised through fun and engaging activities. Our interactive cards and games will help you understand and recognize how people feel in various situations. Let's explore and learn together!
-            </p>
+EmoVision Upload an image and let AI provide an instant description with the detected emotion of the person.Powered by cutting-edge AI, it’s fast, accurate, and effortless—transform your images into insightful emotional analysis in just seconds.            </p>
 
             <a href="{{ url_for('main.Vision') }}">
-            <button class="btn">Explore Emotions</button>
+            <button class="btn">Explore Feature</button>
             </a>
 
         </div>

@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/BoxCube.css') }}">
+    <title>Cube</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/BoxCube.css') }}">
     <script src="https://cdn.jsdelivr.net/gh/pailhead/three-rounded-box@master/build/three-rounded-box.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
 
 
 
@@ -13,7 +14,12 @@
 <body>
 <!-- PWA: https://bsehovac.github.io/the-cube/ -->
 
+
+
+
+
 <div class="ui">
+
 
   <div class="ui__background"></div>
 
@@ -78,12 +84,16 @@
   </div>
 
   <div class="ui__buttons">
-    <button class="btn btn--bl btn--stats">
-      <icon trophy></icon>
-    </button>
+
+      <a href="{{ url_for('main.GamesSelection') }}">
+            <button class="btn btn--bl btn--stats">
+              <icon back></icon>
+            </button>
+      </a>
     <button class="btn btn--br btn--prefs">
       <icon settings></icon>
     </button>
+
     <button class="btn btn--bl btn--back">
       <icon back></icon>
     </button>
@@ -93,10 +103,23 @@
     <button class="btn btn--br btn--reset">
       <icon reset></icon>
     </button>
+
+
+
+
   </div>
 
 </div>
+
+
+
+
+
+
     <script src="static/PageOff/assets/js/BoxCube.js"></script>
 
 </body>
 </html>
+
+
+
