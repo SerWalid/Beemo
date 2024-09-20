@@ -18,6 +18,8 @@ from .interactions import get_all_interactions_today
 import pygame
 import time
 import base64
+import openai
+
 
 
 # Load environment variables from .env file
@@ -37,16 +39,10 @@ db_name = os.getenv('DB_NAME')
 db_port = os.getenv('DB_PORT')
 a2sv_api_key = os.getenv('A2SV_API_KEY')
 
+
+
 client = Groq(api_key=api_key)
 
-import tempfile
-import pygame
-import time
-import threading
-from gtts import gTTS
-from flask import Blueprint, request, jsonify
-
-llm_bp = Blueprint('llm', __name__)
 
 
 def play_audio(file_path):
@@ -318,34 +314,53 @@ def character_story_audio(character):
         return jsonify({'error': str(e)}), 500
 
 
-# Route to handle story generation from user input (POST)
 @llm_bp.route('/generate_story', methods=['POST'])
 def generate_story():
     try:
+        # Get the story input from the user
         data = request.get_json()
         story_input = data.get('story_input')
 
-        # Validate the input
+        # Validate input
         if not story_input:
             return jsonify({'error': 'Invalid input'}), 400
 
-        # Generate the story using LLM based on user input (this function needs to be implemented)
-        story = get_llm_story(story_input)
+        # Define the image prompt using the story input
+        image_prompt = (f"Create a vibrant and whimsical children's book illustration about '{story_input}', "
+                        "designed with a hand-drawn or watercolor aesthetic. The image should be high resolution, "
+                        "with expressive characters and intricate background details. Use a colorful palette and "
+                        "soft, warm lighting that feels inviting and suitable for kids. Ensure the composition feels "
+                        "like a scene from a storybook, with playful, imaginative elements.")
+
+        # Generate the story using LLM based on user input
+        story = get_llm_story(story_input)  # Ensure this function is defined
 
         # Format the story with spans for word highlighting
-        formatted_story = format_story_with_spans(story)
+        formatted_story = format_story_with_spans(story)  # Ensure this function is defined
 
-        # Use a temporary file for the audio
+        # Generate the audio for the story
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as temp_file:
             temp_file_name = temp_file.name
-            generate_audio(story, temp_file_name)
+            generate_audio(story, temp_file_name)  # Ensure this function is defined
 
-        # Return both the formatted story and the audio URL
+        # Generate the image based on the image prompt
+        image_response = openai.Image.create(
+            model="dall-e-3",
+            prompt=image_prompt,
+            n=1,
+            size="1024x1024"
+        )
+        image_url = image_response['data'][0]['url']  # Extract image URL
+
+        # Get the audio URL for the story
         audio_url = url_for('llm.download_audio', filename=os.path.basename(temp_file_name), _external=True)
 
-        return jsonify({'story': formatted_story, 'audio_url': audio_url}), 200
+        # Return the formatted story, audio URL, and image URL in the response
+        return jsonify({'story': formatted_story, 'audio_url': audio_url, 'image_url': image_url}), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 
 # Serve the audio file
@@ -375,13 +390,6 @@ def download_audio(filename):
             return jsonify({'error': 'File not found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-
-story_bp = Blueprint('story', __name__)
-
-
-
-
 
 
 # Function to encode the image
@@ -472,60 +480,3 @@ def analyze_writing_image():
 
     # Remove the temporarily saved image
     os.remove(image_path)
-
-    # Return the result as JSON
-    return jsonify({'response': response_text})
-@llm_bp.route('/generate_report', methods=['GET'])
-def generate_report_api():
-    user_id = session.get('user_id')
-    today_interactions = get_all_interactions_today(user_id)
-    today_interactions_list = [
-        {
-            "message": interaction.message,
-            "response": interaction.response,
-            "created_at": interaction.created_at.isoformat()  # Convert datetime to ISO 8601 string
-        }
-        for interaction in today_interactions
-    ]
-    interactions_str = json.dumps(today_interactions_list, indent=2)
-
-
-    content = generate_report(interactions_str)
-    response_text = content['response']['messages'][0]['content']
-    return jsonify(
-        {'content': response_text}
-    )
-def generate_report(prompt):
-    user_id = session.get('user_id')
-    user = User.query.get(user_id)
-    child_name=user.child_name
-    child_birthday=user.child_birth_date
-    child_age = time_difference_from_today(child_birthday)
-    country = user.country
-    parent_name = user.full_name
-    system_content = f"""
-    You are Beemo, a compassionate and supportive mental health assistant designed to interact with {child_name}, a child who's age is {child_age}  from {country} with ASD. Your primary role is to engage with {child_name}, provide emotional support, and assist them in their daily interactions. 
-
-    Today, {parent_name} has requested a report based on {child_name}'s interaction history with you. Your task is to review the provided data, extract key details about {child_name}'s emotions, behaviors, communication skills, progress towards their goals, and any notable moments or activities observed during the day. Your goal is to generate a clear, insightful, and supportive report that helps {parent_name} better understand {child_name}'s experiences and emotional state today.
-
-    Begin the report with an overview of {child_name}'s day, emphasizing significant emotional trends and notable interactions. Follow with a detailed description of {child_name}'s emotional state throughout the day, highlighting any patterns or shifts observed. Provide insights into {child_name}'s behaviors, noting positive actions and any concerning behaviors that stood out. Discuss {child_name}'s communication skills, outlining any improvements or challenges faced during interactions. Include any notable moments that were particularly special or significant, and offer supportive recommendations to {parent_name} on how to encourage {child_name}'s continued progress or address any areas of concern.
-
-    Maintain a compassionate and supportive tone throughout, focusing on {child_name}'s strengths and celebrating their growth. If there are no interactions recorded, inform {parent_name} by gently stating, "There are no interactions recorded yet."
-    """
-
-    headers = {
-        'Content-Type': 'application/json',
-        'api_token': a2sv_api_key,
-    }
-    payload = {
-        'model': 'gpt-4',
-        'messages': [{"role": "system", "content": system_content}, {"role": "user", "content": prompt}],
-        'max_token': 1024,
-        'temperature': 0.7,
-        'response_format': 'text/plain',
-        'user_id': 'the champs'     
-    }
-    response = requests.post('https://api.afro.fit/api_v2/api_wrapper/chat/completions', json=payload, headers=headers)
-    return response.json()
-
-

@@ -81,58 +81,58 @@
 <div id="nav-bar">
   <input id="nav-toggle" type="checkbox"/>
   <div id="nav-header">
-<a id="nav-title" href="{{ url_for('main.game_zone') }}">Bright Minds <i class="fas fa-lightbulb"></i></a>
+    <a id="nav-title" href="{{ url_for('main.game_zone') }}">Play Zone <i class="fas fa-gamepad"></i></a>
     <hr/>
   </div>
 
-<div id="nav-content">
+  <div id="nav-content">
 
     <!-- Section for Games and Puzzles -->
     <div class="nav-button">
-        <i class="fas fa-chess-knight"></i>
-        <span>
-            <a href="{{ url_for('main.GamesSelection') }}">Fun Puzzles & Games</a>
-        </span>
+      <i class="fas fa-chess-knight"></i>
+      <span>
+        <a href="{{ url_for('main.GamesLoading') }}">Fun Puzzles & Games</a>
+      </span>
     </div>
 
     <hr/>
 
     <!-- Section for Writing & Tests -->
     <div class="nav-button">
-        <i class="fas fa-pencil-alt"></i>
-        <span>
-            <a href="{{ url_for('main.LoaderWriting') }}">Writing Essay</a>
-        </span>
+      <i class="fas fa-pencil-alt"></i>
+      <span>
+        <a href="{{ url_for('main.LoaderWriting') }}">Writing Essay</a>
+      </span>
     </div>
 
     <div class="nav-button">
-        <i class="fas fa-brain"></i>
-        <span>
-            <a href="{{ url_for('main.quiz') }}">Test Your Knowledge!</a>
-        </span>
+      <i class="fas fa-brain"></i>
+      <span>
+        <a href="{{ url_for('main.quiz') }}">Test Your Knowledge!</a>
+      </span>
     </div>
 
     <div class="nav-button">
-        <i class="fas fa-smile"></i>
-        <span>
-            <a href="{{ url_for('main.LearnEmotions') }}">Learn Emotions</a>
-        </span>
+      <i class="fas fa-smile"></i>
+      <span>
+        <a href="{{ url_for('main.LearnEmotions') }}">Learn Emotions</a>
+      </span>
     </div>
 
     <hr/>
 
-    <!-- Section for Achievements -->
-    <div class="nav-button">
-        <i class="fas fa-medal"></i>
-        <span>
-            <a href="{{ url_for('main.dashboardActivities') }}">Your Achievements</a>
-        </span>
-    </div>
-
     <!-- Highlighted section for active link -->
     <div id="nav-content-highlight"></div>
 
+    <!-- New Home button -->
+    <div class="nav-button home-button">
+  <i class="fas fa-home"></i>
+  <span>
+    <a href="{{ url_for('main.Home') }}">Home</a>
+  </span>
 </div>
+
+  </div>
 
   <input id="nav-footer-toggle" type="checkbox"/>
   <div id="nav-footer">
@@ -141,7 +141,7 @@
         <img src="{{ url_for('static', filename='images/bmo.jpg') }}" alt="Temo Avatar"/>
       </div>
       <div id="nav-footer-titlebox">
-        <a id="nav-footer-title" href="https://codepen.io/uahnbu/pens/public" target="_blank">Beemo</a>
+        <a id="nav-footer-title" target="_blank">Beemo</a>
         <span id="nav-footer-subtitle">Your Guide</span>
       </div>
       <label for="nav-footer-toggle"><i class="fas fa-caret-up"></i></label>
@@ -151,6 +151,7 @@
     </div>
   </div>
 </div>
+
 
 
 

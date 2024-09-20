@@ -1,17 +1,30 @@
-{% extends "tailwindBase.html" %} {% block title %} Story Time {% endblock %} {%
-  block header %} {% include 'navbar.html' %} {% endblock %} {% block body %}
+{% extends "tailwindBase.html" %}
+{% block title %} Story Time {% endblock %}
+{% block header %}
+  {% include 'navbar.html' %}
+{% endblock %}
+
+{% block body %}
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<style>
+  #generatedStory {
+    font-family: 'Comic Neue', cursive;
+    font-weight: bold;
+  }
+  .book-title {
+    color: #58D68D;
+  }
+</style>
   <!-- Content -->
-  <div class="h-screen flex flex-col pb-6">
-    <div class="h-full flex flex-col justify-center">
-      <div
-        class="-mt-20 max-w-4xl w-full text-center mx-auto px-4 sm:px-6 lg:px-8"
-      >
+  <div class="h-screen flex flex-col pb-6 h-[250vh]">
+    <div class="h-full flex flex-col justify-start mt-32">
+      <div class="-mt-20 max-w-4xl w-full text-center mx-auto px-4 sm:px-6 lg:px-8">
         <img
           src="{{ url_for('static', filename='PageOff/assets/images/book.gif') }}"
           alt=""
           class="h-28 w-auto mx-auto mix-blend-multiply"
         />
-  
         <h1 class="text-3xl font-bold text-gray-800 sm:text-4xl">
           Create Your Own Story!
         </h1>
@@ -21,7 +34,7 @@
           ideas into a fun adventure just for you!
         </p>
       </div>
-  
+
       <!-- Search -->
       <div class="mt-10 max-w-2xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div class="relative">
@@ -56,163 +69,150 @@
         </div>
       </div>
       <!-- End Search -->
-  
-        <!-- Loading Animation -->
-        <div id="loading" class="loading fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50" style="display: none">
-          <img src="{{ url_for('static', filename='PageOff/assets/images/bmoo.gif') }}" alt="Loading..." class="h-28 w-28 mb-4" />
-          <p class="text-white text-xl mb-4">Generating your story...</p>
-          <div class="w-64 bg-gray-300 rounded-full h-2.5">
-            <div id="progressBar" class="h-2.5 rounded-full" style="background-color: #58D68D;"></div>
-          </div>
+
+      <!-- Loading Animation -->
+      <div id="loading" class="loading fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50" style="display: none">
+        <img src="{{ url_for('static', filename='PageOff/assets/images/bmoo.gif') }}" alt="Loading..." class="h-28 w-28 mb-4" />
+        <p class="text-white text-xl mb-4">Generating your story...</p>
+        <div class="w-64 bg-gray-300 rounded-full h-2.5">
+          <div id="progressBar" class="h-2.5 rounded-full" style="background-color: #58D68D;"></div>
         </div>
-  
-      <!-- Generated Story in Book-Like Format -->
-     <div
-  id="storyContainer"
-  class="book-container mt-10 mx-auto max-w-3xl px-6 py-8 sm:px-8 lg:px-10 shadow-xl rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
-  style="
-    display: none;
-    background: linear-gradient(145deg, #f3f4f7, #e8e9ed);
-    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1), -10px -10px 30px rgba(255, 255, 255, 0.5);
-  "
->
-  <div
-    class="relative bg-white p-8 rounded-lg shadow-md"
-    style="background: linear-gradient(135deg, #ffffff, #f7f8fa);"
-  >
-    <!-- Decorative corner circles -->
-    <div class="absolute -top-4 -left-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
-    <div class="absolute -top-4 -right-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
-    <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
-    <div class="absolute -bottom-4 -right-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
+      </div>
 
-    <!-- Story Title -->
-    <h2 class="book-title text-4xl font-semibold text-gray-900 text-center tracking-wide">
-      Your Adventure Begins
-    </h2>
-      <i class="fas fa-book-open"></i>
+      <!-- Generated Story and Image in Book-Like Format -->
+      <div
+        id="storyContainer"
+        class="book-container mt-10 mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-6 px-6 py-8 sm:px-8 lg:px-10 shadow-xl rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+        style="display: none; background: linear-gradient(145deg, #f3f4f7, #e8e9ed); box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1), -10px -10px 30px rgba(255, 255, 255, 0.5);"
+      >
+        <!-- Story Section -->
+        <div
+          class="relative bg-white p-10 rounded-lg shadow-md"
+          style="background: linear-gradient(135deg, #ffffff, #f7f8fa);"
+        >
+          <!-- Decorative corner circles -->
+          <div class="absolute -top-4 -left-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
+          <div class="absolute -top-4 -right-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
+          <div class="absolute -bottom-4 -left-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
+          <div class="absolute -bottom-4 -right-4 w-6 h-6 bg-gray-200 rounded-full shadow-md"></div>
 
-    <!-- Story Content -->
-    <p
-      id="generatedStory"
-      class="book-content text-gray-800 text-lg mt-8 leading-loose text-justify"
-    ></p>
+          <!-- Story Title -->
+          <h2 class="book-title text-4xl font-semibold text-gray-900 text-center tracking-wide">
+            Your Adventure Begins
+          </h2>
 
-    <!-- Audio Player -->
-    <audio
-      id="storyAudio"
-      controls
-      class="mt-6 w-full border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
-      style="display: none"
-    ></audio>
-  </div>
-</div>
+          <!-- Story Content -->
+          <p
+            id="generatedStory"
+            class="book-content text-gray-800 text-lg mt-8 leading-loose text-justify"
+          ></p>
 
+          <!-- Audio Player -->
+          <audio
+            id="storyAudio"
+            controls
+            class="mt-6 w-full border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+            style="display: none"
+          ></audio>
+        </div>
 
+        <!-- Generated Image Section -->
+        <div class="relative p-4 bg-transparent rounded-lg flex justify-center items-center">
+          <img
+            id="generatedImage"
+            src=""
+            alt="Generated Story Image"
+            class="max-w-full h-auto rounded-lg shadow-lg"
+            style="display: none;"
+          />
+        </div>
+      </div>
     </div>
   </div>
   <!-- End Content -->
-  
+
   <script>
-    document
-      .getElementById("storyForm")
-      .addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent form submission
-  
-        const storyInput = document.getElementById("storyInput").value;
-  
-        // Show loading animation
-        document.getElementById("loading").style.display = "flex";
-        document.getElementById("storyContainer").style.display = "none";
-        const progressBar = document.getElementById("progressBar");
-        progressBar.style.width = "0%";
-        let progress = 0;
-      
-        const progressInterval = setInterval(() => {
-          progress += 4;
-          progressBar.style.width = progress + "%";
-          if (progress >= 100) clearInterval(progressInterval);
-        }, 500);
-  
-        fetch("/generate_story", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ story_input: storyInput }),
+    document.getElementById("storyForm").addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent form submission
+
+      const storyInput = document.getElementById("storyInput").value;
+
+      // Show loading animation
+      document.getElementById("loading").style.display = "flex";
+      document.getElementById("storyContainer").style.display = "none";
+      const progressBar = document.getElementById("progressBar");
+      progressBar.style.width = "0%";
+      let progress = 0;
+
+      const progressInterval = setInterval(() => {
+        progress += 2;
+        progressBar.style.width = progress + "%";
+        if (progress >= 100) clearInterval(progressInterval);
+      }, 500);
+
+      fetch("/generate_story", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ story_input: storyInput }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Hide loading animation
+          document.getElementById("loading").style.display = "none";
+
+          if (data.error) {
+            alert("Error generating story: " + data.error);
+            return;
+          }
+
+          // Display the generated story
+          document.getElementById("generatedStory").innerHTML = data.story;
+
+          // Set and play the audio
+          const audioElement = document.getElementById("storyAudio");
+          audioElement.src = data.audio_url;
+          audioElement.style.display = "block";
+          audioElement.load();
+
+          // Display the generated image
+          const imageElement = document.getElementById("generatedImage");
+          imageElement.src = data.image_url;
+          imageElement.style.display = "block";
+
+          // Get all the words in the story
+          const wordElements = document.querySelectorAll("#generatedStory span");
+
+          // Assuming the total story duration is 60 seconds
+          const totalDuration = 60; // Total duration in seconds
+          const wordCount = wordElements.length;
+          const timePerWord = totalDuration / wordCount; // Calculate time per word
+
+          // Play the audio
+          audioElement.play();
+
+          // Highlight words as the audio plays
+audioElement.addEventListener("timeupdate", () => {
+  const currentTime = audioElement.currentTime;
+
+  // Calculate the current word index based on the elapsed time
+  const currentWordIndex = Math.floor(currentTime / timePerWord);
+
+  // Highlight all words up to the current index
+  wordElements.forEach((word, index) => {
+    word.style.backgroundColor = index <= currentWordIndex ? "yellow" : "transparent";
+  });
+});
+
+          // Show the story container
+          document.getElementById("storyContainer").style.display = "grid";
         })
-          .then((response) => response.json())
-          .then((data) => {
-            // Hide loading animation
-            document.getElementById("loading").style.display = "none";
-  
-            if (data.error) {
-              alert("Error generating story: " + data.error);
-              return;
-            }
-  
-            // Display the generated story and wrap words in span tags
-            document.getElementById("generatedStory").innerHTML = data.story;
-  
-            // Set and play the audio
-            const audioElement = document.getElementById("storyAudio");
-            audioElement.src = data.audio_url;
-            audioElement.style.display = "block";
-            audioElement.load();
-  
-            // Get all the words in the story
-            const wordElements = document.querySelectorAll(
-              "#generatedStory span"
-            );
-  
-            // Assuming the total story duration is 60 seconds
-            const totalDuration = 60; // Total duration in seconds
-            const wordCount = wordElements.length;
-            const timePerWord = totalDuration / wordCount; // Calculate time per word
-  
-            // Play the audio
-            audioElement.play();
-  
-            // Highlight words as the audio plays
-            audioElement.addEventListener("timeupdate", () => {
-              const currentTime = audioElement.currentTime;
-  
-              // Calculate which word should be highlighted based on the elapsed time
-              const currentWordIndex = Math.floor(currentTime / timePerWord);
-  
-              // Reset the previous highlights
-              wordElements.forEach((word, index) => {
-                if (index <= currentWordIndex) {
-                  word.classList.add("highlight");
-                } else {
-                  word.classList.remove("highlight");
-                }
-              });
-            });
-  
-            // Show the story container
-            document.getElementById("storyContainer").style.display = "block";
-  
-            // Scroll smoothly to the story section after loading
-            document
-              .getElementById("storyContainer")
-              .scrollIntoView({ behavior: "smooth" });
-          })
-          .catch((error) => {
-            console.error("Error generating story:", error);
-            document.getElementById("loading").style.display = "none";
-          });
-      });
-  
-    // Style for highlighted words
-    const style = document.createElement("style");
-    style.innerHTML = `
-    .highlight {
-      background-color: yellow;
-      font-weight: bold;
-    }
-  `;
-    document.head.appendChild(style);
+        .catch((error) => {
+          // Hide loading animation
+          document.getElementById("loading").style.display = "none";
+          alert("Error generating story: " + error);
+        });
+    });
   </script>
-  
-  {% endblock %}
+{% endblock %}

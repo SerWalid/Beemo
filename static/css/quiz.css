@@ -1,13 +1,8 @@
 @charset "UTF-8";
 :root {
-  --default-bg: #29786A;
+
   --default-bg-bottom: #2B9884;
   --default-accent: #30987F;
-  --card-01-bg: #213D85;
-  --card-02-bg: #602F73;
-  --card-03-bg: #16565E;
-  --card-04-bg: #45413D;
-  --card-05-bg: #373850;
   --card-01-bg-bottom: #2A78B1;
   --card-02-bg-bottom: #8E318B;
   --card-03-bg-bottom: #14826E;
@@ -508,6 +503,8 @@ body:has(.intro-done:not(:checked)) .status-bar {
 /* Summary */
 .summary {
   position: absolute;
+
+
   width: calc(100% - 64px);
   top: 20px;
   left: 0;
@@ -515,7 +512,6 @@ body:has(.intro-done:not(:checked)) .status-bar {
   bottom: 0;
   padding: 0;
   margin: auto;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -538,6 +534,8 @@ body:has(.intro-done:not(:checked)) .status-bar {
   transition: opacity 300ms;
   transition-delay: 2600ms;
   top: 50px;
+
+
 }
 .summary-panel .points-show {
   height: 48px;
@@ -554,6 +552,8 @@ body:has(.intro-done:not(:checked)) .status-bar {
   margin: auto;
   font-size: 24px;
   font-weight: 700;
+
+
 }
 .summary-panel h2 {
   text-align: center;
@@ -561,11 +561,15 @@ body:has(.intro-done:not(:checked)) .status-bar {
   font-size: 30px;
   margin-top: 30px;
   margin-bottom: 0.5em;
+
+
 }
 .summary-panel p {
   color: var(--color-text);
   text-align: center;
   margin: 0;
+
+
 
 }
 
@@ -609,20 +613,15 @@ body:has(.intro-done:not(:checked)) .status-bar {
     cursor: pointer;
     font-size: 16px;
     margin-top: 20px;
+    position: relative ;
+    bottom :700px;
+    left:700px;
+    z-index: 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
 }
 
 .btn-close:hover {
     background-color: #e64a19;
 }
-
-
-
-
-
-
-
-
-
 
 /* Card specific styles */
 .card:nth-child(1) {
@@ -1055,3 +1054,6 @@ body:has(.card:nth-child(5) .submit:checked) .summary-panel {
     text-decoration: none;
     cursor: pointer;
 }
+
+
+

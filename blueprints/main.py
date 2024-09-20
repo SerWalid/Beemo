@@ -176,6 +176,11 @@ def tom_and_jerry_story():
     return render_template('tom_and_jerry_story.html')
 
 
+@main_bp.route('/GamesLoading')
+@login_required
+def GamesLoading():
+    return render_template('GamesLoading.html')
+
 @main_bp.route('/LoadingHome')
 @login_required
 def LoadingHome():
