@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+{% extends 'sidebar.html' %}
+
+{% block head %}
+<title>Chess</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='PageOff/assets/css/Cube.css') }}">
 
-</head>
-<body>
-<section id="view">
+{% endblock %}
+
+{% block body %}
+    <section id="view">
     <aside>
       <div>
         <h3 title="Autoplay">Auto</h3>
@@ -62,12 +63,6 @@
       <path fill-rule="evenodd" clip-rule="evenodd" d="M80.8877 14C75.0887 14 70.3877 18.701 70.3877 24.5C70.3877 26.1104 70.7502 27.6361 71.3981 29H62.8877C57.0887 29 52.3877 33.701 52.3877 39.5C52.3877 42.438 53.5944 45.0942 55.5392 47H36.0125C22.6829 47 13.0834 59.7934 16.8101 72.5915L30.4959 119.592C32.4647 126.353 37.7814 131.441 44.3251 133.266C41.8876 135.786 40.3877 139.218 40.3877 143C40.3877 150.732 46.6557 157 54.3877 157H116.388C124.12 157 130.388 150.732 130.388 143C130.388 139.211 128.883 135.774 126.438 133.253C132.96 131.417 138.256 126.337 140.22 119.592L153.906 72.5915C157.633 59.7934 148.033 47 134.704 47H115.236C117.181 45.0942 118.388 42.438 118.388 39.5C118.388 33.701 113.687 29 107.888 29H99.3773C100.025 27.6361 100.388 26.1104 100.388 24.5C100.388 18.701 95.6867 14 89.8877 14H80.8877Z" />
     </g>
   </svg>
+            <script src="static/PageOff/assets/js/Cube.js"></script>
 
-
-
-
-
-        <script src="static/PageOff/assets/js/Cube.js"></script>
-
-</body>
-</html>
+{% endblock %}

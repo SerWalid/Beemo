@@ -183,13 +183,22 @@
                 <h3 class="feedback-title">Feedback:</h3>
                 <div class="feedback-content" id="feedbackContent"></div>
             </div>
+                        <!-- Button hidden initially -->
 
-            <!-- Button -->
-            <button id="closeButton" class="btn-close">Learn More about emotions</button>
+                <p class="text-white flex items-center px-4 py-2">
+    <span class="mr-2">️️↖️</span> Learn More about Emotions
+</p>
 
 
-        </div>
+
+       </div>
     </div>
+
+<!-- Button -->
+
+
+
+
 
 
 
@@ -198,52 +207,60 @@
 
 <script>
     const correctAnswers = ['Happy', 'Sad', 'Surprised', 'Angry', 'Fear'];
-    const feedbackContent = document.getElementById('feedbackContent');
-    let score = 0;
+const feedbackContent = document.getElementById('feedbackContent');
+const learnMoreButton = document.getElementById('learnMoreButton'); // Select the button
+let score = 0;
 
-    function generateFeedback() {
-        feedbackContent.innerHTML = ''; // Clear feedback content before updating
+function generateFeedback() {
+    feedbackContent.innerHTML = ''; // Clear feedback content before updating
+    score = 0; // Reset score for each feedback generation
 
-        document.querySelectorAll('.cards .card').forEach((card, index) => {
-            const selectedOption = card.querySelector('input[type="radio"]:checked');
-            const feedbackItem = document.createElement('div');
-            feedbackItem.classList.add('feedback-item');
+    document.querySelectorAll('.cards .card').forEach((card, index) => {
+        const selectedOption = card.querySelector('input[type="radio"]:checked');
+        const feedbackItem = document.createElement('div');
+        feedbackItem.classList.add('feedback-item');
 
-            if (selectedOption) {
-                const userAnswer = selectedOption.value;
-                const isCorrect = userAnswer === correctAnswers[index];
+        if (selectedOption) {
+            const userAnswer = selectedOption.value;
+            const isCorrect = userAnswer === correctAnswers[index];
 
-                if (isCorrect) {
-                    feedbackItem.classList.add('correct');
-                    feedbackItem.innerHTML = `
-                        <h4>Question ${index + 1}: "What emotion is the child showing?"</h4>
-                        <p class="feedback-description">Correct! The child is showing "${correctAnswers[index]}".</p>
-                    `;
-                    score++;
-                } else {
-                    feedbackItem.classList.add('incorrect');
-                    feedbackItem.innerHTML = `
-                        <h4>Question ${index + 1}: "What emotion is the child showing?"</h4>
-                        <p class="feedback-description">You answered incorrectly. The child is showing "${correctAnswers[index]}".</p>
-                    `;
-                }
+            if (isCorrect) {
+                feedbackItem.classList.add('correct');
+                feedbackItem.innerHTML = `
+                    <h4>Question ${index + 1}: "What emotion is the child showing?"</h4>
+                    <p class="feedback-description">Correct! The child is showing "${correctAnswers[index]}".</p>
+                `;
+                score++;
             } else {
                 feedbackItem.classList.add('incorrect');
                 feedbackItem.innerHTML = `
                     <h4>Question ${index + 1}: "What emotion is the child showing?"</h4>
-                    <p class="feedback-description">No answer selected. The child is showing "${correctAnswers[index]}".</p>
+                    <p class="feedback-description">You answered incorrectly. The child is showing "${correctAnswers[index]}".</p>
                 `;
             }
+        } else {
+            feedbackItem.classList.add('incorrect');
+            feedbackItem.innerHTML = `
+                <h4>Question ${index + 1}: "What emotion is the child showing?"</h4>
+                <p class="feedback-description">No answer selected. The child is showing "${correctAnswers[index]}".</p>
+            `;
+        }
 
-            feedbackContent.appendChild(feedbackItem);
-        });
-
-        document.querySelector('.points-inline').textContent = score;
-    }
-
-    document.querySelectorAll('.submit').forEach(submitBtn => {
-        submitBtn.addEventListener('change', generateFeedback);
+        feedbackContent.appendChild(feedbackItem);
     });
+
+    document.querySelector('.points-inline').textContent = score;
+
+    // Show the Learn More button when feedback is generated
+    learnMoreButton.style.display = 'block'; // Change to block to display it
+}
+
+// Add event listeners to the submit buttons
+document.querySelectorAll('.submit').forEach(submitBtn => {
+    submitBtn.addEventListener('change', generateFeedback);
+});
+
+
 
 
 </script>
