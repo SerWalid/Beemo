@@ -347,7 +347,7 @@ def generate_story():
 
         # Generate the image based on the image prompt
         image_response = openai.Image.create(
-            model="dall-e-3",
+            model="dall-e-2",
             prompt=image_prompt,
             n=1,
             size="1024x1024"
