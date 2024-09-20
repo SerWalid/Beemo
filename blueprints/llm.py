@@ -480,3 +480,60 @@ def analyze_writing_image():
 
     # Remove the temporarily saved image
     os.remove(image_path)
+    # Return the result as JSON
+    return jsonify({'response': response_text})
+@llm_bp.route('/generate_report', methods=['GET'])
+def generate_report_api():
+    user_id = session.get('user_id')
+    today_interactions = get_all_interactions_today(user_id)
+    today_interactions_list = [
+        {
+            "message": interaction.message,
+            "response": interaction.response,
+            "created_at": interaction.created_at.isoformat()  # Convert datetime to ISO 8601 string
+        }
+        for interaction in today_interactions
+    ]
+    interactions_str = json.dumps(today_interactions_list, indent=2)
+
+
+    content = generate_report(interactions_str)
+    response_text = content['response']['messages'][0]['content']
+    return jsonify(
+        {'content': response_text}
+    )
+
+def generate_report(prompt):
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    child_name=user.child_name
+    child_birthday=user.child_birth_date
+    child_age = time_difference_from_today(child_birthday)
+    country = user.country
+    parent_name = user.full_name
+    system_content = f"""
+    You are Beemo, a compassionate and supportive mental health assistant designed to interact with {child_name}, a child who's age is {child_age}  from {country} with ASD. Your primary role is to engage with {child_name}, provide emotional support, and assist them in their daily interactions. 
+
+    Today, {parent_name} has requested a report based on {child_name}'s interaction history with you. Your task is to review the provided data, extract key details about {child_name}'s emotions, behaviors, communication skills, progress towards their goals, and any notable moments or activities observed during the day. Your goal is to generate a clear, insightful, and supportive report that helps {parent_name} better understand {child_name}'s experiences and emotional state today.
+
+    Begin the report with an overview of {child_name}'s day, emphasizing significant emotional trends and notable interactions. Follow with a detailed description of {child_name}'s emotional state throughout the day, highlighting any patterns or shifts observed. Provide insights into {child_name}'s behaviors, noting positive actions and any concerning behaviors that stood out. Discuss {child_name}'s communication skills, outlining any improvements or challenges faced during interactions. Include any notable moments that were particularly special or significant, and offer supportive recommendations to {parent_name} on how to encourage {child_name}'s continued progress or address any areas of concern.
+
+    Maintain a compassionate and supportive tone throughout, focusing on {child_name}'s strengths and celebrating their growth. If there are no interactions recorded, inform {parent_name} by gently stating, "There are no interactions recorded yet."
+    """
+
+    headers = {
+        'Content-Type': 'application/json',
+        'api_token': a2sv_api_key,
+    }
+    payload = {
+        'model': 'gpt-4',
+        'messages': [{"role": "system", "content": system_content}, {"role": "user", "content": prompt}],
+        'max_token': 1024,
+        'temperature': 0.7,
+        'response_format': 'text/plain',
+        'user_id': 'the champs'     
+    }
+    response = requests.post('https://api.afro.fit/api_v2/api_wrapper/chat/completions', json=payload, headers=headers)
+    return response.json()
+
+    return jsonify({'response': response_text})
