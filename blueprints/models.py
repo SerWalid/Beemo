@@ -103,6 +103,7 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
     country = db.Column(db.String(50), nullable=False)
     pin_code = db.Column(db.String(50), nullable=True)
+    reading_time = db.Column(db.Integer, default=0)
 
     reports = db.relationship('Report', backref='user', lazy=True)
     notifications = db.relationship('Notification', backref='user', lazy=True)
