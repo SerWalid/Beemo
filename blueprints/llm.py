@@ -1,3 +1,5 @@
+import json
+import requests
 from flask import Blueprint, jsonify, request, send_file, session, after_this_request, url_for, current_app as app, \
     render_template
 import os
@@ -12,7 +14,7 @@ import tempfile
 from .models import User, Settings, db, Interaction, Chat, Notification
 from .utils import calculate_age, time_difference_from_today, split_message  # Import the decorator
 from datetime import date
-
+from .interactions import get_all_interactions_today
 import pygame
 import time
 import base64
@@ -35,57 +37,12 @@ db_user = os.getenv('DB_USER')
 db_password = os.getenv('DB_PASSWORD')
 db_name = os.getenv('DB_NAME')
 db_port = os.getenv('DB_PORT')
+a2sv_api_key = os.getenv('A2SV_API_KEY')
 
 
 
 client = Groq(api_key=api_key)
 
-openai.api_key = os.getenv('OPENAI_API_KEY')
-
-Variable = False;
-# Global connection object
-connection = None
-
-def create_db_connection():
-    global connection
-    if connection is None or not connection.is_connected():
-        try:
-            connection = mysql.connector.connect(
-                host=db_host,
-                user=db_user,
-                password=db_password,
-                database=db_name,
-                port=int(db_port)
-            )
-            if connection.is_connected():
-                print("Connected to MySQL database")
-        except Error as e:
-            print(f"The error '{e}' occurred while creating the database connection")
-
-def get_db_connection():
-    global connection
-    if connection is None or not connection.is_connected():
-        create_db_connection()
-    return connection
-
-
-def create_new_chat_session():
-    connection = get_db_connection()
-    if connection:
-        try:
-            cursor = connection.cursor()
-            cursor.execute('''
-                INSERT INTO Chat_History (timestamp)
-                VALUES (NOW())
-            ''')
-            connection.commit()
-            chat_history_id = cursor.lastrowid
-            return chat_history_id
-        except Error as e:
-            print(f"The error '{e}' occurred during chat session creation")
-        finally:
-            cursor.close()
-    return None
 
 
 def play_audio(file_path):
@@ -523,6 +480,3 @@ def analyze_writing_image():
 
     # Remove the temporarily saved image
     os.remove(image_path)
-
-    # Return the result as JSON
-    return jsonify({'response': response_text})

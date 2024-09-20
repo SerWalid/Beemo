@@ -29,4 +29,57 @@ def count_interactions_today_yesterday(user_id):
     else:
         percentage_change = ((today_count - yesterday_count) / yesterday_count) * 100
 
-    return today_count, yesterday_count, percentage_change
+    return today_count, yesterday_count, round(percentage_change, 2)
+
+def count_interactions_last_7_days(user_id):
+    # Get today's date
+    today = datetime.now().date()
+
+    # Prepare the list to store interaction data for each day
+    interaction_data = []
+
+    # Loop through the last 7 days, including today
+    for i in range(7):
+        # Calculate the date for the current iteration
+        day = today - timedelta(days=i)
+
+        # Query interactions for the specific day
+        interaction_count = db.session.query(func.count(Interaction.id)).filter(
+            func.date(Interaction.created_at) == day,
+            Interaction.user_id == user_id
+        ).scalar()
+
+        # Store the date and the count in a dictionary
+        interaction_data.append({
+            "date": day.strftime("%d %B %Y"),  # Format the date as "25 August 2024"
+            "number_of_interaction": interaction_count
+        })
+
+    interaction_data.reverse()
+
+    # Return the data as a JSON object
+    return interaction_data
+
+def get_interactions_count_today(user_id):
+    # Get today's date
+    today = datetime.now().date()
+
+    # Query to count interactions for today
+    interaction_count = db.session.query(func.count(Interaction.id)).filter(
+        func.date(Interaction.created_at) == today,
+        Interaction.user_id == user_id
+    ).scalar()
+
+    return interaction_count if interaction_count else 0
+
+def get_all_interactions_today(user_id):
+    # Get today's date
+    today = datetime.now().date()
+
+    # Query to get all interactions for today
+    interactions = db.session.query(Interaction).filter(
+        func.date(Interaction.created_at) == today,
+        Interaction.user_id == user_id
+    ).all()
+
+    return interactions

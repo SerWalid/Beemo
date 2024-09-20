@@ -4,6 +4,7 @@ from blueprints.auth import auth_bp
 from blueprints.llm import llm_bp
 from blueprints.story import story_bp
 from blueprints.settings import settings_bp
+from blueprints.user import user_bp
 
 from dotenv import load_dotenv
 import os
@@ -34,6 +35,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(llm_bp)
 app.register_blueprint(story_bp)
 app.register_blueprint(settings_bp)
+app.register_blueprint(user_bp)
 
 with app.app_context():
     db.create_all()

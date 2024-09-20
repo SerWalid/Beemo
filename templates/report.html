@@ -1,5 +1,5 @@
 <div class="bg-white border shadow-sm rounded-xl py-2">
-  <h2 class="text-xl font-semibold text-gray-800 p-4">Today's Timeline</h2>
+  <h2 class="text-xl font-semibold text-gray-800 p-4">Daily Report</h2>
 
   <div id="timeline-container">
     {% for item in beemo_daily_usage_timeline %}
@@ -55,16 +55,32 @@
     {% endfor %}
   </div>
 
+  <div id="report-result" class="p-4 text-gray-700"></div>
+
   <!-- Read More / Read Less Button -->
   <div class="text-center mt-4">
     <button
-      id="toggle-timeline"
-      class="text-blue-500 hover:text-blue-700 underline font-medium"
-      onclick="toggleTimeline()"
+      id="generate-report-btn"
+      class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-indigo-100 border border-indigo-500 rounded-lg shadow-sm cursor-pointer hover:text-white bg-gradient-to-br from-purple-500 via-indigo-500 to-indigo-500"
+      onclick="generateReport()"
     >
-      Read More
+      <svg
+        class="w-5 h-5 mr-2"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 10V3L4 14h7v7l9-11h-7z"
+        ></path>
+      </svg>
+      <span id="button-text" class="relative">Generate Report</span>
     </button>
   </div>
 </div>
 
-<script src="./static/js/timeline.js"></script>
+<script src="./static/js/report.js"></script>

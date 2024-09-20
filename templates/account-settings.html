@@ -1,0 +1,403 @@
+<!-- Card Section -->
+<div
+  id="account-settings-section"
+  class="bg-white col-span-8 overflow-hidden rounded-xl px-8 border settings-section hidden p-4 sm:p-7"
+>
+  <div class="mb-8">
+    <h2 class="text-xl font-bold text-gray-800">Profile</h2>
+    <p class="text-sm text-gray-600">
+      Manage your name, password and account settings.
+    </p>
+  </div>
+
+  <form>
+    <!-- Grid -->
+    <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
+      <div class="sm:col-span-3">
+        <label
+          for="af-account-full-name"
+          class="inline-block text-sm text-gray-800 mt-2.5"
+        >
+          Full name
+        </label>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-9">
+        <div class="">
+          <input
+            id="af-account-full-name"
+            type="text"
+            class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="Maria"
+            value="{{user.full_name}}"
+          />
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-3">
+        <label
+          for="af-account-email"
+          class="inline-block text-sm text-gray-800 mt-2.5"
+        >
+          Email
+        </label>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-9">
+        <input
+          id="af-account-email"
+          type="email"
+          class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+          placeholder="maria@site.com"
+          value="{{user.email}}"
+        />
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-3">
+        <label
+          for="af-account-password"
+          class="inline-block text-sm text-gray-800 mt-2.5"
+        >
+          Password
+        </label>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-9">
+        <div class="space-y-2">
+          <input
+            id="af-account-password"
+            type="password"
+            class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="Enter current password"
+          />
+          <input
+            id="af-account-new-password"
+            type="password"
+            class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="Enter new password"
+          />
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-3">
+        <div class="inline-block">
+          <label
+            for="af-account-phone"
+            class="inline-block text-sm text-gray-800 mt-2.5"
+          >
+            Phone
+          </label>
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-9">
+        <div>
+          <input
+            id="af-account-phone"
+            type="text"
+            class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="+x(xxx)xxx-xx-xx"
+            value="{{user.phone_number}}"
+          />
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-3">
+        <label
+          for="child-full-name"
+          class="inline-block text-sm text-gray-800 mt-2.5"
+        >
+          Child full name
+        </label>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-9">
+        <div>
+          <input
+            id="child-full-name"
+            type="text"
+            class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+            placeholder="Maria"
+            value="{{user.child_name}}"
+          />
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-3">
+        <label
+          for="af-account-gender-checkbox"
+          class="inline-block text-sm text-gray-800 mt-2.5"
+        >
+          Gender
+        </label>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-9">
+        <div class="sm:flex">
+          <label
+            for="af-account-gender-checkbox"
+            class="flex py-2 px-3 w-full border border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+          >
+            <input type="radio" name="af-account-gender-checkbox"
+            class="shrink-0 mt-0.5 border-gray-300 rounded-full text-blue-600
+            focus:ring-blue-500 disabled:opacity-50
+            disabled:pointer-events-none" id="af-account-gender-checkbox" {% if
+            user.gender == "male" %} checked {% endif %} value="male" />
+            <span class="text-sm text-gray-500 ms-3">Male</span>
+          </label>
+
+          <label
+            for="af-account-gender-checkbox-female"
+            class="flex py-2 px-3 w-full border border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+          >
+            <input type="radio" name="af-account-gender-checkbox"
+            class="shrink-0 mt-0.5 border-gray-300 rounded-full text-blue-600
+            focus:ring-blue-500 disabled:opacity-50
+            disabled:pointer-events-none" id="af-account-gender-checkbox-female"
+            {% if user.gender == "female" %} checked {% endif %} value="female"
+            />
+            <span class="text-sm text-gray-500 ms-3">Female</span>
+          </label>
+
+          <label
+            for="af-account-gender-checkbox-other"
+            class="flex py-2 px-3 w-full border border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+          >
+            <input type="radio" name="af-account-gender-checkbox"
+            class="shrink-0 mt-0.5 border-gray-300 rounded-full text-blue-600
+            focus:ring-blue-500 disabled:opacity-50
+            disabled:pointer-events-none" id="af-account-gender-checkbox-other"
+            {% if user.gender == "other" %} checked {% endif %} value="other" />
+            <span class="text-sm text-gray-500 ms-3">Other</span>
+          </label>
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-3">
+        <label
+          for="child-birth-date"
+          class="inline-block text-sm text-gray-800 mt-2.5"
+        >
+          Child's birth date
+        </label>
+      </div>
+      <!-- End Col -->
+
+      <div class="sm:col-span-9">
+        <input
+          id="child-birth-date"
+          type="date"
+          class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+          value="{{user.child_birth_date}}"
+        />
+      </div>
+      <!-- End Col -->
+    </div>
+    <!-- End Grid -->
+
+    <div class="mt-5 flex justify-end gap-x-2">
+      <button
+        id="save-account-settings-button"
+        type="submit"
+        class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        Save
+        <svg
+          class="shrink-0 size-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-6"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M19.916 4.626a.75.75 0 0 1 .208 1.04l-9 13.5a.75.75 0 0 1-1.154.114l-6-6a.75.75 0 0 1 1.06-1.06l5.353 5.353 8.493-12.74a.75.75 0 0 1 1.04-.207Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  document
+    .getElementById("save-account-settings-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+
+      const submitButton = document.getElementById(
+        "save-account-settings-button"
+      );
+
+      // Disable the button to prevent multiple submissions
+      submitButton.disabled = true;
+      submitButton.innerText = "Saving..."; // Change button text to indicate action
+
+      // Clear any previous validation messages
+      document
+        .querySelectorAll(".validation-error")
+        .forEach((el) => el.remove());
+
+      let isValid = true;
+
+      // Form fields
+      let fullName = document
+        .getElementById("af-account-full-name")
+        .value.trim();
+      let email = document.getElementById("af-account-email").value.trim();
+      let phone = document.getElementById("af-account-phone").value.trim();
+      let childName = document.getElementById("child-full-name").value.trim();
+      let gender = document.querySelector(
+        'input[name="af-account-gender-checkbox"]:checked'
+      );
+      let childBirthDate = document
+        .getElementById("child-birth-date")
+        .value.trim();
+      let currentPassword = document
+        .getElementById("af-account-password")
+        .value.trim();
+      let newPassword = document
+        .getElementById("af-account-new-password")
+        .value.trim();
+
+      // Helper function to show validation error
+      function showError(elementId, message) {
+        let element = document.getElementById(elementId);
+        let error = document.createElement("div");
+        error.className = "validation-error text-red-500 text-sm"; // Tailwind CSS styles
+        error.innerText = message;
+        element.parentNode.appendChild(error);
+        isValid = false;
+      }
+
+      function resetPasswordFields() {
+        document.getElementById("af-account-password").value = "";
+        document.getElementById("af-account-new-password").value = "";
+      }
+
+      function displayErrorToast(message) {
+        // Create toast element
+        const toast = document.createElement("div");
+        toast.className =
+          "max-w-xs bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-800 dark:border-neutral-700 fade";
+        toast.setAttribute("role", "alert");
+        toast.setAttribute("tabindex", "-1");
+
+        toast.innerHTML = `
+    <div class="flex p-4">
+      <div class="shrink-0">
+        <svg class="shrink-0 size-4 text-red-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+        </svg>
+      </div>
+      <div class="ms-3">
+        <p class="text-sm text-gray-700 dark:text-neutral-400">${message}</p>
+      </div>
+    </div>`;
+
+        // Append to the container
+        const toastContainer = document.getElementById("toast-container");
+        toastContainer.appendChild(toast);
+
+        // Fade out after 3 seconds
+        setTimeout(() => {
+          toast.style.transition = "opacity 0.5s ease";
+          toast.style.opacity = "0";
+          setTimeout(() => {
+            toast.remove();
+          }, 500); // Wait for the fade-out transition to complete
+        }, 3000);
+      }
+
+      // Full Name validation
+      if (!fullName) {
+        showError("af-account-full-name", "Full name is required.");
+      }
+
+      // Email validation
+      if (!email) {
+        showError("af-account-email", "Email is required.");
+      } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+        showError("af-account-email", "Please enter a valid email address.");
+      }
+
+      // Phone validation
+      if (!phone) {
+        showError("af-account-phone", "Phone number is required.");
+      }
+
+      // Child name validation
+      if (!childName) {
+        showError("child-full-name", "Child full name is required.");
+      }
+
+      // Gender validation
+      if (!gender) {
+        showError("child-full-name", "Gender is required."); // Assuming gender selection is close to child name
+      } else {
+        gender = gender.value;
+      }
+
+      // Child birth date validation
+      if (!childBirthDate) {
+        showError("child-birth-date", "Child birth date is required.");
+      }
+
+      // If the form is invalid, re-enable the button and stop execution
+      if (!isValid) {
+        submitButton.disabled = false;
+        submitButton.innerText = "Save Changes"; // Revert button text
+        return;
+      }
+
+      // Prepare form data
+      let formData = new FormData();
+      formData.append("full_name", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("child_name", childName);
+      formData.append("gender", gender);
+      formData.append("child_birth_date", childBirthDate);
+      formData.append("current_password", currentPassword);
+      formData.append("new_password", newPassword);
+
+      // Send the data via fetch API
+      fetch("/profile", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            displayToast("Profile updated successfully.");
+            resetPasswordFields();
+          } else {
+            displayErrorToast(data.message || "Error updating profile.");
+            resetPasswordFields();
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        })
+        .finally(() => {
+          // Re-enable the button after submission
+          submitButton.disabled = false;
+          submitButton.innerText = "Save Changes"; // Revert button text
+        });
+    });
+</script>
+<!-- End Card -->
+<!-- End Card Section -->
