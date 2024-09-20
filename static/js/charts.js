@@ -1,5 +1,23 @@
 window.addEventListener("load", () => {
-  (function () {
+  async function fetchInteractionData() {
+    try {
+      const response = await fetch("/get-interaction-last-7-days");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching interaction data:", error);
+      return [];
+    }
+  }
+  (async function () {
+    // Fetch the interaction data
+    const interactionData = await fetchInteractionData();
+
+    // Process the data to extract dates and interaction counts
+    const categories = interactionData.map((item) => item.date); // Extract dates
+    const interactionCounts = interactionData.map(
+      (item) => item.number_of_interaction
+    ); // Extract interaction counts
     buildChart(
       "#hs-single-area-chart",
       (mode) => ({
@@ -15,8 +33,8 @@ window.addEventListener("load", () => {
         },
         series: [
           {
-            name: "Visitors",
-            data: [13, 23, 20, 8, 13, 27, 15],
+            name: "Interactions",
+            data: interactionCounts,
           },
         ],
         legend: {
@@ -44,20 +62,7 @@ window.addEventListener("load", () => {
         xaxis: {
           type: "category",
           tickPlacement: "on",
-          categories: [
-            "25 August 2024",
-            "26 August 2024",
-            "27 August 2024",
-            "28 August 2024",
-            "29 August 2024",
-            "30 August 2024",
-            "31 August 2024",
-            "1 September 2024",
-            "2 September 2024",
-            "3 September 2024",
-            "4 September 2024",
-            "5 September 2024",
-          ],
+          categories: categories,
           axisBorder: {
             show: false,
           },

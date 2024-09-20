@@ -34,6 +34,7 @@ def create_user_settings(user_id):
     
     db.session.add(settings)
     db.session.commit()
+    return settings
 
 
 @settings_bp.route('/settings')
@@ -47,12 +48,10 @@ def setting():
     if settings is None:
         settings = create_user_settings(user_id)
     # If `banned_topics` exists in settings, convert it to an array of dictionaries
+    selected_topics = []
     if settings.banned_topics:
         topics_list = settings.banned_topics.split(',')  # Split string by commas
         selected_topics = [{'id': str(i + 1), 'topic': topic.strip()} for i, topic in enumerate(topics_list)]
-    else:
-        # Default or empty banned topics list if none exist
-        selected_topics = []
 
     # Reset specific settings if they are null
     if settings.sleep_time_start is None:

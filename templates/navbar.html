@@ -231,6 +231,28 @@
       const correctPin = "1234"; // Replace with your actual PIN
 
       if (enteredPin === correctPin) {
+        fetch("{{ url_for('main.set_pin_code') }}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            pin: enteredPin,
+          }),
+        })
+          .then((response) => {
+            if (response.ok) {
+              window.location.href = "{{ url_for('main.parent') }}";
+            } else {
+              throw new Error("Failed to set PIN");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            errorMessage.classList.remove("hidden");
+            pinForm.reset(); // Clear inputs on error
+            pinInputs[0].focus(); // Focus the first input
+          });
         window.location.href = "{{ url_for('main.parent') }}";
       } else {
         errorMessage.classList.remove("hidden");

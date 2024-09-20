@@ -138,3 +138,14 @@ def split_message(response: str) -> tuple:
         text = response.strip()
 
     return text, metadata_json
+
+def calculate_progress(target, achieved):
+    if target == 0:
+        return 0  # Avoid division by zero
+
+    progress = (achieved / target) * 100
+    if progress > 100:
+        return 100
+    return int(progress)
+
+

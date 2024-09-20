@@ -532,7 +532,7 @@ endblock %} {% block content %}
       </div>
       <div class="flex justify-end my-2">
         <button
-          id="save-button"
+          id="save-notifications-settings-button"
           type="submit"
           class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
         >
@@ -553,9 +553,7 @@ endblock %} {% block content %}
         </button>
       </div>
     </form>
-    <div id="account-settings-section" class="settings-section hidden">
-      <!-- Account settings HTML -->
-    </div>
+    {%include 'account-settings.html'%}
   </div>
 </div>
 

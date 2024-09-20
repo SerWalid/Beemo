@@ -67,7 +67,7 @@
                 />
               </svg>
               <span class="inline-block text-sm">
-                {{ metric.change_percentage }}
+                {{ metric.change_percentage }}%
               </span>
             </span>
             {% endif %}
@@ -148,7 +148,7 @@
     <!-- End Card -->
   </div>
 
-  {% include 'timeline.html'%} {% include 'weeklyProgress.html'%}
+  {% include 'report.html'%} {% include 'weeklyProgress.html'%}
 </div>
 <script src="static/js/charts.js"></script>
 {% endblock %}

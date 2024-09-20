@@ -104,6 +104,7 @@ def logout():
     # Clear user information from the session
     session.pop('user_id', None)
     session.pop('user_email', None)
+    session.pop('parent_zone_pin', None)
 
     # Optionally, you can clear the entire session
     # session.clear()
