@@ -3,6 +3,7 @@ from flask import redirect, url_for, session, redirect
 from datetime import datetime, timedelta, date
 import re
 import json
+from .models import Settings
 
 
 def login_required(f):
@@ -148,4 +149,65 @@ def calculate_progress(target, achieved):
         return 100
     return int(progress)
 
+def calculate_time_difference_in_seconds(start_time: str, end_time: str) -> int:
+    # Define the time format
+    time_format = "%H:%M"
+    
+    # Convert the time strings to datetime objects
+    start_time_obj = datetime.strptime(start_time, time_format)
+    end_time_obj = datetime.strptime(end_time, time_format)
+    
+    # Calculate the time difference in seconds
+    if end_time_obj >= start_time_obj:
+        time_difference = end_time_obj - start_time_obj
+    else:
+        # If the end time is earlier than the start time, add 24 hours to the end time
+        time_difference = (end_time_obj + timedelta(days=1)) - start_time_obj
+    
+    # Get the total time difference in seconds
+    total_seconds = time_difference.seconds
+    
+    return total_seconds
+
+
+def is_time_between(check_time: str, start_time: str, end_time: str) -> bool:
+    check = datetime.strptime(check_time, "%H:%M")
+    start = datetime.strptime(start_time, "%H:%M")
+    end = datetime.strptime(end_time, "%H:%M")
+
+    # Handle cases where end time is past midnight
+    if end < start:
+        end += timedelta(days=1)
+        if check < start:
+            check += timedelta(days=1)
+
+    return start <= check < end
+
+# The actual decorator
+def check_sleep_time(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Get user_id from session
+        user_id = session['user_id']
+        if not user_id:
+            # No user session, allow the request to pass
+            return f(*args, **kwargs)
+
+        # Retrieve user settings
+        settings = Settings.query.filter_by(user_id=user_id).first()
+
+        # Check if settings exist and if sleep times are present
+        if settings and settings.sleep_time_start and settings.sleep_time_end:
+            # Get the current time in HH:MM format
+            current_time = datetime.now().strftime("%H:%M")
+
+            # Check if current time is within the user's sleep time range
+            if is_time_between(current_time, settings.sleep_time_start, settings.sleep_time_end):
+                # Redirect to 'main.sleep_time' if within sleep time
+                return redirect(url_for('main.sleep_time'))
+
+        # Allow access if not in sleep time or if settings are missing
+        return f(*args, **kwargs)
+
+    return decorated_function
 

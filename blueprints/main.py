@@ -1,6 +1,6 @@
 import json
 from flask import Blueprint, render_template, session, flash, request, redirect, url_for, jsonify
-from .utils import login_required, pin_required, logged_in_restricted, generate_time_array, calculate_age, calculate_progress, time_difference_from_today  # Import the decorator
+from .utils import login_required, pin_required, logged_in_restricted, generate_time_array, calculate_age, calculate_progress, time_difference_from_today, calculate_time_difference_in_seconds, check_sleep_time  # Import the decorator
 from .models import User, Settings, db, Chat, Interaction, Notification
 from datetime import datetime, timedelta, date
 import os
@@ -48,6 +48,7 @@ def ImageChoice():
 
 
 @main_bp.route('/MemoryGame')
+@check_sleep_time
 def MemoryGame():
     return render_template('MemoryGame.html')
 
@@ -78,11 +79,13 @@ def Tetris():
 
 
 @main_bp.route('/Cube')
+@check_sleep_time
 def Cube():
     return render_template('Cube.html')
 
 
 @main_bp.route('/GameSelectTest')
+@check_sleep_time
 def GameSelectTest():
     return render_template('GameSelectTest.html')
 
@@ -99,6 +102,7 @@ def chatbottest_page():
 
 
 @main_bp.route('/BoxCube')
+@check_sleep_time
 def BoxCube():
     return render_template('BoxCube.html')
 
@@ -121,6 +125,7 @@ def game_zone():
 
 
 @main_bp.route('/chat')
+@check_sleep_time
 @login_required
 def Chatbot():
     reset_parent_pin_code()
@@ -145,6 +150,7 @@ def Chatbot():
 
 
 @main_bp.route('/home')
+@check_sleep_time
 @login_required
 def Home():
     reset_parent_pin_code()
@@ -152,28 +158,11 @@ def Home():
 
 
 @main_bp.route('/story-time')
+@check_sleep_time
 @login_required
 def Story():
     reset_parent_pin_code()
     return render_template('storyTime.html')
-
-
-@main_bp.route('/batman_story')
-@login_required
-def batman_story():
-    return render_template('batman_story.html')
-
-
-@main_bp.route('/spiderman-story')
-@login_required
-def spiderman_story():
-    return render_template('spiderman_story.html')
-
-
-@main_bp.route('/tom-and-jerry-story')
-@login_required
-def tom_and_jerry_story():
-    return render_template('tom_and_jerry_story.html')
 
 
 @main_bp.route('/GamesLoading')
@@ -188,6 +177,7 @@ def LoadingHome():
 
 
 @main_bp.route('/LearnEmotions')
+@check_sleep_time
 @login_required
 def LearnEmotions():
     reset_parent_pin_code()
@@ -195,6 +185,7 @@ def LearnEmotions():
 
 
 @main_bp.route('/quiz')
+@check_sleep_time
 @login_required
 def quiz():
     reset_parent_pin_code()
@@ -207,6 +198,7 @@ def LoaderWriting():
     return render_template('LoaderWriting.html')
 
 @main_bp.route('/writing')
+@check_sleep_time
 @login_required
 def writing():
     reset_parent_pin_code()
@@ -214,22 +206,18 @@ def writing():
 
 
 @main_bp.route('/Vision')
+@check_sleep_time
 @login_required
 def Vision():
     reset_parent_pin_code()
     return render_template('vision.html')
 
 @main_bp.route('/GamesSelection')
+@check_sleep_time
 @login_required
 def GamesSelection():
     reset_parent_pin_code()
     return render_template('GamesSelection.html')
-
-@main_bp.route('/dashboardActivities')
-@login_required
-def dashboardActivities():
-    reset_parent_pin_code()
-    return render_template('dashboardActivities.html')
 
 
 @main_bp.route('/parent')
@@ -333,6 +321,21 @@ def show_pin_modal():
     return render_template('pinModal.html')
 
 
+@main_bp.route('/sleep-time')
+@login_required
+def sleep_time():
+    reset_parent_pin_code()
+    user_id = session['user_id']
+    settings = Settings.query.filter_by(user_id=user_id).first()
+    time_difference_in_seconds = 0
+    if settings is not None and settings.sleep_time_start is not None and settings.sleep_time_end is not None:
+        current_time = datetime.now().strftime("%H:%M")
+        time_difference_in_seconds = calculate_time_difference_in_seconds(current_time, settings.sleep_time_end)
+    print(time_difference_in_seconds)
+    
+    return render_template('sleep-time.html', time_difference_in_seconds=time_difference_in_seconds)
+
+
 @main_bp.route('/set-pin', methods=['POST'])
 def set_pin_code():
     entered_pin = request.form['pin']
@@ -355,6 +358,7 @@ def mark_notifications_as_read():
     return jsonify({'message': 'Notifications marked as read'}), 200
 
 @main_bp.route('/get-interaction-last-7-days', methods=['GET']) 
+@login_required
 def get_interaction_last_7_days():
     user_id = session.get('user_id')
     interactions_last_7_days = count_interactions_last_7_days(user_id)
