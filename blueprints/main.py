@@ -274,8 +274,8 @@ def parent():
         {
             "name": f"Read For {user_goals.get('readingTimeGoal')} Minutes",
             "target": user_goals.get("readingTimeGoal"),
-            "achieved": 0,
-            "progress": calculate_progress(user_goals.get("readingTimeGoal"), 0),
+            "achieved": user.reading_time,
+            "progress": calculate_progress(user_goals.get("readingTimeGoal"), user.reading_time),
         },
         {
             "name": f"Have {user_goals.get('sessionsPerWeekGoal')} Interactive Sessions",

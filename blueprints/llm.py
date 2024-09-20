@@ -316,6 +316,8 @@ def character_story_audio(character):
 
 @llm_bp.route('/generate_story', methods=['POST'])
 def generate_story():
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
     try:
         # Get the story input from the user
         data = request.get_json()
@@ -354,6 +356,9 @@ def generate_story():
 
         # Get the audio URL for the story
         audio_url = url_for('llm.download_audio', filename=os.path.basename(temp_file_name), _external=True)
+        if user:
+            user.reading_time += 1
+            db.session.commit()
 
         # Return the formatted story, audio URL, and image URL in the response
         return jsonify({'story': formatted_story, 'audio_url': audio_url, 'image_url': image_url}), 200
