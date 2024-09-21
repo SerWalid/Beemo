@@ -190,6 +190,12 @@ def get_llm_response(prompt):
         "Please avoid using informal or non-professional language such as 'BEEP BEEP' or 'OH NOOO'."
     )
 
+    if(settings and settings.parent_instructions):
+        system_message += (
+        f" Important: The following instructions come directly from {child_name}'s parents. These instructions are crucial and must be followed strictly and without exception: {settings.parent_instructions}. "
+        "Your adherence to these parental instructions is essential, and you should prioritize them above all else in your interactions with the child."
+    )
+
     if settings and settings.banned_topics:
         blocked_topics_list = settings.banned_topics.split(",")  # Assuming banned_topics is a comma-separated string
         banned_topics_formatted = ", ".join(blocked_topics_list)

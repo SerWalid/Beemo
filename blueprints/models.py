@@ -15,6 +15,7 @@ class Settings(db.Model):
     beemo_voice_tune = db.Column(db.String(255), nullable=True)
     notifications_preferences = db.Column(db.JSON, nullable=True)
     banned_topics = db.Column(db.String(1000), nullable=True)
+    parent_instructions = db.Column(db.Text, nullable=True)
     alert_topics = db.Column(db.String(1000), nullable=True)
     goals = db.Column(db.JSON, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
