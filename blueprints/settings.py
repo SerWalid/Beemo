@@ -66,6 +66,9 @@ def setting():
         daily_usage_limit = ""
     else:
         daily_usage_limit = settings.daily_usage_limit
+    custom_instructions = ""
+    if(settings.parent_instructions is not None):
+        custom_instructions = settings.parent_instructions
     if settings.goals is not None:
         # Parse the JSON string into a Python dictionary (object)
         goals_object = json.loads(settings.goals)
@@ -107,7 +110,7 @@ def setting():
                            reading_time_goal=reading_time_goal, sessions_per_week_goal=sessions_per_week_goal,
                            alert_topics=alert_topics, high_emotional_engagement=high_emotional_engagement,
                            repetitive_questions=repetitive_questions, agitated_behavior=agitated_behavior,
-                           notification_list=notification_list, unviewed_count=unviewed_count)
+                           notification_list=notification_list, unviewed_count=unviewed_count, custom_instructions=custom_instructions)
 
 
 @settings_bp.route('/save-settings', methods=['POST'])
@@ -146,6 +149,8 @@ def save_settings():
         settings.alert_topics = data['alertTopics']
     if 'notificationPreferences' in data:
         settings.notifications_preferences = data['notificationPreferences']
+    if 'customInstructions' in data:
+        settings.parent_instructions = data['customInstructions']
 
     # Commit the changes to the database
     db.session.commit()
