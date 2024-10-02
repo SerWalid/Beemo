@@ -3,6 +3,7 @@ from flask import redirect, url_for, session, redirect
 from datetime import datetime, timedelta, date
 import re
 import json
+import calendar
 from .models import Settings
 
 
@@ -79,7 +80,11 @@ def time_difference_from_today(date_input):
     # Adjust months_diff and years_diff if necessary
     if days_diff < 0:
         months_diff -= 1
-        days_diff += (date_input.replace(day=1) - date_input.replace(day=0)).day
+        # Get the number of days in the previous month
+        prev_month = (today.month - 1) if today.month > 1 else 12
+        prev_month_year = today.year if today.month > 1 else today.year - 1
+        days_in_prev_month = calendar.monthrange(prev_month_year, prev_month)[1]
+        days_diff += days_in_prev_month
 
     if months_diff < 0:
         years_diff -= 1

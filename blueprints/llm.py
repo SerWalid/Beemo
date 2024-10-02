@@ -228,7 +228,7 @@ def get_llm_response(prompt):
              "content": system_message},
             {"role": "user", "content": prompt}
         ],
-        model="llama-3.1-70b-versatile",
+        model="llama-3.2-90b-text-preview",
         temperature=0.5,
         max_tokens=1024,
         top_p=1,
