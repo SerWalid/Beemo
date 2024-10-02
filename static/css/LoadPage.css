@@ -1,0 +1,59 @@
+.card {
+  position: absolute; /* Changed from absolute */
+  left: 0;
+  top: 1900px; /* Adjusted from 300px to move elements down */
+  background-position: center;
+  background-size: cover;
+  box-shadow: 6px 6px 10px 2px rgba(0, 0, 0, 0.6);
+  height: 100px;
+}
+
+#btn {
+  position: absolute; /* Changed from absolute */
+  top: 1900px; /* Adjusted from 690px */
+  left: 16px;
+  z-index: 99;
+}
+
+.card-content {
+  position: absolute; /* Changed from absolute */
+  left: 0;
+  top: 1900px; /* Moved down */
+  color: #003366;
+  padding-left: 16px;
+}
+
+.details {
+  z-index: 22;
+  position: relative; /* Changed from absolute */
+  top: 180px; /* Adjusted */
+  left: 60px;
+  color:#003366;
+}
+.details .place-box {
+  height: 46px;
+  overflow: hidden;
+}
+.details .place-box .text {
+  padding-top: 10px;
+  font-size: 20px;
+}
+.details .title-1,
+.details .title-2 {
+  font-weight: 600;
+  font-size: 40px;
+  font-family: "Oswald", sans-serif;
+}
+
+.details > .desc {
+  margin-top: 10px;
+  width: 500px;
+}
+.details > .cta {
+  width: 500px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+}
+
+

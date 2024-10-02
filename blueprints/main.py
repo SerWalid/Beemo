@@ -29,6 +29,11 @@ def index():
     return render_template('index.html')
 
 
+@main_bp.route('/LANDPAGE')
+@logged_in_restricted
+def LANDPAGE():
+    return render_template('LANDPAGE.html')
+
 @main_bp.route('/PageOff')
 @logged_in_restricted
 def PageOff():
