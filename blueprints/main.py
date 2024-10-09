@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, date
 import os
 import random
 from .settings import create_user_settings
+from .report import retrieve_all_reports
 from .notifications import get_notifications
 from .interactions import count_interactions_today_yesterday, count_interactions_last_7_days, get_interactions_count_today
 main_bp = Blueprint('main', __name__, static_folder='static')
@@ -234,6 +235,7 @@ def parent():
     # Retrieve all chats for the specific user
     today_count, yesterday_count, rate_comparison = count_interactions_today_yesterday(user_id)
     chats = Chat.query.filter_by(user_id=user_id).all()
+    reports = retrieve_all_reports(user_id)
     settings = Settings.query.filter_by(user_id=user_id).first()
     user_goals = {
         "wordGoal": 1,
@@ -255,6 +257,16 @@ def parent():
             'title': chat.title,
         }
         chat_list.append(chat_data)
+    # Convert the reports into a JSON-serializable format
+    report_list = []
+    for report in reports:
+        report_data = {
+            'id': report.id,
+            'content': report.content,
+            'created_at': report.created_at.strftime("%B %d, %Y")
+        }
+        report_list.append(report_data)
+
     child_name = user.child_name
     parent_name = user.full_name
     goals = [
@@ -308,7 +320,7 @@ def parent():
     notification_list = []
     notification_list, unviewed_count = get_notifications(user_id)
 
-    return render_template('dashboardHome.html', chats=chat_list, child_name=child_name, parent_name=parent_name,
+    return render_template('dashboardHome.html', chats=chat_list, reports=report_list, child_name=child_name, parent_name=parent_name,
                            goals=goals,
                            dashboard_stats=dashboard_stats, user=user, notification_list=notification_list, unviewed_count=unviewed_count, goals_left = goals_left)
 
