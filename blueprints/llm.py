@@ -11,10 +11,11 @@ from mysql.connector import Error
 from dotenv import load_dotenv
 import threading
 import tempfile
-from .models import User, Settings, db, Interaction, Chat, Notification
+from .models import User, Settings, db, Interaction, Chat, Notification, Report
 from .utils import calculate_age, time_difference_from_today, split_message  # Import the decorator
 from datetime import date
 from .interactions import get_all_interactions_today
+from .report import retrieve_today_report
 import pygame
 import time
 import base64
@@ -496,7 +497,17 @@ def analyze_writing_image():
 @llm_bp.route('/generate_report', methods=['GET'])
 def generate_report_api():
     user_id = session.get('user_id')
+    today_report = retrieve_today_report(user_id)
+    if(today_report):
+        return jsonify(
+            {'content': today_report.content}
+        )
     today_interactions = get_all_interactions_today(user_id)
+    if(not today_interactions):
+        return jsonify(
+            {'content': 'No interactions found for today.'}
+        )
+
     today_interactions_list = [
         {
             "message": interaction.message,
@@ -510,6 +521,14 @@ def generate_report_api():
 
     content = generate_report(interactions_str)
     response_text = content['response']['messages'][0]['content']
+    if( response_text):
+        report = Report(
+            content=response_text,
+            user_id=user_id,
+        )
+    db.session.add(report)
+    db.session.commit()
+    
     return jsonify(
         {'content': response_text}
     )
@@ -523,14 +542,28 @@ def generate_report(prompt):
     country = user.country
     parent_name = user.full_name
     system_content = f"""
-    You are Beemo, a compassionate and supportive mental health assistant designed to interact with {child_name}, a child who's age is {child_age}  from {country} with ASD. Your primary role is to engage with {child_name}, provide emotional support, and assist them in their daily interactions. 
+    You are Beemo, a compassionate and supportive mental health assistant designed to interact with {child_name}, a child who is {child_age} years old from {country} with ASD. Your task is to generate a structured report in JSON format, containing the following sections:
 
-    Today, {parent_name} has requested a report based on {child_name}'s interaction history with you. Your task is to review the provided data, extract key details about {child_name}'s emotions, behaviors, communication skills, progress towards their goals, and any notable moments or activities observed during the day. Your goal is to generate a clear, insightful, and supportive report that helps {parent_name} better understand {child_name}'s experiences and emotional state today.
+    1. **Overview of the Day**: Summarize {child_name}'s interactions today, focusing on significant emotional trends.
+    2. **Emotional State**: Provide a detailed description of {child_name}'s emotional state, highlighting any observed patterns or shifts.
+    3. **Behaviors**: Note any proactive or concerning behaviors observed during interactions.
+    4. **Communication Skills**: Describe {child_name}'s communication strengths or challenges.
+    5. **Notable Moments**: List any particularly special moments or decisions {child_name} made today.
+    6. **Recommendations**: Provide supportive recommendations for {parent_name} on encouraging {child_name}'s progress or addressing areas of concern.
 
-    Begin the report with an overview of {child_name}'s day, emphasizing significant emotional trends and notable interactions. Follow with a detailed description of {child_name}'s emotional state throughout the day, highlighting any patterns or shifts observed. Provide insights into {child_name}'s behaviors, noting positive actions and any concerning behaviors that stood out. Discuss {child_name}'s communication skills, outlining any improvements or challenges faced during interactions. Include any notable moments that were particularly special or significant, and offer supportive recommendations to {parent_name} on how to encourage {child_name}'s continued progress or address any areas of concern.
+    Return the output as a structured JSON object with the format:
+    {{
+        "overview": "Summary paragraph...",
+        "emotional_state": "Detailed paragraph...",
+        "behaviors": "Detailed paragraph...",
+        "communication_skills": "Detailed paragraph...",
+        "notable_moments": ["Moment 1...", "Moment 2..."],
+        "recommendations": "Supportive paragraph..."
+    }}
 
-    Maintain a compassionate and supportive tone throughout, focusing on {child_name}'s strengths and celebrating their growth. If there are no interactions recorded, inform {parent_name} by gently stating, "There are no interactions recorded yet."
+    If there are no interactions recorded, inform {parent_name} by responding: "There are no interactions recorded yet."
     """
+
 
     headers = {
         'Content-Type': 'application/json',

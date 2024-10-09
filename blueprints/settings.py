@@ -8,11 +8,21 @@ from .models import User, Settings, db, Chat, Interaction, Notification
 
 from .notifications import get_notifications
 from .interactions import count_interactions_today_yesterday
+from .report import retrieve_all_reports
 
 
 # Create the Blueprint
 settings_bp = Blueprint('settings', __name__)
 def create_user_settings(user_id):
+    """
+    Creates a new Settings entry for the given user_id.
+
+    Args:
+        user_id (int): The user_id of the user to create settings for.
+
+    Returns:
+        A Settings object with default values for goals and notifications_preferences.
+    """
     goals = {
         "wordGoal": 1,
         "readingTimeGoal": 1,
@@ -92,6 +102,8 @@ def setting():
     # Retrieve all chats for the specific user
     chats = Chat.query.filter_by(user_id=user_id).all()
 
+    reports = retrieve_all_reports(user_id)
+
     # Convert the chats into a JSON-serializable format
     chat_list = []
     for chat in chats:
@@ -100,11 +112,18 @@ def setting():
             'title': chat.title
         }
         chat_list.append(chat_data)
-
+    report_list = []
+    for report in reports:
+        report_data = {
+            'id': report.id,
+            'created_at': report.created_at.strftime("%B %d, %Y"),
+        }
+        report_list.append(report_data)
+    
     notification_list = []
     notification_list, unviewed_count = get_notifications(user_id)
 
-    return render_template('settings.html', chats=chat_list, banned_topics=selected_topics, user=user,
+    return render_template('settings.html', chats=chat_list, banned_topics=selected_topics, user=user, reports=report_list,
                            time_array=time_array, sleep_time_start=sleep_time_start, sleep_time_end=sleep_time_end,
                            daily_usage_limit=daily_usage_limit, word_goal=word_goal,
                            reading_time_goal=reading_time_goal, sessions_per_week_goal=sessions_per_week_goal,
@@ -163,6 +182,7 @@ def get_chat_by_id(id):
     user_id = session.get('user_id')
     user = User.query.get(user_id)
     chats = Chat.query.filter_by(user_id=user_id).all()
+    reports = retrieve_all_reports(user_id)
     # Convert the chats into a JSON-serializable format
     chat_list = []
     for chat in chats:
@@ -171,6 +191,15 @@ def get_chat_by_id(id):
             'title': chat.title
         }
         chat_list.append(chat_data)
+    # Convert the reports into a JSON-serializable format
+    report_list = []
+    for report in reports:
+        report_data = {
+            'id': report.id,
+            'created_at': report.created_at.strftime("%B %d, %Y"),
+        }
+        report_list.append(report_data)
+
     # Query the Chat model using the id from the URL
     chat = Chat.query.get(id)
 
@@ -198,6 +227,6 @@ def get_chat_by_id(id):
         chat_data.append(interaction_data)
         chat_date = chat.created_at
         number_of_interactions = len(interactions)
-    return render_template('chat-history.html', interactions=chat_data, user=user, chats=chat_list, chat_date=chat_date,
+    return render_template('chat-history.html', interactions=chat_data, user=user, chats=chat_list, chat_date=chat_date, reports=report_list,
                            number_of_interactions=number_of_interactions, notification_list=notification_list,
                            interaction_to_highlight_id=interaction_to_highlight_id, unviewed_count=unviewed_count)
